@@ -23,9 +23,10 @@
 \usepackage{phd_layout}
 \usepackage{fancyhdr}
 
-\usepackage[acronym,nowarn]{glossaries}
-\loadglsentries{acronyms}
+%\usepackage[acronym,nowarn]{glossaries}
+\usepackage[acronym]{glossaries}
 \makeglossaries{}
+\loadglsentries{texenv/acronyms}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -33,9 +34,9 @@
 \fancyfoot[CO,CE]{---Draft for the assessment committee ---}
 
 
+
 \begin{document}
 %\includepdf{cover.pdf}
-	
 \frontmatter
 
 \newcommand{\AuthorName}{PhD Candidate}
@@ -65,8 +66,6 @@
 % References
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography}
-
-\include{sections/acronyms}
 
 \include{sections/publications}
 
