@@ -3,7 +3,7 @@ BUILD_DIR = build
 LATEXMK = latexmk
 BIBTEX = bibtex
 #BIBTEX_OPTS = -terse
-LATEXMK_OPTS = -interaction=nonstopmode -outdir=$(BUILD_DIR) -pdf -bibtex # -silent
+LATEXMK_OPTS = -interaction=nonstopmode -outdir=$(BUILD_DIR) -pdf -bibtex -silent
 
 ## Sources and dependencies
 SRC = main.tex
@@ -25,7 +25,7 @@ dirs:
 main.pdf: $(SRC) $(BUILD_DEP)
 	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
 	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
-	@$(BIBTEX) $(BIBTEX_OPTS) $(BUILD_DIR)/sections $(BUILD_DIR)/main
+	#@$(BIBTEX) $(BIBTEX_OPTS) $(BUILD_DIR)/sections $(BUILD_DIR)/main
 	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
 	@cp $(BUILD_DIR)/main.pdf $@
 

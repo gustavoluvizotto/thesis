@@ -1,0 +1,42 @@
+name: build latex and deploy output .pdf to github pages
+
+# run on push to main
+on:
+  push:
+    branches:
+      - main
+
+# perms needed to push to our gh-pages brnach
+permissions:
+  contents: write
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2) compile using a latex container
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          compiler: make    # use 'make' not 'latexmk'
+          args: all         # runs: make all main.tex
+
+      # 3) move main.pdf to public/ and create a simple forwarding index.html
+      - name: Move PDF to public folder
+        run: |
+          mkdir public
+          mv main.pdf public/
+          echo '<meta http-equiv="refresh" content="0; url=main.pdf" />' > public/index.html
+
+      #3)  deploy to github pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
