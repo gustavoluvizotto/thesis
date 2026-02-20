@@ -1,0 +1,74 @@
+\documentclass[10pt,twoside,openright]{book}  % b5paper,
+
+\usepackage{titling}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\setcounter{tocdepth}{1}
+\usepackage{hyperref}
+\usepackage[hypcap=true]{caption}
+\hypersetup{
+	pdffitwindow=false,
+	hidelinks,
+	bookmarksopen=true,
+	pdftitle={Title of the Thesis},
+	pdfauthor={PhD Candidate},
+	pdfcreator={PhD Candidate},
+}
+\usepackage{microtype} % better typesetting
+\usepackage[english]{babel} % typographical rules
+\usepackage{nameref}
+\usepackage[nottoc]{tocbibind}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes}
+\usepackage{acronym}
+\usepackage{phd_layout}
+\usepackage{fancyhdr}
+
+\usepackage[acronym,nowarn]{glossaries}
+\loadglsentries{acronyms}
+\makeglossaries{}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+%TODO remove for final!
+\fancyfoot[CO,CE]{---Draft for the assessment committee ---}
+
+
+\begin{document}
+%\includepdf{cover.pdf}
+	
+\frontmatter
+
+\newcommand{\AuthorName}{PhD Candidate}
+\newcommand{\AuthorNameShort}{PhD Candidate}
+\newcommand{\ThesisTitle}{Title of the Thesis}
+\newcommand{\ThesisSubTitle}{Subtitle of the Thesis}
+
+\include{sections/front_matter}
+
+\pagestyle{headings}
+
+\include{sections/acknowledgements}
+
+\include{sections/abstract}
+\include{sections/samenvatting}
+
+\tableofcontents
+
+\mainmatter
+\pagestyle{fancy}
+
+\include{sections/introduction}
+\include{sections/background}
+\include{sections/sample_chapter}
+\include{sections/conclusions}
+
+% References
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+\include{sections/acronyms}
+
+\include{sections/publications}
+
+
+\end{document}

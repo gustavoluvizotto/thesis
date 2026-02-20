@@ -1,0 +1,59 @@
+\usepackage{fancyhdr}
+\usepackage{fncychap}
+
+\usepackage[paperwidth=170mm,paperheight=240mm]{geometry}
+
+\ChNameVar{\raggedleft\normalsize\rm} % sets the style for name
+\ChNumVar{\normalsize} % sets the style for digit
+\ChTitleVar{\raggedleft\Large\bf}
+\ChRuleWidth{1pt} % Set RW=4pt
+\ChNameUpperCase % Make name uppercas
+  \renewcommand{\DOCH}{%
+    \vspace{-1.5cm}
+    \CNV\FmN{\@chapapp}\space\space \CNoV\thechapter
+    \par\nobreak
+    \vskip -0.5\baselineskip
+   }
+  \renewcommand{\DOTI}[1]{%
+    \mghrulefill{\RW}\par\nobreak
+    \CTV\FmTi{#1}\par\nobreak
+    \vskip 60\p@
+    }
+
+  \renewcommand{\DOTIS}[1]{%
+    \vspace{-1.5cm}
+    \mghrulefill{\RW}\par\nobreak
+    \CTV\FmTi{#1}\par\nobreak
+    \vskip 60\p@
+    \vspace{-2cm}
+    }
+
+%page style
+%%% General page formatting
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\topfraction}{0.99}
+\renewcommand{\floatpagefraction}{0.99}
+\renewcommand{\bottomfraction}{0.99}
+
+\addtolength{\topmargin}{0.5cm}
+\addtolength{\textheight}{1.0cm}
+\addtolength{\oddsidemargin}{0.5cm}
+\addtolength{\evensidemargin}{-0.5cm}
+
+\pagestyle{fancy}
+
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}  % \renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\chaptermark}[1]{\markboth{---#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}{}}
+
+\fancyhf{} %delete the current section for header and footer
+
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\nouppercase{\bfseries\rightmark}}
+\fancyhead[RE]{\nouppercase{\bfseries\leftmark}}
+\renewcommand{\headrulewidth}{0.5pt} % make space for the rule
+
+\fancypagestyle{plain}{%
+  \fancyhead{} %get rid of the headers on plain pages
+  \renewcommand{\headrulewidth}{0pt} % and the line
+}
