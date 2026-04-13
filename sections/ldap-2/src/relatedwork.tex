@@ -1,0 +1,17 @@
+% !TEX root = ../main.tex
+\input{tables/literature_comparison}
+\mypara{Related Work}
+Empirical studies on the \gls{LDAP} ecosystem are scarce. In \cref{tab:literature_comparison}, we show how our paper is positioned with respect to prior work.
+The first work we are aware of is from 2016, when Rapid7's Project Sonar published a blog post~\cite{project_sonar_rapid7} on the presence of \gls{LDAP} servers on the Internet. The blog post did not cover \gls{TLS}, certificates, or hosting.
+While the methodology was not precisely described, the company released the \textit{recog} tool, which uses Root DSE entries to identify the version of an \gls{LDAP} server. For our work, we improved \textit{recog} to enhance the software's recognition capabilities. We shared our extensions with the original authors.
+
+The second prior work is our own. In 2024, we introduced \emph{LanDscAPe}, a tool for large-scale \gls{LDAP} security analysis that revealed widespread misconfigurations, leaked passwords, and insecure \gls{TLS} setups~\cite{landscape}, and investigated weaknesses in public-facing \gls{LDAP} servers, focusing on data leaks and misconfigurations.
+Here, we expand the scope of our prior work and examine the hosting and deployment practices of \gls{LDAP} servers.
+We provide details on the \gls{LDAP} versions, including the product lifecycle, and explore the security practices of \gls{LDAP} servers, including PKI and key management. Our hosting analysis depicts the distribution of \gls{LDAP} servers across different networks. This enables us to investigate whether the \gls{LDAP} ecosystem follows others (like the Web) in terms of centralization. Our analysis includes servers running \gls{GC}
+
+Other kinds of studies have focused on \gls{LDAP} attacks. We do not show these works in \cref{tab:literature_comparison} as they study \gls{LDAP} from a very different perspective and do not measure or characterize the deployment of public-facing servers. For example, Bulusu \etal classified injection attacks and proposed various mitigation techniques~\cite{7210446}. Srinivasa \etal used honeypots to investigate anomalous \gls{LDAP} traffic such as \gls{LDAP} injection, suspicious searches, remote code execution, and brute-force attempts~\cite{9799363}.
+When configured over UDP, \gls{LDAP} can be misused for \gls{DDoS} attacks, amplifying traffic by a factor of 56–70, according to Akamai~\cite{WhatCLDAPReflection}. Other works also consider the dangers of in-band upgrades to \gls{TLS}, which include Person-in-the-middle and downgrade attacks~\cite{274731,10.1145/2815675.2815695}.
+
+Prior work focusing on other protocols, Web protocols~\cite{doan2022}, DNS~\cite{Moura2015}, email~\cite{liuWhoGotYour2021}, or \gls{TLS} ~\cite{holz2020} provided evidence for strong Internet centralization. Durumeric \etal investigated the HTTPS ecosystem~\cite{10.1145/2504730.2504755}, and Holz \etal studied protocols for email and chat~\cite{holz2016}.
+In contrast, our hosting analysis finds the \gls{LDAP} ecosystem more diversified.
+%Other TLS-based protocols have also been studied extensively.

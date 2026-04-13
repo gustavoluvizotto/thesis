@@ -1,0 +1,17 @@
+\subsection{Related work}
+\gls{DMARC} adoption has been widely studied.
+Durumeric \etal studied adoption of \gls{DMARC} in its early days. However, back then, the adoption was low even on popular domains~\cite{zakir2015}.
+Hureau \etal~\cite{hureau_spoofed} carried out \gls{DNS} measurements using domain names from \glspl{gTLD}, \gls{CT} logs, and the tranco list, and used passive DNS data from SIE EU to study \gls{DMARC} preferences.
+They showed the distribution of \gls{DMARC} policies and common mistakes in \gls{DMARC} records.% tags, and that popular domains are better configured with their \gls{DMARC} rules.
+Maroofi's \etal study \gls{DMARC} adoption and subdomain spoofing~\cite{MaroofiEtAl_AdoptionEmailAntiSpoofing_2021}.
+They used \glspl{gTLD}, \texttt{.se}, \texttt{.nu}, and samples of Rapid7 in their analysis, including a set of 32,042 unique high-profile domains (well-known companies, banks, and governments) from 139 countries.
+In their modeled scenario, spoofed emails can reach the recipient's inbox via subdomains when the \gls{DMARC} policy is not strict enough.
+In contrast, our paper focuses on the stringency of \gls{DMARC} policies across nearly all countries, surpassing prior work in the number of \glspl{ccTLD} covered by using a comprehensive \dataset. We go beyond and characterize government domains in isolation rather than grouped with domain names from different sectors.
+
+The \gls{DMARC} reporting system had also been explored.
+Hureau \etal tested the use of \gls{DMARC} reporting across different email service providers, focusing on the supported \gls{DMARC} features. They also tested the quality of reports that organizations or individuals receive~\cite{hureau_stress_testing}.
+In another study, Hureau \etal showed the centralization of \gls{DMARC} report receivers~\cite{hureau_spoofed}. They documented the use of external destinations.
+Ashiq \etal investigated the senders and receivers of \gls{DMARC} reports, showing that in some cases reports are not sent due to misconfigurations~\cite{ashiq2023}. Furthermore, their study revealed that 70\% of domains were configured with \gls{DMARC} to send reports to external domains.
+Our paper provides a complementary perspective by examining the \gls{DMARC} reporting characteristics of domain names across \glspl{ccTLD} and demonstrating how these domain names depend on \gls{DMARC} report processors in foreign countries.
+We analyze the use of \gls{DMARC} reporting in governmental domains and whether they follow their national security agencies' directives in this regard.
+%Our \dataset provides a more comprehensive view of the \gls{DMARC} ecosystem from country-level perspective\rep.

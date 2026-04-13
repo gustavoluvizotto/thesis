@@ -1,0 +1,37 @@
+\begin{table}[tb]
+\setlength\tabcolsep{1pt}
+    \small
+    \centering
+    \begin{tabularx}{\linewidth}{@{} l X @{}}
+    \toprule
+        \thead{Personal} & \thead{LDAP Attributes} \\
+        \thead{Data Group} &  \\
+        \midrule
+        \midrule
+        Last Name   & lastName, LastName, sn, sn;lang-en, , ... \\
+        Email       & EMAIL, eMailAddress, email, mail, mailAlias, ... \\
+        First Name  & firstName, FirstName, givenName, givenname, \\
+                    & middleName, ... \\
+        Full Name   & displayName, username, nickname, fullName, \\
+                    & name, ... \\
+        Birthday    & apple-birthday, birthDay, dateOfBirth, birthDate, ... \\
+        Gender      & gender, sex, schacGender \\
+        Country     & c, co, countryCode, state, st, country, ... \\
+        Phone       & homePhone, mobile, MobileNumber, \\
+                    & telephonenumber, phone, ... \\
+        Address     & homePostalAddress, streetAddress, street, \\
+                    & postalAddress, ... \\
+        Location    & l, location, provinceName, postalCode, zip, city, ... \\
+        Public Key  & userCertificate, userCertificate;binary, pgpKey, \\
+                    & userSMIMECertificate, ... \\
+        Title       & isDoctor, title, title;x-role-2, personalTitle, \\
+                    & umDisplayTitle, ... \\
+        Job         & company, department, employeeNumber, \\
+                    & employeeType, umEmployee, ... \\
+        Photo       & jpegPhoto, photograph \\
+        SSN         & socialSecurityNumber \\
+    \bottomrule
+    \end{tabularx}
+\caption{Grouping of LDAP attributes containing personal data.}
+\label{tab:personal_data_attribute_groups_shortened}
+\end{table}

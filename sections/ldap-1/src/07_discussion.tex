@@ -1,0 +1,57 @@
+\section{Discussion}
+\label{sec:discussion}
+
+Following, we will discuss the implications of our results for the overall security of the Internet-wide LDAP landscape.
+
+% \todo{$$!!!$$ This chapter has been restructured. See 07\_discussion\_old.tex for old text $$!!!$$ }
+
+\subsection{Personal Data and TLS}
+The analysis uncovered 12k public LDAP servers exposing personal data. Because of ethical and legal considerations and because of the large number of affected servers, we cannot ultimately determine if this data is supposed to be public. But even if it is supposed to be public, access to it should be encrypted. Take an LDAP server providing access to a public address book as an example. The people within this address book agreed to be listed there, so this information is not confidential. However, people accessing this address book may not want to reveal their searches in the address book because it leaks with whom they are communicating. Moreover, an active \gls{MITM} could return fake contact results to the client, for example, to intercept the subsequent communication. 
+
+We found that out of 12k public LDAP servers exposing personal data, only $1,392$ servers (11.4\%) run a TLS configuration without issues that LDAP clients can use to authenticate the server and encrypt queries. Given that it is widely accepted that strong transport encryption is mandatory from a security viewpoint and easy to deploy, this is another indicator that LDAP has yet to receive wide attention from security professionals within organizations. Furthermore, the number drops substantially for servers that leak credentials (a mere 10\%) or personal data (about 13\%). It increases when servers are used for authentication or hold sensitive internal information. Servers that leak credentials or store personal data have particularly often poor configurations, both in terms of cipher suites and certificates. The strong correlation we see between weak cryptography and older \acrshort{TLS} versions on the one hand, and data leakages and vulnerable \acrshort{LDAP} implementations on the other hand, supports the hypothesis that the more weakly configured servers have not been updated in several years.
+
+
+
+% Furthermore, several laws in different jurisdictions prohibit the exposing of personal data without the explicit informed consent of the affected persons. In the EU, the \gls{GDPR} allows the processing of personal data only for six defined reasons, whereby the exposing of sensitive personal data is for the vast majority only possible under the first reason, the consent of the data subject~\cite[Art. 6]{GDPR2016a}.
+%Additionally, the GDPR defines a timeframe of 72 hours for the notification of supervisory authority in case of a personal data breach~\cite[Art. 33]{GDPR2016a}.
+% It is thus important to offer confidentiality and authenticity to search queries, even if the queried directory consists of public information.
+
+% \todo{Results TLS / non-TLS}
+
+
+%Not all LDAP servers are intentionally publicly accessible, \eg providing names, locations, or even social security numbers to everyone is a huge risk and can easily be used for identity theft~\cite{10.1145/328236.328114}.
+
+
+
+%In cases of intentionally public LDAP servers, personal data has to be secured, taking the state-of-the-art into account~\cite[Art. 32]{GDPR2016a}. 
+%Explicitly comprised is the encryption of personal data together with the three main common security goals: Confidentiality, Integrity, and Availability (CIA). 
+%It is common knowledge that securing communication over the internet with \gls{TLS} is the defacto state-of-the-art standard~\cite{NIST80052}.
+
+
+% Our results align with the Web PKI and electronic communications such as e-mail and instant messaging~\cite{holz2011, holz2016}. We detected a similar magnitude of invalid X.509 certificate chains and weak TLS connections. We observed that MD5 and RC4 are not used for LDAP servers, and we only found encrypted connections. Better cipher suites are encountered this time, which is a sign of evolution in the Internet. However, LDAP servers still negotiate a fair margin of non-recommended ciphers.
+
+%\paragraph{TLS connection} 
+%\todo{todo? Sebastian}
+%\cref{sec:network_analysis} shows servers leaking sensitive data or credentials, etc. more often uses bad ciphersuites....
+
+
+%\cref{tab:proper_tls} gives an overview of what we consider strong and weak \acrshort{TLS} configurations, breaking the reasons for weak configurations down into issues with the cipher suites vs. certificate chains. We see the already-established pattern again. Overall, just about a quarter of \acrshort{TLS} connections can be said to have a strong configuration. 
+
+
+
+%\paragraph{Certificate chain validity.} The certificate chains can be broken differently. In our study, we identified that most invalid chains are due to an unknown authority, which means that the chain of certificates obtained from the TLS connection with the LDAP servers leads to a self-signed certificate. Self-signed certificates are not a vulnerability and will require that clients verify the server's identity by other means and accept the connection. However, if the verification is not done, an attacker could be a \gls{MITM} and intercept the communication using a forged certificate.
+
+\subsection{Public Directories vs. Social Engineering}
+Knowledge about the internal structure of organizations and, in particular, information about employees is an important indicator for the success of social engineering or phishing attacks. Collecting intelligence from open sources is complex and time-consuming because it involves a multitude of techniques and tools.\footnote{See the MITRE ATT\&CK about the ``Reconnaissance'' tactic~(\url{https://attack.mitre.org/tactics/TA0043/}).} Overall, our analysis found that more than 12k organizations leak their organizational structure, configuration values of other services, or even detailed personal data about employees. These servers provide this information to attackers essentially for free. Even if organizations intentionally expose such information, it is questionable whether they are aware of the possible consequences.
+
+\subsection{Fast Track to Admin}
+\label{sec:fastTrackToAdmin}
+Our analysis uncovered 1,817 servers leaking 3.9 million possible user credentials. As an example, the analysis uncovered that a university exposed more than 30,000 credentials, including email addresses and plaintext passwords, via a public LDAP server. This security lapse compromised a wide array of accounts, including those of IT administrators. %\todo{We immediately notified the university?}
+
+Even worse, we found 526 servers leaking passwords where at least one username contained the substring ``admin''. While it is not necessary for privileged users to have this substring in the username, it is a strong indicator that these servers indeed leak the credentials of privileged users. This is quite dangerous for the affected organizations as many modern ransomware cyberattacks exfiltrate and then encrypt victims' data to demand a ransom from victims. For this, the attackers not only need initial access to the victims' networks, but also privileged user accounts to get read and write access to data or to destroy backups by lateral movement. It is well-known that attackers may give up even if they have network access to a victim if they cannot get privileged user access. Our findings are hence relevant with respect to modern cyberattackers: there is a substantial risk for organizations if they expose privileged user credentials via LDAP.
+
+\subsection{Current Status of Disclosure Efforts}
+
+In February 2024, We disclosed the list of credential-leaking servers to a national CERT, which then contacted the operators via email. To check the effectiveness of our disclosure campaign, three months later, we sent probes to the 1,817 server IPs previously found leaking credentials. These probes are limited to finding only one entry containing at least one of the password fields (see section \ref{subsec:samplingModule}). As in the previous analysis, we instructed the server not to transfer any data besides the \texttt{DN}. Out of the original 1,817 servers, 475 (26.1\%) are no longer available. Five servers remain reachable but now require authentication. 
+%In total, these five servers had previously exposed 5,393 credentials according to our count (see section \ref{sec:methodology_data_analysis_module}). 
+While we observed a significant reduction in password-leaking LDAP servers, a substantial amount remains online.

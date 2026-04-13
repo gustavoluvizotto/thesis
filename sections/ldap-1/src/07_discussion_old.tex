@@ -1,0 +1,138 @@
+%-------------------------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+\todo{TODO: Merge this with section 4 and remove some stuff for analysis in the next paper.}
+%-------------------------------------------------------------------------------
+
+
+\subsection{Privacy Violations}
+- fishing \\
+- übertragung der daten über tls \\
+
+
+\todo{needs review}
+For many European companies (e.g., Callson, a polling firm), leaks are GDPR-relevant and have to be reported within 72 hours. \todo{Should we handle this differently during disclosure? BSI/BfDI might have something to say about this, especially for German cases.}
+
+It is not definitively determinable whether the LDAP servers containing personal data represent unique data breaches since we cannot determine in every individual case whether the data is intentionally exposed or if it consists of authentic information. Nonetheless, we have included in the disclosure those servers that...
+
+When it comes to the unique identification of natural persons, unique identification numbers such as the social security number or a combination of pseudo identifiers like full name and residential address are necessary. Assuming, for example, that first and last name, address, and date of birth are necessary to uniquely identify a person, our analysis indicates that X servers would provide this information.
+
+% \mycomment{
+%     According to a study by Carnegie Mellon University \cite{Sweeney2000}, the combination of residence, birthdate, and gender alone is sufficient to identify 53\% of the U.S. population.
+    
+%     As per the German Anti-Money Laundering Act (Geldwäschegesetz), individuals are uniquely identifiable when the following information is available:
+%     \begin{itemize}
+%         \item First name and last name
+%         \item Place of birth
+%         \item Date of birth
+%         \item Nationality 
+%         \item Residential address
+%     \end{itemize}
+    
+%     However, softer criteria are sufficient to narrow down the number of potential individuals. If softer criteria are employed, their efficacy heavily relies on the specific values. For instance, using only the first and last name may be sufficient to identify 2-3 individuals worldwide with the name "Gurur Öndarö" but not for "Thomas Müller." If additional pseudo identifiers such as job title or residential address for the individual "Thomas Müller" are available, identification becomes more distinct.
+%     This leads to the combinations of attributes presented in Table \ref{tab:grouped_pii_attr}, which may be sufficient in most cases to identify a person.
+    
+%     The figures in Table \ref{tab:grouped_pii_attr} denote the number of servers on which this information is available.
+%     %\input{tables/pii_attributes_grouped}
+% }
+
+
+\subsection{Supported SASL Mechanisms}
+
+The Simple Authentication and Security Layer (SASL) is a framework that provides a mechanism for authentication and data security in communication protocols. It's designed to add authentication support to connection-based protocols in a way that is independent of the application protocol itself. This means that SASL can be used with a variety of protocols without requiring changes to each protocol's core specifications. Among others SASL is used to authenticate LDAP sessions, allowing different authentication methods based on the environment and security requirements. Common SASL mechanisms are:
+
+\begin{itemize}
+    \item \textbf{PLAIN}: Transmits the user's credentials in plain text. This is a simple method but not secure unless combined with an encryption protocol like TLS.
+    \item \textbf{ANONYMOUS}: For anonymous connections where no user credentials are exchanged.
+    \item \textbf{SCRAM (Salted Challenge Response Authentication Mechanism)}: A more secure method that avoids transmitting passwords in plain text.
+    \item \textbf{GSSAPI (Generic Security Services Application Program Interface)}: Used for integrating with systems that use Kerberos for authentication.
+\end{itemize}
+
+LDAP servers advertise in the root DSE which SASL mechanisms they support if they offer SASL. We have queried this entry and analyzed which mechanisms are supported. When SASL is used in External mode, it relies on a strong lower security layer such as TLS to exchange clients' credentials \cite{rfc4513}. The TLS connection Table \ref{table:sasl_mechanisms} presents our results.
+% "If the client's authentication credentials have not been established at a lower security layer, the SASL EXTERNAL Bind MUST fail with a resultCode of inappropriateAuthentication." - https://datatracker.ietf.org/doc/html/rfc4513#section-5.2.3
+
+\begin{table*}[htb]
+\centering
+\begin{tabular}{lr}
+\toprule
+SASL Mechanism & Count \\
+\midrule
+\midrule
+DIGEST-MD5 & 21716 \\
+CRAM-MD5 & 21427 \\
+GSSAPI & 14861 \\
+GSS-SPNEGO & 12316 \\
+SCRAM-SHA-1 & 10068 \\
+NTLM & 9972 \\
+OTP & 8369 \\
+SCRAM-SHA-256 & 6525 \\
+PLAIN & 6232 \\
+LOGIN & 5593 \\
+SCRAM-SHA-512 & 4218 \\
+SCRAM-SHA-384 & 4193 \\
+SCRAM-SHA-224 & 4193 \\
+GSSAPI SRP & 2571 \\
+EXTERNAL & 2493 \\
+GS2-IAKERB & 2338 \\
+GS2-KRB5 & 2338 \\
+ANONYMOUS & 1908 \\
+SRP & 866 \\
+SAML & 355 \\
+SIMPLE & 139 \\
+UNBOUNDID-TOTP & 70 \\
+UNBOUNDID-INTER-SERVER & 70 \\
+UNBOUNDID-CERTIFICATE-PLUS-PASSWORD & 70 \\
+UNBOUNDID-EXTERNALLY-PROCESSED-AUTHENTICATION & 62 \\
+WEBDAV-DIGEST & 59 \\
+PING-IDENTITY-INTER-SERVER & 54 \\
+NMAS\_LOGIN & 21 \\
+CRAM-MD5 DIGEST-MD5 & 3 \\
+ANOMYMOUS & 2 \\
+PASSDSS-3DES-1 & 2 \\
+\bottomrule
+\end{tabular}
+\caption{SASL Mechanisms Count \todo{Group these, than it might fit a single column!}}
+\label{table:sasl_mechanisms}
+\end{table*}
+
+\subsection{Server Test Results}
+
+We identified 115063 LDAP servers.
+We identified 114793 of these servers supporting LDAPv3.
+Our server test was successful for 110251 servers without bind.
+Our server test was successful for 110184 servers with simple bind (username="",password="").
+Our server test was successful for 114670 servers with unauthenticated bind (username="cn=*", password="").
+
+\subsection{Password Discussion}
+
+
+\todo{Sebastian: PII and TLS Certificates -> GPDR: PII must be transmitted encrypted. Art6 Abschnitt 4.e: https://gdpr-info.eu/art-6-gdpr/ 
+Art32?}
+
+\subsection{Case Studies/Most serious leaks}
+
+\subsubsection{From Initial Access to Domain Admin}
+% This is refered by in Section Credential Anlysis
+\label{subsub:FromInitalAccessToDomainAdmin}
+
+\paragraph{NTLM Hashes}
+\todo{Discussion?}
+Of particular interest are the \texttt{sambaNTPassword} and \texttt{sambaLMPassword} attributes, which hold the hash of the Windows NT or LAN Manager (LM) passwords. As Table \ref{tab:CredLeaksGroupedByCommonSchemesShort} showed, we found \todo{XX} instances of servers exposing these values. Both hash types are considered insecure \todo{cite} and easily bruteforce-able. Additionally, they can be used in pass-the-hash attacks, which allow direct authentication to Windows domains using the hash~\todo{cite}. -> Domain Admin
+
+\todo{Discuss Admin Credentials}
+
+It is atleast an initial access sometimes with amdin credentials -> dangerous for business
+
+For businesses, the fallout may encompass data loss, legal liabilities, and a substantial erosion of consumer trust.
+
+\subsubsection{Password Reuse Discussion}
+
+One of our primary concerns when dealing with leaked credentials, particularly in connection with email addresses, centers around the issue of password reuse. We have found the exposure of a \todo{X} passwords associated with email addresses distributed across \todo{y} servers and \todo{z} countries. Research by Poornachandran \etal (2016) revealed that a staggering 59\% of regular Internet users recycle passwords across multiple accounts. This prevalent behavior elevates the risk of a chain reaction of unauthorized access incidents. Once someone with bad intentions obtains these credentials, he might attempt to use them on various platforms, such as Twitter, Facebook, and Co. The danger escalates if the intruder successfully accesses the user's password manager, effectively turning them into a master key for all of the user's digital domains. This scenario is highly feasible, considering that numerous password managers, including Google Password Manager, Apple Keychain, and Bitwarden, typically require email addresses and passwords for user authentication. Furthermore, the repercussions of such breaches extend far beyond mere unauthorized access to user accounts. They can lead to severe consequences such as identity theft, financial fraud, and the compromise of sensitive personal and professional information. 
+
+\subsection{TLS discussion}
+\label{subsec:tls_discussion}
+Our results align with the Web PKI and electronic communications such as e-mail and instant messaging \cite{holz2011} \cite{holz2016}. We detected similar magnitude of invalid X.509 certificate chains and weak TLS connections. We observed that MD5 and RC4 are not used for LDAP servers, and we only found encrypted connections. Better cipher suites are encountered this time, which is a sign of evolution in the Internet, however LDAP servers still negotiate a fair margin of non-recommended ciphers.
+
+\paragraph{TLS connection} 
+
+\paragraph{Certificate chain validity} The certificate chains can be broken differently. In our study, we identified that most invalid chains are due to an unknown authority, which means that the chain of certificates obtained from the TLS connection with the LDAP servers leads to a self-signed certificate. Self-signed certificates are not a vulnerability and will require that clients verify the server's identity by other means and accept the connection. However, if the verification is not done, an attacker could be a person-in-the-middle and intercept the communication using a forged certificate.

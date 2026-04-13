@@ -1,0 +1,26 @@
+\begin{table}[!tb]
+    \centering
+    \small
+    \begin{tabular}{@{}l r r rr @{}}
+    \toprule
+        \thead{SASL} & \multirow{2}{*}{\thead{\# IPs}} & \multirow{2}{*}{\thead{Plaintext only}} & \multicolumn{2}{c}{\thead{TLS config}} \\
+        \cline{4-5}
+                                        \thead{Mechanism}&                         &                                 & \multicolumn{1}{@{}l}{\thead{w/ issues}} & \multicolumn{1}{r@{}}{\thead{w/o issues}}\\
+        \midrule
+        \midrule
+Total & 26,464 & 7,962 & 13,418 & 5,084\\
+        \arrayrulecolor{gray!90}
+        \midrule
+        \arrayrulecolor{black}
+Hash        & 87.95\%  & 31.67\%  & 47.53\% & 20.80\%\\
+CR          & 87.68\%  & 32.57\%  & 47.57\% & 19.86\%\\
+GSSAPI      & 57.52\%  & 14.63\%  & 58.13\% & 27.24\%\\
+Plain       & 32.63\%  & 3.56\%   & 80.68\% & 15.76\%\\
+External    & 6.05\%   & 10.74\%  & 68.66\% & 20.60\%\\
+Anonymous   & 4.61\%   & 8.52\%   & 66.99\% & 24.49\%\\
+Proprietary & 0.37\%   & 29.59\%  & 68.37\% & 2.04\%\\
+        \bottomrule
+    \end{tabular}
+    \caption{Supported SASL Mechanism Types. Percentages are based on Mechanism Type. Servers commonly support multiple mechanisms.}
+    \label{tab:supported_sasl}
+\end{table}

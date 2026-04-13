@@ -1,0 +1,49 @@
+\begin{table}[tb]
+\scriptsize
+\centering
+\caption{Overview of our \dataset. All ccTLDs and the government-related domains.}
+\begin{tabular}{lr}
+\toprule
+    & Total \\
+\hline
+Domains using DMARC & 19.2M \\
+\ldots \# ccTLDs & 301 \\
+\ldots \# countries & 290 \\
+\ldots with either \texttt{rua} or \texttt{ruf} & 5.8M \\
+\ldots \ldots with \texttt{rua} & 5.7M \\
+\ldots \ldots with \texttt{ruf} & 1.9M \\
+\hline
+Government-related domains using DMARC & 40.0k\\
+\ldots \# ccTLDs & 192 \\
+\ldots \# countries & 183 \\
+\ldots with either \texttt{rua} or \texttt{ruf} & 22.4k \\
+\ldots \ldots with \texttt{rua} & 22.1k \\
+\ldots \ldots with \texttt{ruf} & 13.5k \\
+\bottomrule
+\end{tabular}
+\label{tab:data_overview}
+\vspace{-10px}
+\end{table}
+
+\begin{table}[tb]
+\scriptsize
+\centering
+\caption{DNS measurements overview. Measurement steps reffers to~\cref{fig:methodology}.}
+\label{tab:dns_meas_overview}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Step from~\cref{fig:methodology}} & \textbf{Step 3} & \textbf{Step 6} & \textbf{Step 7} \\
+\midrule
+Measurement date & Sep-30 & Oct-10 & Oct-11 \\
+\midrule
+Total & 10.1k & 1.8M & 1.1M \\
+\midrule
+NOERROR & 5,798 & 1,726,854 & 1,013,738 \\
+NXDOMAIN & 3,989 & 29,287 & 43,763 \\
+TIMEOUT & 231 & 58,052 & 894 \\
+SERVFAIL & 93 & 886 & 206 \\
+ERROR & 0 & 416 & 0 \\
+\bottomrule
+\end{tabular}
+\vspace{-15px}
+\end{table}

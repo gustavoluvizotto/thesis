@@ -1,0 +1,18 @@
+\begin{table*}[tb]
+\centering
+\small
+\caption{LDAP product types, open-source software status, and a few vulnerabilities found. \todo{FI: Without version detection in Table 3, this list is not very useful and feels like cherry picking and a bit "fear mongering" - e.g., most of the OpenLDAP versions will most likely be fine, but we cannot determine that without the version.} \todorh{Not entirely correct, although I agree that the table is not very useful and can possibly go. We know, however, that OpenLDAP likes to use RSA kex very often, and this hints at older installations. Still, we don't know how old.} \todo{G: ok}}
+\begin{tabular}{lcrr}
+\toprule
+\textbf{Most common types}                      & \textbf{Open source?} & \textbf{Example of CVEs}                 & \textbf{Some types of vuln.}     \\
+\midrule
+Microsoft Active Directory         & \faClose                     & 2013-1282, 2011-3406 & DoS, ACE                   \\
+OpenLDAP                           & \faCheck                     & 2010-0211, 2015-3276 & DoS, ACE, Cipher downgrade \\
+KerioConnect                       & \faClose                     & 2011-1506                & \gls{PitM}                       \\
+389 Directory Server               & \faCheck                     & 2024-6237, 2014-0132                & DoS, Privilege escalation                        \\
+VMWare Platform Service Controller & \faClose                     & No information found         & - \\
+\bottomrule
+\end{tabular}
+\label{tab:ldap_types_vuln}
+\end{table*}
+% MS AD - 2013-3868

@@ -1,0 +1,47 @@
+% Discussed with Roland to change the table. Rationale: methods and analysis are means to reach the contributions, and methods and analysis confuse more than help 
+% (from a perspective of someone not so familiar with the paper). Disclosure is not a contribution per se, it's was needed for usenix paper but it's not a contribution of this paper. Also, information ordering is important, so "misconfiguration" for example should be brought more to front. Order the rows chronologically!
+\begin{table}[tb]
+\centering
+\caption{Comparison with related work. ~\cite{landscape} cover ports 389 and 636.}
+\scriptsize
+\begin{tabular}{l|cccccc|c}
+\toprule
+& \multicolumn{6}{c|}{\textbf{Contributions \& key insights}} &  \\
+ & \rotatebox{90}{\makecell{Hosting and network\\operation of LDAP}} & \rotatebox{90}{\makecell{Use of PKI and\\compromised certs.}} & \rotatebox{90}{\makecell{Misconfigurations and\\sensitive information}} & \rotatebox{90}{\makecell{Recommendations\\for operators}} & \rotatebox{90}{Data set} & \rotatebox{90}{Open-source}
+ & \rotatebox{90}{\makecell{Ports 389, 636,\\3268, 3269}} \\
+\midrule
+Rapid7 (2016)~\cite{project_sonar_rapid7} & \Ocircle & \Ocircle & \Ocircle & \Ccircle & \Ocircle & \Ccircle & \Ccircle \\
+Kaspereit (2024)~\cite{landscape} & \Ocircle & \Ocircle & \Ccircle & \Ocircle & \Ocircle & \Ocircle & \Hcircle \\
+\midrule
+\textbf{This work} & \Ccircle & \Ccircle & \Ocircle & \Ccircle & \Ccircle & \Ccircle & \Ccircle \\
+\bottomrule
+\end{tabular}
+\vspace{-18px}
+\label{tab:literature_comparison}
+\end{table}
+
+
+
+
+
+\iffalse
+\begin{table*}[ht]
+\centering
+\caption{Comparison with related work. Half circles are partially done or have been improved in other work.}
+\scriptsize
+\begin{tabular}{l|cccccc|cccccccccccc}
+\toprule
+& \multicolumn{6}{c|}{\textbf{Contributions \& key insights}} & \multicolumn{10}{c}{\textbf{Methods \& Analysis}} \\
+ & \rotatebox{90}{Hosting of LDAP} & \rotatebox{90}{Disclosure} & \rotatebox{90}{Data set} & \rotatebox{90}{\makecell{Recommendations\\for operators}} & \rotatebox{90}{Open-source} & \rotatebox{90}{Misconfigurations}
+ & \rotatebox{90}{Period} & \rotatebox{90}{Ports} & \rotatebox{90}{Identification} & \rotatebox{90}{(start)TLS} & \rotatebox{90}{Extract metadata} & \rotatebox{90}{Network operation} & \rotatebox{90}{Use of PKI} & \rotatebox{90}{Compromised certs.} & \rotatebox{90}{Extract samples} & \rotatebox{90}{Sensitive data} & \rotatebox{90}{LDAP clients} & \rotatebox{90}{UDP scans} \\
+\midrule
+Kaspereit \etal~\cite{landscape} & \Ocircle & \Ccircle & \Ocircle & \Ocircle & \Ocircle & \Ccircle &2024.01 & 389,636 & \Hcircle & \Ccircle & \Ccircle & \Ocircle & \Ocircle & \Ocircle & \Ccircle & \Ccircle & \Ccircle & \Ocircle \\
+Rapid7 blog~\cite{project_sonar_rapid7} & \Ocircle & \Ocircle & \Ocircle & \Ccircle & \Ccircle & \Ocircle & 2016.09 & 389,636,3268,3269 & \Hcircle & \Ocircle & \Ccircle & \Ocircle & \Ocircle & \Ocircle & \Ocircle & \Ocircle & \Ocircle & \Ccircle \\
+\midrule
+\textbf{This work} & \Ccircle & \Ccircle & \Ccircle & \Ccircle & \Ccircle & \Ocircle & 2024.10--2024.11 & 389,636,3268,3269 & \Ccircle & \Ccircle & \Ccircle & \Ccircle & \Ccircle & \Ccircle & \Ocircle & \Ocircle & \Ocircle & \Ocircle \\
+\bottomrule
+\end{tabular}
+\vspace{-12px}
+\label{tab:literature_comparison}
+\end{table*}
+\fi

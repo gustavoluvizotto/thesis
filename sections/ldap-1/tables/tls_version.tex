@@ -1,0 +1,21 @@
+\begin{table*}[tb]
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \thead{Total IPs} & \thead{Leak credentials} & \thead{Personal data}  & \thead{SASL support}   & \thead{CVE} & \thead{Internal info.} \\ 
+\midrule
+\midrule
+Supporting TLS & 48,198 (100\%) & 910 (100\%) & 7,378 (100\%) & 18,502 (100\%) & 528 (100\%) & 7,118 (100\%) \\
+\arrayrulecolor{gray!90}
+\midrule
+\arrayrulecolor{black}
+TLSv1.3 & 36.67\% & 20.00\% & 27.24\% & 42.04\% & 28.41\% & 49.34\% \\
+TLSv1.2 & 59.46\% & 77.03\% & 68.91\% & 55.92\% & 71.59\% & 46.90\% \\
+TLSv1.1 & 0.33\%  & 0.33\%  & 0.16\%  & 0.23\%  & 0.00\%  & 0.10\% \\
+TLSv1.0 & 3.54\%  & 2.64\%  & 3.69\%  & 1.81\%  & 0.00\%  & 3.67\% \\
+\bottomrule
+\end{tabular}
+\caption{TLS version used in connections}
+\label{tab:tls_version}
+\end{table*}

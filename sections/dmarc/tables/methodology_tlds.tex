@@ -1,0 +1,25 @@
+\begin{table}[tb]
+    \footnotesize
+\centering
+\caption{Data sources used in our analysis, their purpose and the connected research question.}
+\begin{tabular}{p{0.2\linewidth}|p{0.61\linewidth}|r}
+\toprule
+\textbf{Data source} & \textbf{Purpose} & \textbf{Linked RQs} \\
+\midrule
+Domain names from \gls{CT} logs & With $\approx$300 ccTLDs, we establish a global view of the countries and their government (domain names with such purpose) adoption of \gls{DMARC}. We investigate the \texttt{p, sp, rua} and \texttt{ruf} \gls{DMARC} tags. & RQ1 \\
+                                & We investigate the \gls{DMARC} \texttt{rua} and \texttt{ruf} tags to establish the relationship at the inter-country level of organizational domains and \gls{DMARC} report processing centers. & RQ2 \\
+GovDirectory \& UN e-Government & Identify government domains using \texttt{gov} labels as well as domain names present in such \dataset. & RQ1,RQ2 \\
+%\iptwolocation & Identification of the hosters of organizational domains where \gls{DMARC} are retrieved to understand the intent of policy adoption and reporting. & RQ1,RQ2 \\
+\iptwolocation & Mapping IPv4 addresses of domain names from email servers found in domain names of \texttt{rua} and \texttt{ruf} tags to countries. & RQ2 \\
+%Anycast Census & Rule out email servers that receive \gls{DMARC} reports that are anycasted to the nearest geographical location instead of the intended recipient. & RQ2 \\
+\hline
+\hline
+\multicolumn{3}{l}{\textbf{New measurements}}          \\
+\midrule
+\texttt{rua/ruf} domains' MX and A record & Retrieve the email server and their IPv4 address of \gls{DMARC} report receivers. The IPv4 address is used as input to \iptwolocation for geolocation. & RQ2 \\
+%\gls{EDV} & Confirmation that external domains are configured to receive reports and \gls{DMARC} telemetry data is exchanged. & RQ2 \\
+GovDirectory \& UN e-Government & Measure \gls{DMARC} for government domains that are not covered by \openintel \dataset. & RQ1,RQ2 \\
+\bottomrule
+\end{tabular}
+\label{tab:datasources}
+\end{table}

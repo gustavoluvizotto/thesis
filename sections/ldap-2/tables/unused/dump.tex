@@ -1,0 +1,62 @@
+\begin{table}[!ht]
+\small
+\centering
+\begin{tabular}{lll}
+\hline
+\multirow{2}{*}{Port} & \multicolumn{2}{l}{\% IPs without attribute} \\
+                      & Schema dataset       & Root DSE dataset      \\
+\hline
+636                   & 69.3                 & 3.5                   \\
+389                   & 56.1                 & 5.3      \\
+\hline
+\end{tabular}
+\caption{IPs that we could collect schema and root dse}
+\label{tab:dump1}
+\end{table}
+
+\begin{table*}[!ht]
+\small
+\centering
+\begin{tabular}{lll}
+\hline
+IP             & Source  & Type of site                                                                                                                                                                                                                                           \\
+\hline
+69.58.105.244  & browser & \begin{tabular}[c]{@{}l@{}}Symantec Encryption \\ Verified Directory allows you to find and trust keys belonging to this \\ organization. Publish your key here to allow others in the organization \\ to start sending you secure email.\end{tabular} \\
+91.208.68.40   & shodan  & managed service provider in the IT market of statutory health insurance                                                                                                                                                                                \\
+62.152.170.77  & shodan  & organization/company                                                                                                                                                                                                                                   \\
+212.243.86.59  & shodan  & hosts several pgp domains in switzerland. ISP: Swisscom. One case, domain is in india bosegroup.in                                                                                                                                                     \\
+132.235.51.88  & shodan  & University of Ohio                                                                                                                                                                                                                                     \\
+212.84.89.25   & shodan  & ISP                                                                                                                                                                                                                                                    \\
+18.204.119.220 & browser & \begin{tabular}[c]{@{}l@{}}PGP Global Directory \\ is a free service designed to make it easier to find and trust the \\ universe of PGP keys. Publish your key today and allow others to start \\ sending you secure email.\end{tabular}              \\
+216.58.166.87  & browser & Symantec Encryption Verified Directory                                                                                                                                                                                                                 \\
+62.251.195.243 & shodan  & National Post and Telecommunications Office, Morocco                                                                                                                                                                                                   \\
+109.233.13.48  & shodan  & organization/company       \\                                                            
+\hline
+\end{tabular}
+\caption{IPs with namingContext=[’o=Searchable PGP keys’, ’o=Uploaded PGP keys’,
+’o=Users’, ’o=Prefs’, ’o=CRL’, ’cn=PGPServerInfo’, ’o=PGP
+keys’]}
+\label{tab:dump2}
+\end{table*}
+
+\begin{table*}[!ht]
+\small
+\centering
+\begin{tabular}{ll}
+\hline
+serverNames & percent \\
+\hline
+unkown & 59.1 \\
+Microsoft Active Directory & 34.3 \\
+389 Project & 2.4 \\
+Samba Team (https://www.samba.org) or Microsoft Active Directory & 1.4\\
+Apple & 0.8 \\
+Microsoft Active Directory or Samba Team (http://samba.org) & 0.4 \\
+IBM & 0.3 \\
+Apache Software Foundation & 0.2 \\
+ForgeRock AS. & 0.1 \\
+NetIQ Corporation & 0.1 \\
+\end{tabular}
+\caption{Extracted from OID, attribute names and vendorName out of 21086 ldap servers - 389 2024-04-17}
+\label{tab:dump3}
+\end{table*}

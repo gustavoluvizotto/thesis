@@ -1,0 +1,31 @@
+\newcommand{\todo}[1]{\textcolor{red}{(#1\xspace)}}
+\newcommand{\todorh}[1]{\textcolor{orange}{(RH: #1\xspace)}}
+\newcommand{\replyg}[1]{\textcolor{black}{#1\xspace}}
+\newcommand{\etal}[0]{\textit{et al.}\xspace}
+\newcommand{\ie}[0]{\textit{i.e.,}\xspace}
+\newcommand{\eg}[0]{\textit{e.g.,}\xspace}
+\newcommand{\starttls}[0]{StartTLS\xspace}
+\newcommand{\zmap}[0]{ZMap\xspace}
+\newcommand{\cert}[1]{X.509\xspace}
+\newcommand{\hostscape}[0]{\textit{Hostscape}\xspace}
+\newcommand{\iptwolocation}[0]{\textit{IP2Location}\xspace}
+\newcommand{\mypara}[1]{\textbf{#1\xspace.}}
+
+\makeatletter
+\newcommand\EatSpacesHack{\@bsphack\@esphack}
+\makeatother
+\renewcommand\todorh[1]{\EatSpacesHack}
+\renewcommand\todo[1]{\EatSpacesHack}
+
+\newif\ifshorten
+\NewEnviron{shorten}{
+  \ifshorten
+    \BODY
+  \fi
+}
+
+\newcommand{\shortened}[1]{\begin{shorten}#1\end{shorten}}
+
+\newcommand{\Ccircle}{\faCircle} % filled circle \ding{108}
+\newcommand{\Ocircle}{\faCircleThin} % empty circle \ding{109}
+\newcommand{\Hcircle}{\faAdjust} % half-filled circle

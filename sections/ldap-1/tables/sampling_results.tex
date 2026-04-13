@@ -1,0 +1,27 @@
+\begin{table*}[tb]
+\centering
+\small
+\begin{tabular}{@{} lrrr r @{\hspace{8pt}} rrr @{}}
+\toprule
+                   \multirow{2}{*}{\thead{Bind Type}}&\thead{Root}
+                   &  \multirow{2}{*}{\thead{Schema}} & \thead{Naming}& \thead{Passw.} &\multicolumn{3}{c}{\thead{Samples}}\\
+\cline{6-8}
+                    & \thead{DSE} & & \thead{Context} & \thead{Policy} & \multicolumn{1}{@{}r}{\thead{Rand.}} & \thead{Admin} & \thead{Passw.} \\ 
+\midrule
+\midrule
+Total &
+92,588 &35,658 &90,265 &1,432&17,283 &11,715 &2,935 \\
+\arrayrulecolor{gray!90}
+\midrule
+\arrayrulecolor{black}
+No bind & 
+95.04\%&87.28\%&94.97\%&99.93\%&84.02\%&99.74\%&99.18\%\\
+Only Simple bind & 
+4.93\%&12.69\%&5.00\%&0.07\%&15.98\%&0.26\%&0.82\%\\
+Only Unauth. bind & 
+0.03\%&0.03\%&0.03\%&0.00\%&0.00\%&0.00\%&0.00\%\\
+\bottomrule
+\end{tabular}
+\caption{Summary of sampling result per IP:port combination.}
+\label{tab:sampling_results}
+\end{table*}

@@ -1,0 +1,22 @@
+
+%\newcommand{\todo}[1]{\textcolor{red}{#1}}
+%\newenvironment{todoenv}{\color{red}}{\ignorespacesafterend}
+\newcommand{\NAME}{LanDscAPe}
+% can be used to comment out text
+\newcommand{\mycomment}[1]{}
+%\newcommand{\rh}[1]{\textcolor{orange}{RH:\xspace #1}}
+% The most prolific author of all times, Et Al.
+\newcommand{\etal}[0]{\textit{et al.}\xspace}
+\newcommand{\ie}[0]{\textit{i.e.,}\xspace}
+\newcommand{\eg}[0]{\textit{e.g.,}\xspace}
+\newcommand{\denseparagraph}[1]{\vspace{0.45em}\noindent\textbf{#1\hspace{0.5em}}}
+
+\newcommand{\thead}[1]{\textbf{#1}}
+
+\makeatletter
+  \pretocmd\@acrlong{\glsunset{#2}}{}{}
+\makeatother
+\DeclareFloatingEnvironment[fileext=lop,placement={tb},name=Listing]{lstfloat}
+\captionsetup[lstfloat]{name={Listing}, skip=0pt}
+\crefname{lstfloat}{Listing}{Listings}
+\Crefname{lstfloat}{Listing}{Listings}

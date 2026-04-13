@@ -1,0 +1,92 @@
+% OLD TABLE (OCT 2024)
+%\begin{table}
+%\caption{Top 10 anycast ASNs by number of /24s}
+%\begin{tabular}{rlrrrr}
+%\toprule
+%ASN & Name & Active IPs & /24-prefixes & BGP-prefixes & IP utilization \\
+%\midrule
+%396982 & Google Cloud & 826,588 & 3,351 & 146 & 96.36\% \\ % TODO expanded by 20% ish
+%13335 & Cloudflare & 746,556 & 3,088 & 348 & 94.44\% \\ largely the same
+%16509 & Amazon & 112,578 & 1,042 & 227 & 42.20\% \\ stayed the same
+%54113 & Fastly & 115,122 & 454 & 50 & 99.05\% \\ % TODO doubled in number of /24s
+%209242 & Cloudflare & 66,527 & 272 & 226 & 95.54\% \\ stayed the same
+%12041 & Afilias & 2,075 & 224 & 224 & 3.62\% \\ stayed the same
+%40509 & Fly.io & 19,949 & 220 & 115 & 35.42\% \\ stayed the same
+%15169 & Google & 50,877 & 219 & 19 & 90.75\% \\ -> TODO what happened?
+%15967 & NetArt Group & 46,904 & 191 & 41 & 95.93\% \\
+%15133 & EdgeCast & 22,785 & 151 & 151 & 58.94\% \\ -> TODO what happened to EdgeCast? They reduced their deployment?
+%\bottomrule
+%\end{tabular}\label{tab:top_ases}
+%\end{table}
+%\begin{table}
+%\label{tab:top_ases}
+%\begin{tabular}{rlrrr}
+%\toprule
+%ASN & Organization & /24-prefixes & Active IPs & IP Utilization \\
+%\midrule
+%396982 & Google & 4,115 & 1,001,503 & 95.07\% \\
+%13335 & Cloudflare & 2,712 & 653,999 & 94.20\% \\
+%16509 & Amazon & 1,140 & 116,489 & 39.92\% \\
+%54113 & Fastly & 837 & 212,937 & 99.38\% \\
+%209242 & Cloudflare & 281 & 67,188 & 93.40\% \\
+%12041 & Afilias & 223 & 2,116 & 3.71\% \\
+%40509 & Fly.io & 219 & 20,000 & 35.67\% \\
+%15967 & NetArtGroup & 195 & 47,945 & 96.04\% \\
+%63911 & NetActuate & 105 & 1,151 & 4.28\% \\
+%16276 & OVH & 99 & 12,415 & 48.99\% \\
+%\bottomrule
+%\end{tabular}
+%    \caption{Number of active IPs and IP Utilization for the ten largest anycast ASNs by number of /24s.}
+%\end{table}
+
+% OLD RESULTS 4 FEB
+%\begin{table}[tb]
+%    \begin{tabular}{lrrrr}
+%        \toprule
+%        Org (ASN) & /24s & Active IPs & Active IP ratio & HRP ratio \\
+%        \midrule
+%        Cloudflare (13335) & 2,866 & 657,587 & 0.896 & 0.989 \\
+%        Google (396982) & 4,319 & 262,845 & 0.238 & 0.974 \\
+%        Fastly (54113) & 830 & 210,443 & 0.990 & 0.990 \\
+%        AWS (16509) & 1,589 & 130,649 & 0.321 & 0.245 \\
+%        Cloudflare (209242) & 268 & 59,822 & 0.872 & 0.978 \\
+%        Fly.io (40509) & 223 & 21,711 & 0.380 & 1.000 \\
+%        GoDaddy (398787) & 64 & 16,383 & 1.000 & 1.000 \\
+%        AceVille (139341) & 115 & 12,943 & 0.440 & 0.835 \\
+%        Nazwa.pl (15967) & 195 & 11,741 & 0.235 & 0.959 \\
+%        Afilias (207266) & 82 & 11,142 & 0.531 & 0.061 \\
+%        \bottomrule
+%    \end{tabular}
+%    \caption{Largest ASes by number of active IPs,
+%        alongside the number of /24s
+%        and Active IP \& HRP ratios.
+%    }
+%    \label{tab:top_ases}
+%\end{table}
+
+% RESULTS 18 FEB
+\begin{table}[tb]
+    \centering
+    \caption{Largest ASes by number of active IPs,
+        alongside the number of /24s
+        and active IP \& HRP ratios.
+    }
+    \begin{tabular}{lrrrr}
+        \toprule
+        Org (ASN) & Active IPs & /24s & \makecell{Active \\ IP ratio} & HRP Ratio \\
+        \midrule
+        Cloudflare (13335) & \num{658e3} & \num{2866} & 0.896 & 0.989 \\
+        Google (396982) & \num{492e3} & \num{4298} & 0.447 & 0.973 \\
+        Fastly (54113) & \num{209e3} & \num{827} & 0.989 & 0.990 \\
+        AWS (16509) & \num{133e3} & \num{1603} & 0.325 & 0.260 \\
+        Cloudflare (209242) & \num{60e3} & \num{270} & 0.862 & 0.967 \\
+        Fly.io (40509) & \num{22e3} & \num{223} & 0.387 & 1.000 \\
+        GoDaddy (398787) & \num{16e3} & \num{64} & 1.000 & 1.000 \\
+        AceVille (139341) & \num{13e3} & \num{118} & 0.430 & 0.805 \\
+        Vercara (12008) & \num{12e3} & \num{98} & 0.459 & 0.449 \\
+        Nazwa.pl (15967) & \num{11e3} & \num{195} & 0.224 & 0.959 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:top_ases}
+    \vspace*{-4mm}
+\end{table}

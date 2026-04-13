@@ -1,0 +1,83 @@
+% hyperref did not work as intended
+%\usepackage[breaklinks]{hyperref} \renewcommand\UrlFont{\color{blue}\rmfamily} \urlstyle{rm}
+%\hypersetup{colorlinks, linkcolor={black!70!black}, citecolor={black!70!black}, urlcolor={black!70!black}}
+
+%\usepackage{color}
+\usepackage{comment}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+
+%\usepackage{arydshln}
+\usepackage{graphicx}
+
+\usepackage{cite} % IMC template does not like this; this groups citations of ~\cite{a,b,c} like [1-3]
+%\usepackage{breakurl} % pdflatex doesn't like this
+\usepackage{url}
+\usepackage[acronym]{glossaries}
+%\glsdisablehyper
+\usepackage{xcolor}
+\usepackage{makecell} % used in the literature comp. table
+%\usepackage{colortbl}
+\usepackage{booktabs}  % tables style
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[capitalise]{cleveref}
+
+\usepackage{xspace}
+\usepackage{soul}
+
+%\usepackage{caption}
+%\usepackage{subcaption}
+
+\usepackage{textcomp} % trademarks symbols
+\usepackage{algorithmic}
+
+\usepackage{enumitem}
+
+%\usepackage{fixltx2e}
+%\usepackage{stfloats}
+%\ifCLASSOPTIONcompsoc
+%\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+
+% Disable / remove copyright boxes
+% CCR
+%\setcopyright{none}
+%\settopmatter{printacmref=false}
+%\renewcommand\footnotetextcopyrightpermission[1]{}
+
+\iffalse
+%%%%%%%%%%%%% CCR specifics
+% Increase margin between text and footer
+\setlength{\footskip}{20pt}
+
+% Add CCR footer
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{%
+   \fancyhf{} %
+   \fancyfoot[L]{ACM SIGCOMM Computer Communication Review}%
+   \fancyfoot[R]{Volume X Issue Y, Month YYYY}%
+}
+\pagestyle{plain}
+
+% Add CCR footer on first page
+\fancypagestyle{firstpagestyle}{%
+   \fancyhf{} %
+   \fancyfoot[L]{ACM SIGCOMM Computer Communication Review}%
+   \fancyfoot[R]{Volume X Issue Y, Month YYYY}%
+}
+
+\fi
+
+%\usepackage{balance}
+% to remove newcommands texts
+\usepackage{environ}
+
+% used for the literature comparison table
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{pifont}
+\usepackage{adjustbox}
+\usepackage{fontawesome}

@@ -1,0 +1,45 @@
+\section{Introduction}
+\label{sec:introduction}
+The \acrfullpl{ccTLD} play a strategic role in providing regionalized content and services to their local populations.
+\glspl{ccTLD} often represent national digital identity, encompassing critical sectors such as healthcare, education, and public administration.
+The misuse of domains under a \gls{ccTLD} through phishing campaigns can, therefore, undermine the reputation of the country's Internet namespace. For instance, Nominet -- the registry for \texttt{.uk} -- initiated a domain health campaign to make the \texttt{.uk} \gls{ccTLD} the most trusted namespace~\cite{Sanmogan_IntroducingDomainHealth_2025}.
+Within \glspl{ccTLD}, governmental domains hold inherent trust from the public they serve.
+Furthermore, communication between governments and citizens is crucial, including official announcements~\cite{Zaken_GovernmentCommunicationsPolicy_2018} or tax notifications.
+For example, Scheitle \etal identified domain names that imitate tax authorities~\cite{ScheitleEtAl_RiseCertificateTransparency_2018} that could be used for phishing.
+Hence, phishing campaigns that impersonate government domains can have serious consequences.
+CISA issued a binding operational directive in 2017 mandating U.S. government domains to implement \gls{DMARC}~\cite{_BOD1801Enhance_2017}.
+Similarly, other countries have followed such practice~\cite{_DMARCForumStandardization_,_BSITR03182Email_}.
+%Furthermore, \glspl{ccTLD} are not under the sight of ICANN as the others \glspl{gTLD} and rely on local authorities~\cite{Merrill2016}.
+
+To combat phishing and spoofing on email, protocols such as \gls{DKIM}~\cite{rfc6376}, \gls{SPF}~\cite{rfc7208}, and \gls{DMARC}~\cite{rfc7489} have been developed.
+%For instance, \gls{DKIM} allows domain owners to sign their emails digitally, and \gls{SPF} specifies the IP prefixes that are authorized to send emails on behalf of their domain.
+\gls{DMARC} builds upon \gls{SPF} and \gls{DKIM}, acting as a gatekeeper by allowing domain owners to specify a policy that tells how receiving mail servers should handle emails that fail authentication checks.
+Furthermore, \gls{DMARC} includes a reporting system that provides domain owners with insights into how their domains are used, improving their email security posture.
+
+\gls{DMARC} can be set up to report email authentication status on a per-failure basis or, more commonly, in an aggregated report format~\cite{hureau_stress_testing}.
+Domain owners can specify an external specialized company to process these reports on their behalf. In return, domain owners receive insights and recommendations to improve their email authentication practices.
+\gls{DMARC} aggregated reports may reveal communication patterns and organizational infrastructure details that can be exploited for impersonation~\cite{hureau_spoofed,rfc7489}.
+While outsourcing can simplify operations~\cite{_DMARCReportsGoogle_}, it introduces a dependency on third-party service providers, which may raise concerns about vendor lock-in and data sovereignty when reports are sent to a foreign country~\cite{hureau_spoofed, _EuropeanCriticalDependencies_2025}.
+
+Prior work has shown the adoption of \gls{DMARC} in a broad context, often merging different data sources such as: popular domains from hit lists, domains from \gls{gTLD}, \gls{ccTLD} from open zone files (\eg \texttt{.se}), data crawlers, passive DNS data, or \gls{CT} logs~\cite{hureau_spoofed, ashiq2023,han_libo2023,han_dengke2023,tatang2021,MaroofiEtAl_AdoptionEmailAntiSpoofing_2021}.
+Similarly, \gls{DMARC} reporting has been studied using various sources of domain names, showing overall adoption, examining report format, and domains that send and receive reports~\cite{ashiq2023,hureau_spoofed,hureau_stress_testing}.
+However, these works did not examine \gls{DMARC} adoption and report-processing locations from a geographical view, \ie \gls{DMARC} usage from the perspective of \glspl{ccTLD}.
+
+To bridge this gap, we seek to answer: \textbf{RQ1)} how domains across different \glspl{ccTLD} -- including government domains -- adopt \gls{DMARC} and what factors help to shape the strength of their configuration; and \textbf{RQ2)} how \gls{DMARC} reporting is distributed geographically and to what extent they reveal cross-border data flows.
+%For both research questions, we investigate the recent evolution of \gls{DMARC} policies adoption and reporting to external domains.
+In our study, we use the \openintel~\cite{openintel} \dataset, which covers a substantial portion (301) of all \glspl{ccTLD} and includes frequent \gls{DMARC} measurements over 1.5 years.
+We compile a comprehensive set of government domains through pattern matching, as well as from sources such as GovDirectory~\cite{govdirectory}, the United Nations E-Government Knowledgebase~\cite{_EGOVKBUnitedNations_}, and the approach by Rashna \etal~\cite{rashna2024}.
+We perform \gls{DNS} measurements to retrieve \gls{DMARC} records from government domains.
+And we measure and geolocate the mailboxes for \gls{DMARC} reports.
+Our contributions are:
+
+\begin{itemize}
+    \item We present a first analysis of \gls{DMARC} adoption across nearly all \glspl{ccTLD}. Our analysis reveals that European countries lead the adoption of \gls{DMARC} worldwide. However, the rollout of stringent policies is still limited to 5.2M (34.5\%) of domains.
+    \item We reveal relationships between domains and their \gls{DMARC} report receivers. Such relationships have implications for digital sovereignty, \eg the indication of cross-border data flows or, in some cases, dependency on foreign service providers to process \gls{DMARC} telemetry data. From the non-U.S. \glspl{ccTLD}, 1.7M domains (26.5\%) is configured to send \gls{DMARC} reports to the U.S. The U.S. leads the list of domains with indication of cross-border flows.
+    \item We analyze different government domains' \gls{DMARC} strategies. We find that some government domains follow best practices and use stringent \gls{DMARC} policies. Additionally, from all non-U.S. government domains, 5.9k (21.8\%) is configured to send \gls{DMARC} data to the U.S.
+    \item We give a longitudinal view on \gls{DMARC} practices. We find that some government domains within \glspl{ccTLD} increase in numbers of external domains configured to receive \gls{DMARC} reports.
+    \item We provide recommendations scoping governments and their national agencies, registries, hosting providers, and email service providers.
+\end{itemize}
+
+Our findings show a global need to strengthen \gls{DMARC} practices to combat email spoofing better.
+Our analysis is intended to help improve the \gls{DMARC} adoption and reporting across different countries.

@@ -1,0 +1,19 @@
+%-------------------------------------------------------------------------------
+\begin{abstract}
+%-------------------------------------------------------------------------------
+The \acrfull{LDAP} is the standard technology to query information stored in directories. These directories can contain sensitive personal data such as usernames, email addresses, and passwords. LDAP is also used as a central, organization-wide storage of configuration data for other services. Hence, it is important to the security posture of many organizations, not least because it is also at the core of Microsoft's Active Directory, and other identity management and authentication services. 
+%While some of these services are restricted to internal networks, other LDAP instances are used for address book-like lookups or remote authentication purposes; they are meant to be publicly available.
+
+We report on a large-scale security analysis of deployed LDAP servers on the Internet. We developed \mbox{\NAME}, a scanning tool that analyzes security-relevant misconfigurations of LDAP servers and the security of their TLS configurations. 
+%Importantly, it can automatically detect data leaks such as publicly accessible password hashes or plaintext passwords that are accessible in insecure ways. 
+Our Internet-wide analysis revealed more than 10k servers that appear susceptible to a range of threats, including insecure configurations, deprecated software with known vulnerabilities, and insecure TLS setups. 4.9k LDAP servers host personal data, and 1.8k even leak passwords. We document, classify, and discuss these and briefly describe our notification campaign to address these concerning issues.
+
+
+% We've also discovered %\todo{thousands} of servers with subpar security configurations, such as . 
+%We have also found that many LDAP servers can be traversed, enabling an unauthorized copy of sensitive information.
+
+% However, the question looms is whether these servers safeguard our data and privacy, as mandated by contemporary regulations like the General Data Protection Regulation (GDPR). A compelling inquiry emerges: What sort of data lies exposed during a journey through the vast network of LDAP servers across the Internet?
+
+
+%Recognizing the vulnerabilities in LDAP servers is a vital step toward enhancing the overall IT security. It serves as a reminder that the security landscape is continually evolving, and organizations must adapt and fortify their defenses to protect critical data and maintain trust with their users and customers.
+\end{abstract}

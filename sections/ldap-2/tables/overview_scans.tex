@@ -1,0 +1,47 @@
+\begin{table}[tb]
+\centering
+\scriptsize
+\caption{Responsive LDAP servers by port.}
+\begin{tabular}{lrr}
+\toprule
+                                    & \textbf{Total} & \textbf{(Start)TLS} \\
+\midrule
+LDAP/389 only                       & 53.1k  & 14.4k \\
+LDAPS/636 only                      & 12.1k  & 14.0k \\
+\ldots both LDAP/389 and LDAPS/636  & 23.0k  & 21.2k \\
+\midrule
+Global Catalog/3268 only            & 21.5k  & 0.5k  \\
+Global Catalog/3269 over TLS only   & 0.5k   & 0.5k  \\
+\ldots both Global Catalog ports    & 5.3k   & 5.3k  \\
+\bottomrule
+\end{tabular}
+\vspace{-15px}
+\label{tab:overview_scans}
+\end{table}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% REMOVED - old version
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\begin{table}[tb]
+\centering
+\small
+\caption{Overview of identified LDAP servers.}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+               & \multicolumn{2}{c}{\textbf{LDAP}}                    & \multicolumn{2}{c}{\textbf{Global Catalog}} \\
+\midrule
+               & \multicolumn{1}{c}{no TLS} & \multicolumn{1}{c}{TLS} & \multicolumn{1}{c}{no TLS} & \multicolumn{1}{c}{TLS} \\
+\hline
+\starttls only & 50.9k                      & 14.9k                   &  16.4k                          & 0.4k                     \\
+LDAPS only     & 12.4k                      & 14.2k                   &  1.8k                           & 1.8k                     \\
+Both           & 23.1k                      & 21.3k                   &  4.1k                           & 4.1k                      \\
+\bottomrule
+\end{tabular}
+\label{tab:overview_scans}
+\end{table}
+\fi

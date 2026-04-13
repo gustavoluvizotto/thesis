@@ -1,0 +1,94 @@
+% !TEX root = ../main.tex
+%\section{Longitudinal identification of LDAP servers}
+%In addition to the snapshot measurement we reported in the paper, we measured \gls{LDAP} servers in July and September. Starting in July, the total number of recognized servers increased in September and then slightly reduced in November. The increase is mostly due to \gls{AD} on Windows server 2016/2019. However, we did not observe a decrease in the outdated Windows Server 2008 or 2000, indicating that these servers might have been online longer than our July measurement. The results are summarized in \cref{fig:ldap-type-longitudinal}
+\iffalse
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/ldap_server_type_longitudinal_cnt.pdf}
+    \caption{Longitudinal view of LDAP servers identification in 4 months. \todorh{I think this one is not needed.}}
+    \label{fig:ldap-type-longitudinal}
+    \vspace{-10px}
+\end{figure}
+\fi
+%\section{Hosters and LDAP types}
+%
+%\begin{figure}[tb]
+ %   % CHANGE TO BE HORIZONTAL STACKED BARPLOT
+  %  \centering
+   % %\subfloat[Top cloud providers on different LDAP types]
+    %\includegraphics[width=1.\linewidth]{figures/cloud_providers_types_ldap.pdf}\label{subfig:cloud-ms-ad}
+    %\caption{Most common hosters vs. hosted LDAP products.}
+    %\label{fig:cloud-ldap-types-correlation}
+%\end{figure}
+%https://xneelo.co.za/managed-servers/ -> managed servers, linux
+%https://www.hetzner.com/managed-server/ -> managed servers, linux
+%https://contabo.com/en/vps/cloud-vps-1/?addons=1002&image=windows-server.308&qty=1&contract=1&storage-type=vps-1-400-gb -> can do managed servers with windows and linux too!
+%https://aws.amazon.com/marketplace/pp/prodview-mr7e2y6qhxaag?sr=0-11&ref_=beagle&applicationId=AWSMPContessa -> windows server, unmanaged
+
+%%%%NO!! NhanHoa (Vietnamese organization) has no \gls{AD} deployment because their catalog only offers Linux-based systems. ``Ocassio IP Range'' (ocassio.co.uk) is mapped to ``UK Dedicated Servers Limited'' in the \textit{whois}, with no clear indication of a hosting organization. ``HostPapa'' website indicates a small hosting company offering fully- to self-managed services. Ocassio and HostPapa account for 0.1k servers, and they show old versions of \gls{AD} on Windows Server.
+
+\section{Hosters and valid chains of X.509 certificates}
+\input{tables/hosting_valid_chain}
+Investigation of hosters x valid chains at \cref{tab:hosting-valid-chains}.
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%%%% REMOVED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\iffalse
+subsection{TLS characteristics}
+\input{tables/ciphersuites}
+The RFC9325 gives guidelines for secure use of \gls{TLS} communication. We group and evaluate them by showing the recommended ciphers found in our data set in \cref{tab:tls_ciphersuite}. 
+
+\input{tables/tls_properties}
+In general, cipher suites utilizing the \gls{RSA} algorithm for key exchange and authentication are not supported in TLS version 1.3. For version 1.2, they are classified as weak and will soon officially be deprecated, as can be seen in a ``work in progress'' draft by the \gls{IETF}. The reason for this classification is the \todorh{not the algorithm, the session key} falgorithm is non-ephemeral, and thus does not support Perfect Forward Secrecy (PFS) \cite{ietf-tls-deprecate-obsolete-kex-03}. Cipher suites using \gls{SHA-1} are classified as weak because \gls{SHA-1} is generally considered vulnerable and was deprecated and disallowed by the \gls{NIST} (its original author) in the year 2011 with SP 800-131A \cite{BarkerRoginsky_TransitioningUseCryptographic_2019}. Cipher suites employing \gls{CBC} mode \cite{fardan2013} are also classified as weak (in \gls{TLS} version 1.2) due to it having vulnerabilities to padding attacks and not providing integrity protection for the encrypted data. \gls{GCM} fixes these specific vulnerabilities and should thus be used in place of \gls{CBC}. Our results are summarized in \cref{tab:tls_properties_table}.
+
+The corresponding field in the \gls{CUIDS} to determine if the certificate is self-signed is computed by comparing issuer- and subject names, and provided in the data set. If both match, Censys automatically categorizes the certificate as self-signed \cite{rfc5280}.
+
+
+\section{Size of LDAP hosting}
+\label{sec:appendix_host_size}
+In \cref{fig:ldap-per-nr-ips-cnt} we show the distribution of \gls{LDAP} servers per number of IP addresses hosted by an AS. We counted the distribution of \gls{LDAP} servers across different hoster sizes and presented in \cref{tab:ldap-size-cnt}. 
+
+\begin{table}[tb]
+    \centering
+    \small
+    \caption{Distribution of LDAP over hoster size}
+    \begin{tabular}{lr}
+    \toprule
+    \textbf{Hoster size} & \textbf{\#} \\
+    \midrule
+    Large & 31.1k \\
+    Small & 30.3k \\
+    Medium & 30.3k \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:ldap-size-cnt}
+\end{table}
+
+\section{Size of hosters and type of LDAP servers}
+\label{sec:appendix_host_size_ldap_type}
+\input{tables/ldap_type_hosting_size}
+In \cref{tab:host-size-ldap-type} we present how \gls{LDAP} servers types are distributed across different hosting companies size
+
+\section{Hosting and valid chains of X.509 certificates}
+\label{sec:appendix_hosting_chains}
+\input{tables/hosting_valid_chain}
+In \cref{tab:hosting-valid-chains} we show the distribution of valid chains across different hosting companies.
+
+\section{Cipher suites and valid chains of X.509 certificates}
+\label{sec:appendix_ciphers_chains}
+We show how cipher suites are distributed across valid and invalid chains of X.509 certificates in \cref{fig:cipher_chains}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/cipher_chain_error.pdf}
+    \caption{Distribution of cipher suites on valid chains of X.509 certificates.}
+    \label{fig:cipher_chains}
+\end{figure}
+\fi

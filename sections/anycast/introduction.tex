@@ -1,0 +1,69 @@
+% !TEX root = main.tex
+
+\section{Introduction}\label{sec:introduction}
+Anycast is the practice of making a service address available in
+multiple, discrete, autonomous locations~\cite{rfc4786},
+which we refer to as \glspl{pop} throughout this paper.
+%
+The first RFC describing anycast (RFC~1546~\cite{rfc1546}) was published in 1993 and explains how anycast simplifies finding an appropriate server.
+As service examples, they list DNS, FTP, and `Archie' (one of the first Internet search engines).
+%
+More than three decades later, anycast is widely deployed for critical Internet infrastructure, such as the DNS~\cite{dns-anycast},
+and by \glspl{cdn} to provide web services~\cite{CicaleseEtAl_CharacterizingIPv4Anycast_2015, GiordanoEtAl_FirstCharacterizationAnycast_}.
+%
+Reasons for providing a service using anycast include
+increased service resilience through automatic failover
+(where traffic is redirected to a different \gls{pop} if one fails),
+service replication closer to users to reduce latencies,
+and load distribution amongst \glspl{pop}.
+
+Given the importance of anycast, previous studies have characterized the services hosted on anycast prefixes~\cite{CicaleseEtAl_CharacterizingIPv4Anycast_2015, GiordanoEtAl_FirstCharacterizationAnycast_}.
+However, these works are more than ten years old
+and cover only \num{1.7e3} prefixes.
+As of 2026, anycast deployments have grown significantly, with recent daily censuses~\cite{Hendriks_LACeS_An_Open_2025} detecting \num{14e3} anycast /24-prefixes
+and \num{12e3} IPv6 /48-prefixes.
+
+In this work, we provide an up-to-date view of how anycast is used globally
+by looking at the services replicated with anycast
+and investigating the deployment strategies used by operators to provision such services.
+%
+We achieve this by investigating the number and location of \glspl{pop} behind anycast prefixes and their topologies visible in routing data.
+%
+Additionally, we construct a pipeline to perform service-aware scanning from multiple \glspl{vp},
+combining TCP, UDP, and QUIC scans using ZMap~\cite{ZMapInternetScanner2013}, LZR~\cite{lzr} and ZGrab2~\cite{censys15}.
+
+\noindent{}\textit{Our contributions are as follows:}
+
+\textit{(i)}
+We find \num{1e3} ASes originate anycast.
+77\% of ASes host services on less than 10\% of their announced IP addresses, and 7\% utilize more than 90\% of their prefixes.
+Thus, five ASes alone account for more than 88\% of anycast IP addresses hosting services.
+%
+This concentration has implications for the resilience and diversity of anycast infrastructure.
+
+\textit{(ii)}
+We show that \gls{byoip} has become a significant deployment pattern.
+18\% of anycast ASes replicate their services using a single \gls{byoip} provider.
+Half of these ASes use that provider exclusively.
+%
+This reveals hidden dependencies where independent ASes
+rely on the same provider and infrastructure.
+
+\textit{(iii)}
+We demonstrate that anycast is often deployed regionally (\ie, within a single continent),
+with 35\% of ASes have at least one regional prefix,
+some of which having distinct regional prefixes in multiple continents.
+%
+This shows that anycast is not just used to replicate services globally
+but also to provide redundancy for regional services.
+%
+
+\textit{(iv)}
+We find web services dominate anycast at prefix granularity,
+with a significant (42\%) presence of QUIC,
+signaling operators are adopting modern transport protocols.
+%
+At AS level, however, DNS is the most common service (61\%),
+particularly amongst operators hosting services on only one or a few IP addresses.
+This contrast highlights distinct deployment strategies between
+large \glspl{cdn} and DNS-focused operators.

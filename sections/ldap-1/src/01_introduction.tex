@@ -1,0 +1,94 @@
+%-------------------------------------------------------------------------------
+\section{Introduction}
+%-------------------------------------------------------------------------------
+The \acrfull{LDAP} is the standard technology to query information stored in directories. These directories may contain sensitive personal data such as usernames, email addresses, and passwords. LDAP is also used as a central organization-wide storage of configuration data for other services. 
+\acrshort{LDAP} instances manage data within the directory and allow the authentication of individuals and services seeking access to it~\cite{rfc4511}. \acrshort{LDAP} is used in various domains, including email services~\cite{carterLDAPSystemAdministration2003, rhotonProgrammerGuideInternet1999} such as Microsoft Exchange~\cite{ExchangeAccountServer}, publishing \gls{PKI} information~\cite{karatsiolisPlanningDirectoryServices2005a}, and enabling Single-Sign-On solutions~\cite{wangResearchDesignUnified2017, huApplicationSingleSignon2010}.
+% , or \todo{verification of DNS-SVR records \cite{deland-hanVerifyThatSRV2023}}, which are used for \acrfull{voip}, among other things.
+\acrshort{LDAP} servers are often an integral part of more comprehensive directory services,  notably Apple's Open Directory~\cite{AppleOpenDirectory2005}, Microsoft's \acrfull{AD} \cite{janicerickettsLDAPAuthenticationAzure2023, deland-hanEnableLightweightDirectory2023}, and Red Hat's Directory Server~\cite{AdministrationGuideRed}. In some cases, these services are intended for public use and hence meant to be exposed to and accessible over the Internet. 
+More frequently, however, they hold private or sensitive data that should be only accessible to a small group of principals or within an organization's backend network. The secure configuration of these private \acrshort{LDAP} servers is of critical importance. 
+% However, even seemingly less important public services can be subject to regulation such as the EU's \acrfull{GDPR}, which requires any form of personal data %\acrfull{PII}
+% to be protected at all times and, \eg mandates securely encrypted connections.
+
+In this paper, we take a closer look at the security configurations and the directories of \acrshort{LDAP} servers publicly accessible on the Internet. To the best of our knowledge, despite it being the industry standard, there is no prior study of LDAP at Internet scale besides DDoS amplification analyses using LDAP over UDP~\cite{ldap-ddos}. In fact, \acrshort{LDAP} has been mostly studied in terms of isolated vulnerabilities rather than as an ecosystem. Consequently, there are no tools dedicated to large-scale evaluation. Existing software to analyze \acrshort{LDAP} settings is also usually limited in scope~\cite{ldappershellster,synzackldapper,metasploit}.
+
+For our study, we built a custom tool, \NAME, that identifies public \acrshort{LDAP} servers on the Internet, assesses their configuration, including TLS setup, and samples the hosted directories. Concretely, the tool scans the IPv4-wide Internet for hosts with common LDAP ports in an open state. It then sends LDAP probes to determine if the service indeed speaks \acrshort{LDAP}. \NAME{} tries all standard-conforming ways of anonymously (without using passwords) binding to servers and, if successful, collects configuration information and requests directory samples. It analyzes the samples for personal data, sensitive configuration values, and possible passwords. Finally, \NAME{} examines the TLS configurations of LDAP servers. Note that the scanning and analysis methods behind \NAME, in particular those that take and analyze directory samples, are built to minimize harm to affected users. For example, we only take small directory samples, even if the server is willing to return larger samples or even the full directory, and delete all samples after analysis.
+
+\NAME{} found 3.7 million IPv4 addresses responding on \acrshort{LDAP} ports 389 or 636; about 
+82.1k IPs sent valid \acrshort{LDAP} responses. 12,179 IPs (14.83\%)
+respond with personal data, and out of those, only 1,392 (11.4\%) use a recommended cipher suite and have a valid certificate chain. This means that the vast majority of \acrshort{LDAP} servers exposing personal data insufficiently protect the confidentiality and authenticity of personal data. Furthermore, 
+616 IPs (0.75\%) run an \acrshort{LDAP} server version that is linked to at least one CVE and 
+9,731 IPs (11.85\%) leak possibly sensitive internal information. 
+In combination, these findings mean that it is trivial for attackers to obtain valuable information about organizations. Personal data in \acrshort{LDAP} directories often resembles contact information of employees; these may even leak the organization's structure, which is valuable reconnaissance information.
+
+Even worse, our sampling revealed that 
+%1,770 
+1,817 IPs (2.21\%) leak passwords, either hashed or plaintext. To further minimize harm to users, we develop a method for counting the total numberount of passwords within a directory without actually downloading them. In total, the affected servers leak 3.9 million passwords. For technical, ethical, and legal reasons, we cannot validate whether these passwords are (still) valid, and for many LDAP servers, we do not know which organizations and services the directories are part of. 
+%Furthermore, many jurisdictions prohibit testing credentials, even with good intentions. 
+Still, we fear that the sheer amount of leaked passwords implies that a sizable number is used in real-world services.
+
+% We use \NAME{} to investigate the content of \acrshort{LDAP} servers that are exposed to the Internet without access control. Most worryingly, we find \acrshort{LDAP} servers among these that contain sensitive data, including passwords.
+
+%\paragraph{Responsible disclosure.} We initiated a coordinated disclosure campaign to ensure that the issues we identified are addressed. We work with a national CERT to notify organizations with vulnerable LDAP servers via email. For those organizations with critical password leaks, we also attempt to contact them directly. 
+
+%We continue monitoring the affected \acrshort{LDAP} servers and collect information if and when vulnerabilities, leaks, or weak TLS configurations are mitigated. Furthermore, we collect information about the mitigation strategies and will include this information in future versions of this paper.
+
+
+\paragraph{Contributions.} In summary, our contributions are:
+\begin{itemize}
+    \item We introduce \NAME, enabling semi-automated and Internet-wide security analysis of public \acrshort{LDAP} servers. 
+    %We intend to publish \NAME{} and submit it to artifact evaluation.
+
+    \item We analyze technical opportunities and limits of the \acrshort{LDAP} protocol as well as ethical considerations for Internet-wide \acrshort{LDAP} security analysis. 
+
+    \item We uncover thousands of LDAP servers that host personal data and use a subpar 
+    %or outright weak 
+    security configuration, including TLS ciphers and certificates. We find 1.8k LDAP servers that leak hashed or plaintext passwords, posing a high risk for affected organizations and users.
+
+    \item We describe our coordinated disclosure campaign and its effectiveness.
+    %continue to monitor \acrshort{LDAP} servers with known weaknesses. We will update future versions of this paper to reflect the results.
+\end{itemize}
+
+
+% LDAP servers have hardly been examined for vulnerabilities. However, we could imagine various scenarios in which LDAP servers are attacked. For example, consistent access restriction measures are not in place due to the possibility of connecting via unauthenticated/anonymous bind, as outlined in the LDAP RFC (\cite{rfc4511}). This suggests that potentially millions of data entries are publicly available on the Internet, encompassing information that could comprise personal details, unsecured certificates, vulnerable password hashes, and various other critical data categories.
+%
+% \paragraph{Our ideas.} We now summarize our ideas to make an LDAP Landscape analysis. 
+%
+%\hfill \break
+%\textit{Recap: ZMap: Fast Internet-wide Scanning and Its Security Applications}. In 2013, Zmap was introduced at USENIX in Washington D.C. by Zakir Durumeric, Eric Wustrow, and J. Alex Halderman, a modular, open-source network scanner specifically architected to perform Internet-wide scans \cite{durumeric2013zmap}. Meanwhile, Zmap is conducting scans across the entire IPv4 address space within a five-minute timeframe. Notably, ZMap boasts modules for executing TCP SYN scans, UDP probes, ICMP and DNS query analysis, UPnP assessments, and BACNET inspections \cite{ZMapInternetScanner2023}. In addition, it is possible to extend ZMap's capabilities to application-level scanning through its sister project, ZGRAP. ZGRAP utilizes the IP addresses discovered by ZMAP as input and dispatches queries to these addresses based on the loaded modules. This enables, for instance, the execution and analysis of complete TLS handshakes. Moreover, it provides the flexibility to define custom modules, allowing, for instance, the initiation of LDAP queries \cite{ZGrab2023}.
+%
+% \hfill \break
+% \textit{Internet-wide scanning for LDAP servers.} A significant challenge that persists is the lack of a clear and up-to-date picture of how many LDAP servers are publicly accessible on the Internet. To address this problem and gain insights into the exposure of LDAP servers, we employ a proactive solution. 
+
+% , and tests them in an ethical way for vulnerable configurations and potential leakage of personal data and credentials. We notify the operators of vulnerable \acrshort{LDAP} instances in an ongoing campaign.
+
+% To evaluate the security on the transport layer, we use \zmap~\cite{durumeric2013zmap} to scan the Internet for open \acrshort{LDAP} ports, and we extend Goscanner~\cite{Goscanner2017} to carry out \acrshort{TLS} handshakes, also using \acrshort{LDAP}'s \starttls method of upgrading to \acrshort{TLS} in-band. We evaluate the cryptographic configuration we encounter, including cipher suites and X.509 certificate chains. We validate the latter against a number of root stores. We identify about 80k servers using \starttls and 40k using \acrshort{LDAP} directly over TLS; however, about 45\% of the chains do not pass the validity checks.
+
+% We then use \NAME{} to analyze the security of the \acrshort{LDAP} servers themselves. We find that a large number of servers allow downgrading the connection to the obsolete version 2 of the \acrshort{LDAP} protocol, which is a security issue due to the lack of appropriate authentication mechanisms.
+% \todo{we do not focus on detecting LDAP v2 on the Internet as we expect to have an insignificant (if none) amount. (thoughts?)}
+% \rh{LDAPv2-\textbf{only} is rare; but downgradeability is common. PitM attackers should be able to downgrade to LDAPv2 as part of the connection setup, is that right? Then it's a major issue.}
+%Although downgrading LDAP to the obsolete version 2 (since 2003) is considered a major security issue due to the lack of TLS support and modern authentication mechanism as the Simple Authentication and Security Layer (SASL) \cite{10.17487/rfc3494},
+
+%Certain server capabilities could potentially expose vulnerabilities or hint at weaker configurations. For instance, an LDAP V3 server may be susceptible to downgrade attacks, \todo{(what is the security-implication of a v3 to v2 downgrade? - see further...)} while others might only support protocol version V2 with less robust authentication and encryption measures in place. \todo{(reference of such attack?)}
+
+%\rh{The following paragraph is an attempt to be more specific - please extend with the necessary details}
+% Numerous \acrshort{LDAP} capabilities and attributes are security-relevant or lend themselves to exploitation. We explore these with the help of \NAME, dividing them into three categories: 1) basic capabilities as they are commonly used in the connection setup, 2) controls, features, and options that configure security properties and access control \rh{correct? or used to do what?}, and 3) exploitable attributes \rh{please fix - see commented text, it was too abstract}.
+%Furthermore, numerous other attributes could be security-relevant, with potential vulnerabilities yet to be explored. 
+%\rh{`yet to be explored' is an odd wording}
+% \rh{The following paragraph is so high-level that I fail to understand what is actually meant.}
+%Therefore, we aim to assess the LDAP Servers we've discovered. In our analysis, we'll focus on a range of capabilities divided into four three categories. Firstly, we will delve into the basic capabilities, scrutinizing aspects such as the supported protocol versions, bind requirements, and bind options. Following this, we'll analyze controls, features, and extensions and investigate security implications. Furthermore, we'll explore attributes, looking for classification or exploitation possibilities given through certain attribute configurations. 
+
+% \hfill  \break
+% \textit{Crawling these servers in order to classify them.}
+% \todo{Crawling is possible even when no paging is available}.\rh{is that of relevance in the intro?}
+% We find that it is often possible to crawl these servers, exploiting weak attributes that support configurations such as wildcards, among others. We use an ethical method to take samples to understand what these servers would expose to any party that connects and crawls the server. Servers that do not attempt to prevent such crawling present a significant problem as they may grant unauthorized access to sensitive personal data, facilitate the downloading of insecure certificates, and allow for the cracking of weak password hashes, all while exposing potential vulnerabilities arising from inadequate configurations.
+
+ %\rh{I don't understand the next 2 sentences. Crawling is not a solution, it's an attempt to sample.}
+ %To investigate these concerns, we propose a multifaceted solution. This includes conducting a Proof of Concept through the crawling of selected servers or even extending this approach to encompass all servers where crawling is feasible. 
+
+%promptly and appropriately - RH: I don't think we can ensure that, just try
+% \rh{The following sentence is out of context, suggest deleting it.}
+% Lastly, we emphasize the importance of demonstrating the potential consequences if further manual exploitation occurs, thus highlighting the critical need to secure DICOM servers effectively.
+
+
+
+% This research provides an overview of LDAP servers on the Internet and possible vulnerabilities but by no means shows all vulnerabilities in all detail.

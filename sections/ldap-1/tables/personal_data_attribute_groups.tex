@@ -1,0 +1,63 @@
+% \begin{table*}[tb]
+% \setlength\tabcolsep{2pt}
+%     \small
+%     \centering
+%     \begin{tabularx}{\textwidth}{@{} l X @{}}
+%     \toprule
+%         \thead{Personal Data} & \thead{LDAP Attributes} \\
+%         \thead{Group} &  \\
+%         \midrule
+%         \midrule
+%         Last Name & lastName, LastName, sn, sn;lang-cs, sn;lang-en, sn;lang-ja, sn;lang-el sn;x-role-2, uvmEduSurname, i3sicLastName, suDisplayNameLast \\
+%         Email & EMAIL, eMailAddress, email, i3sicEmail, mail, mailAlias, mailAlternateAddress, mailLocalAddress, mailalias, zimbraMailAlias, umMailAlias, umAlternateMail, suMailAddress, mailAliasLast, mailAliasLastLaw, mailAliasesLaw, mailAliases \\
+%         First Name & firstName, FirstName, givenName, givenName;lang-cs, givenName;lang-ja, givenName;lang-el, givenName;x-role-2, givenname, i3sicFirstName, middleName, umDisplayFirstName, suDisplayNameFirst, suDisplayNameMiddle, umMiddleInitial, ucMiddleName, cuMiddlename \\
+%         Full Name & displayName, displayname, eduPersonNickname, umDisplayName, umDisplayNameLF, krbPrincipalName, username, nsNickName, umNickName, nsnickname, mozillaNickname, nickname,  fullName, name, CallerIDName, suDisplayNameLF, umNameComponent, suOtherName \\
+%         Birthday& apple-birthday, birthDay, dateOfBirth, schacDateOfBirth, birthDate \\
+%         Gender & gender, sex, schacGender \\
+%         Country & c, co, countryCode, state, st, country, userCountry, mozillaHomeState \\
+%         Phone Number & homePhone, telephoneNumber, uvmEduOfficePhone, mobile, i3sicLocalPhoneNumber, facsimileTelephoneNumber, MobileNumber, HomeNumber, suGwAffilPhone1, telephonenumber, otherTelephone, osuAltPhoneNumber, otherMobile, phone \\
+%         Address &  homePostalAddress, streetAddress, street, postalAddress, uvmEduOfficeAddress, umStreetAddress, suGwAffilAddress1, mozillaHomeStreet, postalAddress;x-role-2, osuOfficeAddress, mozillaHomeStreet2 \\
+%         Location & l, location, uvmEduOfficeLocation, mozillaHomeLocalityName, provinceName, postalCode, zip, city \\
+%         Public Key & userCertificate, userCertificate;binary, pgpKey, nDSPKIPublicKeyCertificate, nDSPKIPublicKey, userPKCS12, userSMIMECertificate \\
+%         Title &  isDoctor, title, title;x-role-2, personalTitle, umOfficialTitle, umDisplayTitle, umPrimaryTitle, umNamePrefix, umNameSuffix, suDisplayNamePrefix, suDisplayNameSuffix \\
+%         Job & company, department, employeeNumber, employeeType, umEmployee, eduPersonAffiliation, eduPersonPrimaryAffiliation, Department, umPrimaryDeptName, umPrimaryInstitutionCode, umInstitutionCode, umPrimaryInstitution, umDepartment, suGwAffiliation2, suDisplayAffiliation, suGwAffiliation1, suAffiliation, ucDepartment, departmentName, osuPrimaryAffiliation, osuDepartment, companyName, brEduAffiliation, psDepartment, hireDate \\
+%         Photo & jpegPhoto, photograph \\
+%         SSN & socialSecurityNumber \\
+%     \bottomrule
+%     \end{tabularx}
+% \caption{Grouping of LDAP attributes containing personal data.}
+% \label{tab:personal_data_attribute_groups}
+% \end{table*}
+
+
+\begin{table}[!htb]
+\setlength\tabcolsep{1pt}
+\renewcommand{\arraystretch}{1.3}
+    \footnotesize
+    \centering
+    \begin{tabularx}{\linewidth}{@{} X @{}}
+    \toprule
+        \thead{Personal Data Group} LDAP Attributes\\
+        \midrule
+        \midrule
+        \textbf{Last Name}  lastName, LastName, sn, sn;lang-cs, sn;lang-en, sn;lang-ja, sn;lang-el sn;x-role-2, uvmEduSurname, i3sicLastName, suDisplayNameLast \\
+        \textbf{Email}  EMAIL, eMailAddress, email, i3sicEmail, mail, mailAlias, mailAlternateAddress, mailLocalAddress, mailalias, zimbraMailAlias, umMailAlias, umAlternateMail, suMailAddress, mailAliasLast, mailAliasLastLaw, mailAliasesLaw, mailAliases \\
+        \textbf{First Name}  firstName, FirstName, givenName, givenName;lang-cs, givenName;lang-ja, givenName;lang-el, givenName;x-role-2, givenname, i3sicFirstName, middleName, umDisplayFirstName, suDisplayNameFirst, suDisplayNameMiddle, umMiddleInitial, ucMiddleName, cuMiddlename \\
+        \textbf{Full Name}  displayName, displayname, eduPersonNickname, umDisplayName, umDisplayNameLF, krbPrincipalName, username, nsNickName, umNickName, nsnickname, mozillaNickname, nickname,  fullName, name, CallerIDName, suDisplayNameLF, umNameComponent, suOtherName \\
+        \textbf{Birthday} apple-birthday, birthDay, dateOfBirth, schacDateOfBirth, birthDate \\
+        \textbf{Gender}  gender, sex, schacGender \\
+        \textbf{Country}  c, co, countryCode, state, st, country, userCountry, mozillaHomeState \\
+        \textbf{Phone}  homePhone, telephoneNumber, uvmEduOfficePhone, mobile, i3sicLocalPhoneNumber, facsimileTelephoneNumber, MobileNumber, HomeNumber, suGwAffilPhone1, telephonenumber, otherTelephone, osuAltPhoneNumber, otherMobile, phone \\
+        \textbf{Address}   homePostalAddress, streetAddress, street, postalAddress, uvmEduOfficeAddress, umStreetAddress, suGwAffilAddress1, mozillaHomeStreet, postalAddress;x-role-2, osuOfficeAddress, mozillaHomeStreet2 \\
+        \textbf{Location}  l, location, uvmEduOfficeLocation, mozillaHomeLocalityName, provinceName, postalCode, zip, city \\
+        \textbf{Public Key}  userCertificate, userCertificate;binary, pgpKey, nDSPKIPublicKeyCertificate, nDSPKIPublicKey, userPKCS12, userSMIMECertificate \\
+        \textbf{Title}   isDoctor, title, title;x-role-2, personalTitle, umOfficialTitle, umDisplayTitle, umPrimaryTitle, umNamePrefix, umNameSuffix, suDisplayNamePrefix, suDisplayNameSuffix \\
+        \textbf{Job}  company, department, employeeNumber, employeeType, umEmployee, eduPersonAffiliation, eduPersonPrimaryAffiliation, Department, umPrimaryDeptName, umPrimaryInstitutionCode, umInstitutionCode, umPrimaryInstitution, umDepartment, suGwAffiliation2, suDisplayAffiliation, suGwAffiliation1, suAffiliation, ucDepartment, departmentName, osuPrimaryAffiliation, osuDepartment, companyName, brEduAffiliation, psDepartment, hireDate \\
+        \textbf{Photo}  jpegPhoto, photograph \\
+        \textbf{SSN}  socialSecurityNumber \\
+    \bottomrule
+    \end{tabularx}
+\caption{Personal data attribute groups.}
+\label{tab:personal_data_attribute_groups}
+\end{table}
+

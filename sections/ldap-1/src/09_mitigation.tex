@@ -1,0 +1,43 @@
+%-------------------------------------------------------------------------------
+\section{(LDAP-specific) Mitigations}
+\label{sec:mitigations}
+
+
+\todo{@Sebastian, delete}
+
+
+\todo{config of the four authentication mechanisms}
+\todo{use TLS}
+\todo{prohibit crawling on specific attributes}
+
+%\subsubsection{Valid Reasons for crawlable Servers @Cristoph}
+%The question arises if there are reasons for crawlable servers on the public internet.
+%- Adressbook of public institutions and postboxes
+
+% RFC Pw Policies DoS: The LDAP directory server SHOULD log as much information as it can (such as client IP address) whenever an account is locked, in order to be able to identify the origin of the attack. Denying anonymous access to the LDAP directory is also a way to restrict this kind of attack. Using the login delay instead of the lockout mechanism will also help avoid this denial of service.
+
+%\subsubsection{Differentiation to webcrawling @Sebastian}
+
+\subsection{Unauthenticated Bind}
+\todo{What is this?}
+
+Unauthenticated Bind operations can have significant security issues
+   (see Section 6.3.1).  In particular, users intending to perform
+   Name/Password Authentication may inadvertently provide an empty
+   password and thus cause poorly implemented clients to request
+   Unauthenticated access.  Clients SHOULD be implemented to require
+   user selection of the Unauthenticated Authentication Mechanism by
+   means other than user input of an empty password.  Clients SHOULD
+   disallow an empty password input to a Name/Password Authentication
+   user interface.  Additionally, Servers SHOULD by default fail
+   Unauthenticated Bind requests with a resultCode of
+   unwillingToPerform.
+
+SHOULD NOT !!!!! see also security considerations
+
+make statistics about that
+
+
+Guidelines on securely configuring LDAP servers.
+Usage of service accounts for authentication via LDAP
+%-------------------------------------------------------------------------------

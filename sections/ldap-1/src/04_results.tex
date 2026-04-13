@@ -1,0 +1,40 @@
+\input{tables/sanity_check_servers}
+\input{tables/sampling_results}
+\section{Results}
+\label{sec:results}
+
+Using the pipeline described above, we aim to answer two main questions: What sensitive data do publicly accessible LDAP servers expose, and how protected are the connections a client can establish to them?
+
+The structure of this section follows the same analysis pipeline as \cref{sec:methodology} by presenting the results of each module in \cref{fig:scanning_pipeline}. An overview of the results is given in \cref{tab:results_overview}.
+
+\subsection{Scanning}
+% TLS numbers coming from Gustavo
+Our ZMap scan identified 3,704,816 hosts responding to the SYN scan on port 389 and 3,763,310 hosts on 636. We collected 67,498 distinct TLS certificates from 50,970 hosts on port 636 and 35,707 hosts on 389 via \starttls, including non-static hosts. In pilot studies, we observed that \acrshort{LDAP} servers usually run on static IP addresses, observing a churn rate as it is commonly observed for other protocols as well~\cite{MouraEtAl_HowDynamicISPs_2015}.
+
+% In this stage, we collected 67,498 distinct TLS certificates (with non-static hosts) in a single snapshot from a union of 50,970 hosts on port 636 and 35,707 hosts on port 389 via \starttls. 
+
+
+%We have measured in two periods, September and November of 2023, 6 weeks in total. 
+%We compare two and two weeks, the LDAP IPs that are present in the older week with a miss in the newer week and, in another list, the LDAP IPs that appeared in the newer snapshot. 
+
+
+
+\subsection{Confirmation}
+
+We determined that 80,968 servers on port 389 and 34,095 servers on port 636 (82,129 distinct IP addresses in total) respond to our LDAPv2 bind or LDAPv3 bind with an LDAP result message as defined in Section 4.1.9 in~\cite{rfc4511}; we classified them as LDAP servers (\cref{tab:number_of_ldap_servers}). Nearly all LDAP servers support LDAPv3, with slightly over half accepting LDAPv2 binds; however, this does not necessarily indicate that the server actually supports LDAPv2. For instance, OpenLDAP documentation~\cite{OpenLDAPSoftwareAdministrator} states that OpenLDAP does not support LDAPv2 but accepts LDAPv2 bind requests for legacy reasons. Nevertheless, we observed 177 servers on port 389 and 32 on port 636 that only accept LDAPv2.
+
+%\todo{how do we categorize ldap servers which do not support v2 and where v3 bind fails?}
+During the confirmation process, we observed that a few LDAP servers delivered a \texttt{protocolError} either during an LDAPv2 or LDAPv3 bind. However, using the respective other version, our connection experiences a timeout (two seconds) or receives a connection reset. The occurrence of a \texttt{protocolError} indicates that the server is an LDAP server; however, it does not support the requested protocol version.
+
+
+
+\subsection{Sampling}
+
+
+We established a total of 115,063 connections (\texttt{IP:port}), as shown in \cref{tab:number_of_ldap_servers}. We found that many connections were willing to send data without a bind request. For example, we retrieved the root \gls{DSE} entry 92,588 times: 95.04\% without a bind, 4.93\% with a simple bind, and 0.03\% with an unauthenticated bind. This means that in some cases, we were able to request additional information from the server via simple bind and unauthenticated bind \cref{tab:sampling_results}. However, according to RFC 4513~\cite{rfc4513}, the server should be in the same state as without binding. This hints at misconfigurations and faulty assumptions regarding the authorization and authentication mechanisms \gls{LDAP} provides.
+
+Alarmingly, we identified entries\footnote{Note that not each entry contains actual user credentials (cf.~\cref{sec:data_analysis_results}).} with credential attributes on 2,935 connections (\texttt{IP:port}), highlighting a significant security concern. 
+
+% We were able to identify a total of $115,063$ (\cref{tab:number_of_ldap_servers}) possible distinct connections (\texttt{IP:port}). As \cref{tab:sampling_results} shows, we were able to extract configuration parameters or samples from a large set of these connections without sending a bind request at all, indicating that they implement no access control. However, we were also able to extract additional data from using the simple bind---which should lead into the same context as connections without binding--- and unauthenticated bind---which should not be accepted by servers according to RFC4513~\cite{rfc4513}---mechanisms. This hints at misconfigurations and faulty assumptions regarding the authorization and authentication mechanisms \gls{LDAP} provides.
+
+%  Alarmingly, we extracted entries\footnote{Note that not each entry contains actual user credentials. We expand on this in \cref{sec:data_analysis_results}.}. with credential attributes from 2,935 connections (\texttt{IP:port}), highlighting a significant security concern. 

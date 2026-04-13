@@ -1,0 +1,25 @@
+\begin{table}[tb]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{@{} l r@{\hspace{1pt}}r r@{\hspace{1pt}}r r@{\hspace{1pt}}r @{}}
+\toprule
+\thead{Version} & \multicolumn{2}{c}{\multirow{2}{*}{\thead{Port 389}}} & \multicolumn{2}{c}{\multirow{2}{*}{\thead{Port 636}}} & \multicolumn{2}{c}{\multirow{2}{*}{\thead{Any}}} \\
+\thead{Support} \\
+\midrule
+\midrule
+Any           & 80,968 &(100.00\%) & 34,095  & (100.00\%) & 82,129 & (100.00\%) \\
+v2            & 48,362 &(59.73\%)  & 21,162  & (62.07\%)  & 56,798 & (69.16\%)\\
+Only v2       & 177    & (0.22\%)  & 32      & (0.09\%)   & 205    & (0.25\%) \\
+v3            & 80,750 &(99.73\%)  & 34,043  & (99.85\%)  & 81,322 & (99.02\%) \\
+Only v3       & 32,565 &(40.22\%)  & 12,913  & (37.87\%)  & 35,325 & (43.01\%)\\
+None          & 41     &(0.05\%)   & 20      & (0.06\%)   & 55     & (0.07\%) \\
+\bottomrule
+\end{tabular}
+\caption{Identified LDAP servers with supported versions.}
+\label{tab:number_of_ldap_servers}
+\end{table}
+
+%any row: any column: "is ldap" grouped by IP
+%v2 row: any column: "is ldap" and "v2 support: true" grouped by IP
+%v2 only row: any column: "is ldap" and "v2 support: true" and "v3 support: false" grouped by ip

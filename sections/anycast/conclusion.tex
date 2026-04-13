@@ -1,0 +1,18 @@
+% !TEX root = main.tex
+
+\section{Summary and Conclusions}\label{sec:conclusions}
+% --- what we did
+This paper provides a comprehensive characterization of anycast, analyzing both the deployment strategies operators use and the services they replicate.
+We use a service-aware scanning pipeline to measure replicated services from multiple \glspl{vp} using ZMap, LZR, and ZGrab2\@.
+
+% --- centralization takeaways
+Despite \num{1e3} ASes deploying anycast, we find that only five ASes account for over 88\% of anycast IP addresses hosting services, as most operators announce prefixes with only a few active addresses.
+Furthermore, five operators (including Cloudflare) account for 61\% of anycast DNS deployments and 72\% of domain names under \glspl{gtld} rely on authoritative name servers deployed on anycast infrastructure.
+We identify that \gls{byoip} is commonly used, with 18\% of ASes using a single \gls{byoip} provider, and \num{77} ASes deploy anycast prefixes solely with Cloudflare.
+Hence, disruptions or attacks targeting Cloudflare's anycast network~\cite{_CloudflareOutageNovember_2025,_DetailsCloudflareOutage_2019} could extend beyond its direct customers, such as 22\% of domain names under \gls{gtld}, to potentially affect Cloudflare's \num{77} downstream anycast ASes.
+This consolidation creates significant dependencies on a few operators, potentially lowering the ecosystem's resilience.
+
+Web services are the most common services hosted on anycast prefixes, with a few ASes deploying QUIC, indicating that these hypergiants are adopting modern technologies to improve web content delivery.
+
+Our results show regional anycast is widespread, with 35\% of ASes providing replicated services within a continent.
+Hence, anycast is not just used for global redundancy, but also for localized content.

@@ -1,0 +1,66 @@
+\documentclass[10pt, conference, letterpaper]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\input{texenv/usepackage}
+\input{texenv/custom}
+\input{texenv/acronyms}
+% REMOVE before submission
+\setlength {\marginparwidth }{2cm} % this is for todonotes package (remove warning)
+
+% Submissions must not exceed 8 (eight) pages in IEEE 2-column style, 10pt, plus 2 (two) additional pages for references and appendices
+\begin{document}
+\title{A Deep Dive on Deployment Strategies of Services Provisioned using Anycast}
+
+\author{anonymous submission}
+
+\iffalse
+% TODO author positions
+\author{
+    \IEEEauthorblockN{
+        Gustavo Luvizotto Cesar\IEEEauthorrefmark{1}\orcidlink{0009-0007-4665-421X}\footnote[*]{Shared first author.},
+        Remi Hendriks\IEEEauthorrefmark{1}\orcidlink{0009-0008-1578-668X}\footnote[*]{Shared first author.},
+        Martin Angelov\IEEEauthorrefmark{1}, % TODO orcid
+        Johannes Zirngibl\IEEEauthorrefmark{1}\orcidlink{0000-0002-2918-016X},
+        Mattijs Jonker\IEEEauthorrefmark{1}\orcidlink{0000-0001-5174-9140},
+        Roland van Rijswijk-Deij\IEEEauthorrefmark{1}\orcidlink{0000-0002-0249-8776},
+        Ralph Holz\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\orcidlink{0000-0001-9614-2377},
+    }
+    % TODO mail Martin
+    \IEEEauthorblockA{
+        \IEEEauthorrefmark{1}
+        \textit{University of Twente}, Enschede, The Netherlands \\
+        \{remi.hendriks, m.jonker, r.m.vanrijswijk \\
+        \IEEEauthorrefmark{2}University of Münster, email: ralph.holz@uni-muenster.de
+    }
+}
+% TODO add note: shared first author
+\fi
+
+\maketitle
+
+\input{abstract}
+\glsresetall % JZ: Abstract and Body should be independent, reset Acronyms after abstract
+\input{introduction}
+\input{background}
+\input{methodology}
+\input{deployment}
+\input{services}
+%\input{longitudinal}
+%\input{discussion}
+\input{conclusion}
+%\input{acknowledgment}
+% TODO ack bgp.tools
+% TODO ACK CATRIN
+% TODO ACK intersect
+% TODO ack Catalyst
+% TODO ack openintel
+%\nocite{*}
+
+% "plus 2 (two) additional pages for references and appendices"
+\bibliographystyle{IEEEtran}
+%\balance
+\bibliography{references}
+
+\input{appendix}
+
+\end{document}

@@ -1,0 +1,19 @@
+ % !TEX root = ../main.tex
+\section{Introduction}
+\label{sec:introduction}
+\glsreset{LDAP}
+The \gls{LDAP} is a well-known protocol to access directory servers.
+The protocol is used by various applications, including Microsoft's \gls{AD}. It serves as a way for \gls{LDAP} clients to query a backend---\eg for \gls{SSO} or to enable email clients to fetch receiver addresses or the corresponding S/MIME certificates~\cite{OndaroEtAl_MINECollectingAnalyzing_2025}.
+Due to their content and widespread use of \gls{LDAP} servers in organizations, it is often intended for internal use and are not reachable from the public Internet. However, there are many legitimate cases of public-facing servers, such as the aforementioned support for (secure) email.
+
+In recent work, we investigated the security posture of the \emph{general} \gls{LDAP} server population on the Internet \cite{landscape} with a focus on unauthorized access to sensitive data and some aspects of communication security, leaving an analysis of \emph{\gls{LDAP} hosting} to future work.
+
+In this paper, we return to the topic with a focus on the \emph{management and hosting of \gls{LDAP} across hosting providers}. Our main contributions are: a) improved \gls{LDAP} measurements, which enable us to b) detect more \gls{LDAP} products at large scale; c) analyze the types of hosting and network segments where \gls{LDAP} is found; d) analyze the \gls{PKI} practices in the \gls{LDAP} ecosystem. We make our code and data publicly available under a permissive license\footnote{\url{github.com/internettransparency/ldap-sequel}}.
+
+We extend our previous tooling to improve the identification of \gls{LDAP} servers by a factor of 6.5, identifying many previously unknown instances in the process. Unlike prior work, we extend our measurement and analysis to \gls{GC} instances, achieving a more comprehensive view of the ecosystem.
+Our product detection can help operators assess the exposure of their networks by identifying outdated instances that an attacker could exploit.
+To characterize the diverse hosting practices, we drill down to the level of the hosters' network blocks to identify and describe the network segments they use for \gls{LDAP}. We use a Pareto-inspired approach to determine the hosting behavior in segments in terms of \gls{LDAP} server software and underlying operating system.
+
+Against this background, we then investigate management practices such as the use of strong communication security and the setup of \gls{PKI}, including attempts to deploy private \glspl{PKI}.
+
+We find that 4.3k servers run a deprecated \gls{LDAP} product. Unlike the centralization observed in other ecosystems such as Web hosting~\cite{doan2022}, DNS~\cite{Moura2015}, and email~\cite{liuWhoGotYour2021}, we observed several hosters of \gls{LDAP} servers. We report on servers using X.509 certificates with a private key that is publicly known, posing serious risks to operators and users of these servers. Our findings enable us to provide recommendations for \gls{LDAP} operators on how to configure their systems more securely, as well as guidance for hosting operators who wish to identify poorly maintained \gls{LDAP} deployments within their network segments or develop mitigation strategies.

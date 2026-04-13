@@ -1,0 +1,126 @@
+\begin{table*}[tb]
+\centering
+\scriptsize
+\caption{LDAP products by category. Note that rows do not add up to the total due to overlap between categories.}
+
+\begin{tabular}{lrrrrr}
+\toprule
+&              &         &        & \multicolumn{2}{c}{\textbf{Global Catalog}} \\
+\textbf{Name} & \textbf{All} & \textbf{w/o TLS} & \textbf{w/ TLS} & \textbf{w/o TLS} & \textbf{w/ TLS} \\
+\midrule
+\multicolumn{6}{l}{Category 1: Active Directory/Windows} \\
+\ldots MS ADC on Windows Server 2016/2019 & 24.6k & 11.9k & 7.4k & 11.7k & 3.4k \\
+\ldots MS ADC on Windows Server 2012 R2 & 4.9k & 2.0k & 1.9k & 1.9k & 1.0k \\
+\ldots MS ADC on Windows Server 2008 R2 & 2.7k & 0.7k & 1.6k & 0.5k & 0.9k \\
+\ldots MS ADC on Windows Server 2022 & 1.4k & 0 & 1.4k & 0 & 0.7k \\
+\ldots MS ADC on Windows Server 2000 & 0.8k & 0.1k & 0.7k & 18 & 7 \\
+\ldots MS ADC on Windows Server 2012 & 0.6k & 0.2k & 0.2k & 0.2k & 0.1k \\
+\ldots MS ADC on Windows Server 2008 & 0.3k & 0.1k & 0.1k & 0.1k & 0.1k \\
+%\ldots MS ADC on Windows Server 2003 & 0.2k & 0.1k & 0.1k & 0.1k & 38 \\
+%\ldots MS LDS on Windows Server 2016/2019 & 0.2k & 0.2k & 0.1k & 0 & 0  \\
+\ldots Remainder in this category & 0.6k & 0.4k & 0.2k & 0.1k & 38 \\
+\midrule
+Category 2: OpenLDAP & 25.0k & 7.6k & 17.7k & 0 & 3 \\
+%\ldots OpenLDAP on Apple & 0.4k & 0.1k & 0.4k & 0 & 0 \\ merged!
+\midrule
+\multicolumn{6}{l}{Category 3: Less common products} \\
+\ldots Kerio Connect & 4.8k & 9 & 4.8k & 0 & 13 \\
+\ldots 389 Directory Server & 1.8k & 0.1k & 1.7k & 0 & 4 \\
+\ldots VMware PSC & 1.3k & 0.9k & 1.2k & 0 & 0 \\
+\ldots Remainder in this category & 0.4k & 0.3k & 0.1k & 0 & 0 \\
+\midrule
+Category 4: no identification possible & 5.6k & 3.6k & 2.0k & 47 & 29 \\
+\midrule
+Total & 74.7k & 27.9k & 40.9k & 14.6k & 6.3k \\
+\bottomrule
+\end{tabular}
+
+\label{tab:ldap_types}
+%\end{adjustbox}
+\vspace{-15px}
+\end{table*}
+
+
+\begin{comment}
+\begin{table*}[tb]
+%\rowcolors{2}{blue!20}{white}
+\centering
+\small
+\caption{Type of LDAP servers divided into categories they were discovered:
+by port numbers, where 389 and 3268 are with \starttls, and 636 and 3269 are with LDAP over TLS.
+\faMehO: Community support, but no version found. \faThumbsUp: Receives security updates. \faExclamation: Receives paid security updates. \faRemove: End of life. \faBomb: Community support with security issues found (approximately 2.6k -- all DoS). \faHourglassHalf: Some versions are still supported, and some are end-of-life. \todo{FI: Honestly, I don't like the table too much. The last column has no header, and The icons are somewhat suggestive, i.e., why the smiley for OpenLDAP, and what does the dash mean? What's the difference between All others and not identified?}}
+\begin{tabular}{lrrrrrr}
+\toprule
+%\rowcolors{2}{blue!20}{white}
+&              &         &        & \multicolumn{2}{l}{\textbf{Global Catalog}}    & \\
+\textbf{Name} & \textbf{All (\%)} & \textbf{w/o TLS (\%)} & \textbf{w/ TLS (\%)} & \textbf{w/o TLS (\%)} & \textbf{w/ TLS (\%)} & \\
+\midrule
+\multicolumn{7}{l}{Category 1: Active Directory/Windows} \\
+\ldots MS ADC on Win. Server 2016/2019 & 33.0 & 42.8 & 18.0 & 80.2 & 54.4 & \faThumbsUp \\
+\ldots MS ADC on Win. Server 2012 R2 & 6.6 & 7.0 & 4.7 & 13.2 & 16.4 & \faExclamation \\
+\ldots MS ADC on Win. Server 2008 R2 & 3.6 & 2.5 & 4.0 & 3.6 & 13.5 & \faRemove \\
+\ldots MS ADC on Win. Server 2022 & 1.9 & - & 3.3 & - & 11.2 & \faThumbsUp \\
+\ldots MS ADC on Win. Server 2000 & 1.0 & 0.3 & 1.7 & 0.1 & 0.1 & \faRemove \\
+\ldots MS ADC on Win. Server 2012 & 0.8 & 0.8 & 0.6 & 1.4 & 2.2 & \faExclamation \\
+\ldots MS ADC on Win. Server 2008 & 0.4 & 0.4 & 0.3 & 0.7 & 0.8 & \faRemove \\
+\ldots MS LDS on Win. Server 2016/2019 & 0.3 & 0.7 & 0.1 & - & - & \faThumbsUp \\
+%\ldots MS ADC on Win. Server 2003 & 0.3 & 0.3 & 0.2 & 0.5 & 0.6 & \faRemove \\
+\midrule
+\multicolumn{7}{l}{Category 2: OpenLDAP} \\
+\ldots OpenLDAP & 32.9 & 27.0 & 42.2 & - & - & \faMehO \\
+\ldots OpenLDAP on Apple & 0.6 & 0.2 & 1.0 & - & - & \faMehO \\
+\midrule
+\multicolumn{7}{l}{Category 3: Less common products} \\
+\ldots Kerio Connect & 6.4 & - & 11.6 & - & 0.2 & \faMehO \\
+\ldots 389 Directory Server & 2.4 & 0.3 & 4.2 & - & 0.1 & \faBomb \\
+\ldots VMware PSC & 1.7 & 3.2 & 3.0 & - & - & \faHourglassHalf \\
+\ldots Remainder in this category & 1.0 & 1.8 & 0.5 & 0.5 & 0.6 & - \\
+\midrule
+Category 4: no identification possible & 7.5 & 13.0 & 4.9 & 0.3 & 0.5 & - \\
+\midrule
+\rowcolor{white!100}Total (100\%) & 74.7k & 27.9k & 40.9k & 14.6k & 6.3k & - \\
+\bottomrule
+\end{tabular}
+\label{tab:ldap_types}
+%\end{adjustbox}
+\end{table*}
+\end{comment}
+
+\begin{comment}
+\begin{table*}[tb]
+\rowcolors{2}{blue!20}{white}
+\centering
+\small
+\caption{Type of LDAP servers divided into categories they were discovered:
+by port numbers, where 389 and 3268 are with \starttls, and 636 and 3269 are with LDAP over TLS.
+\faMehO: Community support, but no version found. \faThumbsUp: Receives security updates. \faExclamation: Receives paid security updates. \faRemove: End of life. \faBomb: Community support with security issues found (approximately 2.6k -- all DoS). \faHourglassHalf: Some versions are still supported, and some are end-of-life.}
+\begin{tabular}{lrrrrrr}
+\toprule
+\rowcolors{2}{blue!20}{white}
+              &              &         &        & \multicolumn{2}{l}{\textbf{Global Catalog}}    & \\
+\textbf{Name} & \textbf{All (\%)} & \textbf{w/o TLS (\%)} & \textbf{w/ TLS (\%)} & \textbf{w/o TLS (\%)} & \textbf{w/ TLS (\%)} & \\
+\midrule
+OpenLDAP & 32.9 & 27.0 & 42.2 & - & - & \faMehO \\
+MS ADC on Win. Server 2016/2019 & 33.0 & 42.8 & 18.0 & 80.2 & 54.4 & \faThumbsUp \\
+MS ADC on Win. Server 2012 R2 & 6.6 & 7.0 & 4.7 & 13.2 & 16.4 & \faExclamation \\
+Kerio Connect & 6.4 & - & 11.6 & - & 0.2 & \faMehO \\
+MS ADC on Win. Server 2008 R2 & 3.6 & 2.5 & 4.0 & 3.6 & 13.5 & \faRemove \\
+389 Directory Server & 2.4 & 0.3 & 4.2 & - & 0.1 & \faBomb \\
+MS ADC on Win. Server 2022 & 1.9 & - & 3.3 & - & 11.2 & \faThumbsUp \\
+VMware PSC & 1.7 & 3.2 & 3.0 & - & - & \faHourglassHalf \\
+MS ADC on Win. Server 2000 & 1.0 & 0.3 & 1.7 & 0.1 & 0.1 & \faRemove \\
+MS ADC on Win. Server 2012 & 0.8 & 0.8 & 0.6 & 1.4 & 2.2 & \faExclamation \\
+OpenLDAP on Apple & 0.6 & 0.2 & 1.0 & - & - & \faMehO \\
+MS ADC on Win. Server 2008 & 0.4 & 0.4 & 0.3 & 0.7 & 0.8 & \faRemove \\
+MS LDS on Win. Server 2016/2019 & 0.3 & 0.7 & 0.1 & - & - & \faThumbsUp \\
+%MS ADC on Win. Server 2003 & 0.3 & 0.3 & 0.2 & 0.5 & 0.6 & \faRemove \\
+Other & 1.0 & 1.8 & 0.5 & 0.5 & 0.6 & - \\
+Unknown & 7.5 & 13.0 & 4.9 & 0.3 & 0.5 & - \\
+\hline
+\rowcolor{white!100}Total (100\%) & 74.7k & 27.9k & 40.9k & 14.6k & 6.3k & - \\
+\bottomrule
+\end{tabular}
+\label{tab:ldap_types}
+%\end{adjustbox}
+\end{table*}
+\end{comment}

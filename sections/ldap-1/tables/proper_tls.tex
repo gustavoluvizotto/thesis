@@ -1,0 +1,21 @@
+\begin{table*}[tb]
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \thead{Total IPs} & \thead{Leak credentials} & \thead{Personal data}  & \thead{SASL support}   & \thead{CVE}          & \thead{Internal info.} \\ 
+\midrule
+\midrule
+Supporting TLS & 48,198 (100\%) & 910 (100\%) & 7,378 (100\%) & 18,502 (100\%)  & 528 (100\%)  & 7,118 (100\%) \\
+\arrayrulecolor{gray!90}
+\midrule
+\arrayrulecolor{black}
+Strong TLS              & 14,920 (30.96\%) & 122 (13.41\%) & 1,392 (18.87\%) & 5,799 (31.34\%) & 157 (29.73\%) & 2,341 (32.89\%) \\
+Weak TLS config         & 33,278 (69.04\%) & 788 (86.59\%) & 5,986 (81.13\%) & 12,703 (68.66\%) & 371 (70.27\%) & 4,777 (67.11\%) \\
+... \begin{tabular}[c]{@{}l@{}}Not recommended\\ cipher suites\end{tabular} & 16,424 (34.08\%) & 577 (63.41\%) & 4,117 (55.80\%) & 7,866 (42.51\%) & 27 (5.11\%) & 2,746 (38.58\%) \\
+... Invalid X.509 chain & 30,454 (63.19\%) & 749 (82.31\%) & 5,600 (75.90\%) & 11,030 (59.62\%) & 358 (67.80\%) & 3,717 (52.22\%) \\
+\bottomrule
+\end{tabular}
+\caption{Overview of TLS connections and certificates.}
+\label{tab:proper_tls}
+\end{table*}

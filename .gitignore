@@ -1,2 +1,11 @@
 /build/
 /main.pdf
+/.DS_Store
+/figures/.*.bkp
+/sections/.DS_Store
+/sections/anycast/.github
+/sections/anycast/.gitignore
+/sections/ldap-2/.github
+/sections/ldap-2/.gitignore
+/sections/dmarc/.github
+/sections/dmarc/.gitignore

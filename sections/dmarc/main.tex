@@ -1,0 +1,47 @@
+% orivec added based on https://tex.stackexchange.com/questions/724569/package-amsmath-warning-unable-to-redefine-math-accent-vec
+% IEEE style
+\documentclass[10pt,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\input{texenv/usepackage}
+\input{texenv/custom}
+\input{texenv/acronyms}
+\setlength {\marginparwidth }{2cm} % this is for todonotes package (remove warning)
+
+\begin{document}
+
+\title{Longitudinal Analysis of DMARC across country code Top-Level Domains}
+
+% IEEE style:
+\author{
+    \IEEEauthorblockN{
+        Gustavo Luvizotto Cesar\IEEEauthorrefmark{1},
+        Ralph Holz\IEEEauthorrefmark{1}\IEEEauthorrefmark{2},
+        Mattijs Jonker\IEEEauthorrefmark{1}
+    }
+    \IEEEauthorblockA{
+        \IEEEauthorrefmark{1}University of Twente, 
+        email: \{g.luvizottocesar, m.jonker\}@utwente.nl \\
+        \IEEEauthorrefmark{2}University of Münster, email: ralph.holz@uni-muenster.de
+    }
+}
+
+\maketitle
+
+\input{abstract}
+
+\input{introduction}
+\input{background}
+\input{methodology.tex}
+\input{results}
+\input{discussion}
+\input{conclusions}
+\input{acknowledgment}
+
+% IEEE style
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+
+\input{appendix}
+
+\end{document}

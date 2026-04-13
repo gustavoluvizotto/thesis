@@ -1,0 +1,14 @@
+% !TEX root = ../main.tex
+\begin{abstract}
+%150--250 words.
+The \gls{LDAP} is widely used to make structured data available for standardized lookup, which may sometimes include personal information or authentication credentials. Previous work, including ours, found security issues such as public \gls{LDAP} servers leaking sensitive information without prior authentication and server configurations with poor communication security. However, prior work did not investigate whether, or to what extent, the identified problems are linked to hosting and management setups. In this paper, we address this gap and explore the organizations hosting public-facing \gls{LDAP} servers. We identify the network segments more likely to host \gls{LDAP} instances, the products and operating systems used, and examine the management practices related to \gls{PKI} setups for \gls{LDAP}.
+In contrast to studies on Web and email, which have revealed strong centralization tendencies in deployment, we show that the \gls{LDAP} ecosystem is diverse, with a wide range of different hosting networks.
+%We also reveal the preferences of different network sizes for hosting \gls{LDAP}, which can enhance the effectiveness of network operators in identifying deployments and developing mitigation strategies.
+In this study, we identify 69.1k \gls{LDAP} instances---6.5$\times$ more than prior work---and map these to the respective \gls{LDAP} products. We find that 5.8\% of the servers use a product that is end-of-life or runs on a deprecated OS.
+We identify servers using problematic X.509 certificates, \eg those associated with publicly known private keys.
+From our observations, we give recommendations for network operators to improve their security posture.
+
+\begin{IEEEkeywords}
+LDAP; network security; hosting, and management practices.
+\end{IEEEkeywords}
+\end{abstract}

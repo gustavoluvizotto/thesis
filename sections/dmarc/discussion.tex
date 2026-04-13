@@ -1,0 +1,29 @@
+\section{Discussion and Recommendations}
+\label{sec:discussion}
+\textbf{National fight against email abuse.}
+Phishing and spoofing remain a significant threat on the Internet~\cite{FOCBSWarningPhishingMessages}.
+The effectiveness of these threats increases when attackers abuse regionalized domains in phishing campaigns. Even worse, when the source of the email appears to be from a government domain.
+In this paper, we showed the adoption of \gls{DMARC} across 301 \glspl{ccTLD} and governmental domains to shed light on national practices to fight email abuse.
+
+Our results show uneven adoption of \gls{DMARC} across countries, despite their goals in combating email spoofing and phishing.
+The countries with higher \gls{DMARC} adoption--notably the Netherlands and Switzerland--are those in which registries have issued concrete technical guidelines or provided incentives. We see that ``SIDN'' and ``Switch''  exemplify how government-backed initiatives can accelerate adoption: clear documentation and financial incentives can lead to tangible improvements in policy stringency~\cite{_Report2023Ch_}. We observed SIDN's references to Germans' BSI guidelines~\cite{_GermanysBSIPublishes_} as useful for Dutch organizations. In particular, compliance requirements for government domains in India show a positive effect with high rates of \gls{DMARC} stringent policies.
+In contrast, countries lacking such frameworks show either lower adoption (\eg Brazil) or delayed transition toward stricter enforcement policies (\eg Brazil and Italy). National-level coordination is determinant for \gls{DMARC} deployment success.
+
+Furthermore, private organizations such as email service providers and hosting organizations play an important role in promoting \gls{DMARC} adoption.
+For example, DMARC requirements from Google, Yahoo~\cite{_NewGmailProtections_2023,_Yahoo_2023} in 2024, and recently Microsoft~\cite{_StrengtheningEmailEcosystem_} (2025) could be a factor that helped boost DMARC adoption, from just 5.4\% in 2023~\cite{hureau_spoofed} rising to 25.7\%.
+Hosting providers such as GoDaddy support \gls{DMARC} adoption with guidelines and tooling~\cite{_GoDaddyWatDKIM_}.
+
+\textbf{Digital sovereignty.}
+Our analysis of \gls{DMARC} reporting reveals domains configured to transmit \gls{DMARC} data to other countries and dependence on foreign report processors, particularly those based in the U.S.
+For example, GoDaddy alone appears as a major \gls{DMARC} report receiver across domains from six out of ten non-U.S. countries, raising concerns about digital sovereignty and data governance.
+
+Although the RFC~\cite{rfc7489} and national agencies~\cite{_BSITR03182Email_} advise the use of \gls{DMARC} reporting, there is no guidance on \textit{where} reports should be sent. Our analysis shows that the Netherlands, Poland, and France have prioritized domestic infrastructures (\textit{reportdmarc.nl}, \textit{lh.pl}, and \textit{brevo.com}, respectively) for report handling. Furthermore, government domains tend to have \gls{DMARC} configured to send reports to national infrastructures. This practice avoids creating cross-border data flows that could be subject to foreign jurisdiction, regulations, and even dependence on foreign vendors. In this context, \gls{DMARC} reporting can be viewed as an asset. Nations that process their own reporting data preserve control over their digital ecosystems and reduce exposure to third-country legislations.
+
+\textbf{Recommendations.}
+Given the low adoption of \gls{DMARC} and low use of stringent policies, we recommend national agencies such as CERTs and registries provide, in their local languages, information about the importance of email security technologies such as \gls{DMARC}. Furthermore, they should give clear guidelines for what is expected in government domains and enforce compliance through regular audits. The guidelines can contain, for example: 1) how to configure \gls{DMARC} in DNS's TXT records to avoid abuse; 2) \gls{DMARC} policy rollout strategy with timelines; and 3) how to process \gls{DMARC} aggregated reports, or outsource when internal processing is not feasible, with preference for national solutions. Despite recommendations to outsource \gls{DMARC} report processing~\cite{_DMARCReportsGoogle_}, our data shows a notable reliance on U.S. infrastructure, and we believe it's important to consider keeping the data within local organizations when possible.
+
+In light of the apparently positive effect of incentives on \gls{DMARC} adoption in Switzerland~\cite{_Report2023Ch_}, we recommend that more registries and hosting providers bring awareness and incentives to domain owners to adopt \gls{DMARC}. Examples of incentives include, \eg financial benefits and advice to correctly configure and maintain \gls{DMARC} records and reports.
+
+%We recommend email service providers to give or extend the \gls{DMARC} requirements to include any email sender, regardless of the volume of emails sent over a period of time. This could help stop phishing campaigns targeting smaller populations.
+
+Our data shows domains relying on external reporting. To improve the data sovereignty landscape, we recommend that governmental agencies promote the development of local security companies that can provide \gls{DMARC} report processing services. Local technologies help to reduce reliance on foreign entities and foster a more resilient digital ecosystem.

@@ -1,0 +1,22 @@
+\begin{table*}[tb]
+\rowcolors{2}{blue!20}{white}
+\caption{X.509 chain validation.}
+\small
+\centering
+\begin{tabular}{lrrrrrrr}
+\hline
+\rowcolors{2}{blue!20}{white}
+\textbf{Validation msg} & \textbf{\# IPs (\%)} & \textbf{389 only (\%)} & \textbf{636 only (\%)} & \textbf{389$\cup$636 (\%)} & \textbf{3268 only (\%)} & \textbf{3269 only (\%)} & \textbf{3268$\cup$3269 (\%)} \\
+\hline
+Total                                                                             & 100\% (50.3k) & 100\% (14.4k) & 100\% (13.9k) & 100\% (49.5k) & 100\% (.5k) & 100\% (.6k) & 100\% (6.3k) \\
+\hline
+Valid chain                                                                       & 33.2 & 36.0 & 38.3 & 33.6 & 5.7 & 16.4 & 11.0 \\
+\begin{tabular}[c]{@{}l@{}}Signed by unk-\\nown authority\end{tabular}            & 37.8 & 34.6 & 40.8 & 37.3 & 68.6 & 60.0 & 68.3 \\
+... Self-signed                                                                   & 23.5 & 18.7 & 15.5 & 23.5 & 24.1 & 19.8 & 26.4 \\
+Exp./Not yet val.                                                                 & 17.4 & 22.6 & 14.7 & 17.3 & 25.5 & 23.2 & 20.4 \\
+\begin{tabular}[c]{@{}l@{}}No valid leaf\\certificate\end{tabular}                & 11.6 & 6.8 & 6.1 & 11.8 & 0.2 & 0.4 & 0.3 \\
+\hline
+\end{tabular}
+\label{tab:cert_validation}
+%\end{adjustbox}
+\end{table*}

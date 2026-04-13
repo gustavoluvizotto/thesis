@@ -1,0 +1,72 @@
+\begin{table}[tb]
+\centering
+\scriptsize
+\caption{Top hosters of LDAP servers, their network size range, most common prefix they use, and usage of \gls{AD}.}
+\begin{tabular}{lrp{1.4cm}p{1.3cm}r}
+\toprule
+\textbf{Hoster} & \textbf{All} & \textbf{Network size} & \textbf{Dominant prefix} & \textbf{AD(\%)} \\
+\midrule
+Category 1 & 12.6k & & & \\
+\ldots OVH & 4.3k & $(2^{22}, 2^{23}]$ & /16 & 62.5 \\
+\ldots Hetzner & 3.3k & $(2^{21}, 2^{22}]$ & /16 & 41.0 \\
+\ldots Contabo & 2.2k & $(2^{18}, 2^{19}]$ & /23 & 76.1 \\
+\ldots home.pl S.A. & 1.9k & $(2^{17}, 2^{18}]$ & /18 & 2.7 \\
+\ldots DigitalOcean & 0.9k & $(2^{21}, 2^{22}]$ & /20 & 3.7 \\
+\midrule
+
+Category 2 & 6.8k & & & \\
+\ldots Amazon & 3.9k & $(2^{25}, 2^{26}]$ & /15 & 47.6 \\
+\ldots Microsoft & 2.1k & $(2^{25}, 2^{26}]$ & /11 & 89.9 \\
+\ldots Aliyun & 0.8k & $(2^{23}, 2^{24}]$ & /16 & 35.1 \\
+\midrule
+
+Category 3 & 3.1k & & & \\
+\ldots Chunghwa & 2.2k & $(2^{23}, 2^{24}]$ & /16 & 29.7 \\
+\ldots Comcast & 0.9k & $(2^{26}, 2^{27}]$ & /9 & 70.3 \\
+
+\midrule
+Total & 93.9k & & & \\
+\bottomrule
+\end{tabular}
+\vspace{-15px}
+\label{tab:hosting}
+\end{table}
+
+
+
+
+
+\iffalse
+    \begin{table*}[tb]
+\rowcolors{2}{blue!20}{white}
+\centering
+\small
+\caption{Top hosters of LDAP servers, separated by scanned port.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+\rowcolors{2}{blue!20}{white}
+%\textbf{Cloud provider} & \textbf{Unique IPs} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p389\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p636\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Both p389\\and p636\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p3268\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p3269\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Both p3268\\and p3269\end{tabular}} \\
+\textbf{Hoster} & \textbf{\#IPs (\%)} & \textbf{389 only (\%)} & \textbf{636 only (\%)} & \textbf{389$\cup$636 (\%)} & \textbf{3268 only (\%)} & \textbf{3269 only (\%)} & \textbf{3268$\cup$3269 (\%)} \\
+\midrule
+Total & 93912.0 & 53129.0 & 12123.0 & 88290.0 & 21534.0 & 523.0 & 27316.0 \\
+\hline
+OVH & 4.6 & 5.2 & 1.8 & 4.2 & 8.9 & 1.1 & 8.1 \\
+Amazon & 4.2 & 3.2 & 8.9 & 4.3 & 1.7 & 3.1 & 1.8 \\
+Hetzner & 3.5 & 3.2 & 3.9 & 3.4 & 3.4 & 3.3 & 3.4 \\
+Contabo & 2.4 & 3.4 & 0.5 & 2.5 & 5.3 & 0.8 & 5.0 \\
+Chunghwa & 2.4 & 3.5 & 0.4 & 2.5 & 0.3 & 2.1 & 0.5 \\
+Microsoft & 2.3 & 1.6 & 8.4 & 2.3 & 1.6 & 11.3 & 1.7 \\
+home.pl S.A. & 2.0 & 3.5 & 0.0 & 2.1 & 0.2 & - & 0.1 \\
+\begin{tabular}[c]{@{}l@{}}Comcast Cable\\Communications\end{tabular} & 1.0 & 0.8 & 1.1 & 1.0 & 0.6 & 2.7 & 0.8 \\
+DigitalOcean & 1.0 & 1.3 & 0.5 & 1.0 & 0.0 & - & 0.0 \\
+%Aliyun & 0.9 & 1.3 & 0.3 & 0.9 & 0.4 & - & 0.4 \\
+%Telefonica Brasil S.A & 0.8 & 1.0 & 0.1 & 0.7 & 1.9 & 3.0 & 1.9 \\
+%Charter Communications Inc & 0.7 & 0.6 & 0.7 & 0.7 & 0.3 & 0.4 & 0.4 \\
+%Deutsche Telekom AG & 0.7 & 0.3 & 2.3 & 0.7 & 0.2 & 1.7 & 0.2 \\
+%Google & 0.6 & 0.6 & 0.3 & 0.7 & 0.3 & 0.2 & 0.4 \\
+%Others & 74.0 & 72.8 & 70.9 & 73.8 & 75.0 & 70.4 & 75.3 \\
+\bottomrule
+\end{tabular}
+\label{tab:hosting_old}
+\end{table*}
+\fi

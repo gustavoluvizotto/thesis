@@ -1,0 +1,131 @@
+%-------------------------------------------------------------------------------
+\section{Related work}
+%-------------------------------------------------------------------------------
+%1990, LDAP arose as an internet alternative to the access protocol X.511 DAP (Directory Access Protocol), which was a part of the X.500 series of standards governing distributed directory services. In the initial stages, there were significant concerns regarding LDAP security. For example, LDAPv1 and LDAPv2 did not incorporate strong authentication mechanisms, relying instead on simple authentication methods like clear text passwords. This exposed user accounts to the risk of unauthorized access, as attackers could potentially intercept login credentials. LDAPv3 addressed these security concerns by introducing SASL-based authentication. This integration facilitated the adoption of encryption mechanisms like DIGEST-MD5, an algorithm to safeguard against the transmission of plain text passwords. Furthermore, LDAPv3 introduced extension fields, expanding the protocol's capabilities and laying the foundation for the utilization of Transport Layer Security (TLS). The use of TLS ensures data integrity, bolstering the security of LDAP communications.
+
+% \paragraph{LDAPv3 Security Considerations.}
+
+%\rh{Use machete!!}
+
+%LDAP itself does not inherently offer safeguards for accessing or modifying the directory server~\cite{RFC4512LDAPAuthenticationMethodsAndSecurityMechanisms}. However, servers may store sensitive data.  %LDAP's cleartext password authentication method is strongly discouraged, especially when the transport service is not secure. SASL mechanisms do not offer adequate protection, either~~\cite{RFC4422SASL,
+%RFC4512LDAPAuthenticationMethodsAndSecurityMechanisms, findlayBestPracticesLDAP, rfc4511}.
+
+Hassler~\cite{hassler500LDAPSecurity1999}, along with Findlay,~\cite{findlayBestPracticesLDAP} Sermersheim~\cite{rfc4511} and Harrison~\cite{RFC4512LDAPAuthenticationMethodsAndSecurityMechanisms}, strongly endorsed using \acrshort{TLS} to protect \acrshort{LDAP} sessions while also emphasizing the importance of considering the possibility of its removal by adversaries. This is a particular issue when using \starttls. Recent research by Poddebniak \etal highlighted vulnerabilities of in-band upgrades to \acrshort{TLS}~\cite{poddebniak2021}. In this context, we note that security factors can change even during an \acrshort{LDAP} session, necessitating additional considerations by servers~\cite{rfc4511, RFC4512LDAPAuthenticationMethodsAndSecurityMechanisms, findlayBestPracticesLDAP}. Further security risks result from the absence of standardized access control mechanisms in \acrshort{LDAP}, requiring each server to implement its own custom approach~\cite{hassler500LDAPSecurity1999, findlayBestPracticesLDAP}. In our work, we do not exploit any of these vulnerabilities, nor do we aim to find new ones. Our framework focuses on the analysis of a large set of \gls{LDAP} servers on the Internet. It analyzes their network security and takes samples (ethically) to assess whether sensitive information is leaked.
+
+%The security of \acrshort{LDAP} has been explored in other contexts as well.
+Obimbo and Ferrima~\cite{obimboVulnerabilitiesLDAPAuthentication2011} demonstrated a Denial of Service (DoS) attack on LDAP, highlighting how the protocol can be abused. In 2017, the Project Sonar study by Rapid7 \cite{project_sonar_rapid7} investigated the prevalence of LDAP services on the Internet and fingerprinted them based on the root \gls{DSE}. The study aimed to identify remote services using the \gls{CLDAP} protocol and also included LDAP scans on TCP ports 389 and 636. They found 300,663 servers on TCP port 389 and 91,842 servers on port 636 speaking LDAP. In our work, we found 80,968 servers on port 389 and 34,095 servers on port 636, indicating significant changes in this area over the past years. Additionally, their analysis assessed the effectiveness of \gls{CLDAP} in Distributed Reflection Denial of Service (DRDoS) attacks. Srinivasa~\etal~\cite{srinivasa2022} employed honeypots to study malicious intrusion attempts with various purposes, demonstrating that the protocol constitutes an attack surface that is quite commonly targeted by attackers. Our work does not use honeypots nor study DoS attacks; however, we focus on LDAP configurations and publicly accessible data, which may correlate with attack vectors as well, indicating the need for further scrutiny. Furthermore, our methodology employs a broader classification approach, considering additional parameters such as OIDs and LDAP attributes rather than solely relying on the root \gls{DSE} to categorize LDAP services.
+
+The X.509 PKI has been the subject of numerous publications, with multiple weaknesses identified for the Web as well as other communication protocols, often due to poor cipher suites and invalid certificate chains~\cite{holz2011,holz2016,Amann2017,Durumeric2013}. Other studies indicated that \acrshort{TLS} deployment is difficult even for expert users~\cite{KrombholzEtAl_HaveNoIdea_2017}. More recently, attention has focused on the root stores as well. Ma \etal investigated the root stores' operational ecosystem and exposed bad practices of multipurpose root stores and concentration in a root store~\cite{maTracingYourRoots2021}. Our analysis focuses on the deployment of certificate chains. A standard root store for \acrshort{LDAP} does not exist; we hence relied on a combination of the ones available for the Web, which comprises all commonly recognized Certificate Authorities.
+
+%\paragraph{Comparison to Existing Tools.}
+Compared to existing LDAP analysis tools, LanDscAPe is primarily designed to detect misconfigurations of LDAP servers at Internet-scale while at the same time transferring as little data as possible for ethical and performance reasons. 
+%There are several tools that allow security analysis of LDAP servers, but none are suitable for detecting misconfigurations like LanDscAPe. 
+Tools such as ldapsearch \cite{LdapsearchCommandLineTool} and nmap’s LDAP script \cite{LdapsearchNSEScript} are designed to simplify communication with LDAP servers; however, they lack server analysis. Windapsearch \cite{flathersRopnopWindapsearch2024}, ldapper \cite{synzackldapper}, and LDAPPER \cite{ldappershellster} focus on the enumeration of \gls{AD}, while LanDscAPe minimizes harm by fetching samples instead and is applicable to all LDAP server types. 
+Furthermore, LanDscAPe allows us to analyze servers by only transmitting small data samples using a novel counting algorithm (see section \ref{sec:methodology_data_analysis_module}). Our tool also differs in connection modes. It connects to LDAP servers via anonymous, simple, and unauthenticated bind, while the other tools rely on authentication or switch to anonymous bind. Moreover, LanDscAPe can detect personal data, examine password policies, and find configuration files, whereas previously mentioned tools focus on pen-testing active directories. 
+%Therefore, LanDscAPe is unique in its way of analyzing LDAP servers. 
+pbis \cite{holsten_josephholstenpbis_2023} aims to integrate non-Windows devices into \gls{AD} to extend security policies, which is outside the scope of our work.
+
+% Zgrab \cite{ZGrab2023} scans \gls{TLS} connections. However, Zgrab lacks support for TLSv1.3. To address this limitation and analyze the connection security of LDAP servers, we used Goscanner, which can retrieve both the \gls{TLS} connection state and X.509 certificates from the servers and also allows crafting client hellos, which we have used to analyze different \gls{LDAP} clients' connections to an LDAP server.
+%\paragraph{Existing Security Tooling for LDAP.}
+%Currently, we know of three published and maintained \gls{LDAP} tools that can be used for security testing.
+
+%\texttt{LDAPPER}~\todo{cite https://github.com/shellster/LDAPPER} is mainly a usability tool that provides common enumeration and search operations, primarily for \gls{AD} \gls{LDAP} servers. It does not support anonymous and unauthenticated bind operations, focuses on \gls{AD}-specific attributes, and has no support for enumeration based on wildcard crawling.
+
+%\texttt{Ldapper}~\todo{cite https://github.com/Synzack/ldapper} is a security testing tool for \gls{LDAP} that focuses on inconspicious analysis of \gls{LDAP} servers, for example during penetration tests. It only supports extracting data from servers where login credentials are known to the attacker beforehand and focuses on \gls{AD}-specific attributes. User enumeration is only supported via wordlists.
+
+%Furthermore, Rapid7's \texttt{Metasploit}~\todo{cite metasploit} comes with \gls{LDAP} modules that allow enumerating passwords and password hashes using a simple or anonymous bind. They extract a specific set of attributes from the server.
+
+%\todo{Compare to existing tools:}
+%\begin{todoenv}
+%\begin{itemize}
+    %\item https://github.com/shellster/LDAPPER
+    %\item https://github.com/Synzack/ldapper
+    %\item https://docs.metasploit.com/docs/pentesting/metasploit-guide-ldap.html
+%\end{itemize}
+%\end{todoenv}
+
+%\iffalse
+%\paragraph{LDAPv3 Use-Cases.}
+
+%todo{FI: Honestly, unless we have a very good reason for including this in the related work, I would remove it}
+
+%todo{TODO: Post paper here, read it, and then write the corresponding section}
+
+%- LDAP in E-Mail Exchange and PKI
+
+%\cite{karatsiolisUsingLDAPDirectories2004}
+%
+%A Public Key Infrastructure (PKI) is a system that can issue, distribute, and verify digital certificates. Prior work enhances LDAP Directories for the Management of PKI Processes~\cite{chadwickModifyingLDAPSupport2004, karatsiolisUsingLDAPDirectories2004, lippertLifecycleManagement5092006}. In both scenarios, for S/MIME certificates used in encrypted email communication~\cite{schwenkMIME2014}~\cite{chernickFederalSMIMEV32002} and in conjunction with Single Sign-On in cloud environments to securely authenticate users, PKI certificates managed via LDAP are utilized~\cite{zissisAddressingCloudComputing2012, raipurkarImproveDataSecurity2016, mushtaqCloudComputingEnvironment2017}~\cite{danielLDAPLightweightDeduplication2019}. 
+
+%\todo{TODO: Why is this here (and why is it in German? :)}- Buch Kryptographie von Klaus Schmeh:
+%Verzeichnisdienste werden in Form von Zertifikatsservern als Teil einer PKI genutzt, um Zertifikate zu verwalten und den PKI-Teilnehmern zur Verfügung zu stellen. \cite{kryptographie_klaus_schmeh}
+
+%Sowohl in für S/MIME Zertifikate, die zur verschlüsselten E-Mail Kommunikation eingesetzt werden, also auch zusammen mit Single-Sign-On werden die PKI Zertifikate, welche über LDAP verwaltet werden verwendet, um Nutzer in einer Cloud sicher zu authentifizieren.
+
+
+%We present a framework for extending the functionality of LDAP servers from their typical use as a public directory in public key infrastructures. In this framework the LDAP servers are used for administrating infrastructure processes. One application of this framework is a method for providing proof-of-possession, especially in the case of encryption keys. Another one is the secure delivery of software personal security environments.
+
+%- LDAP KERBEROS as Identification Service
+%- LDAP VoIP 
+%- LDAP .... 
+%- LDAP IoT
+%- LDAP as Directory Server
+%- LDAP in Cloud Envrionments
+%
+%We hope to be able to classify the servers we find automatically into different categories. And intend to question the data those servers provide to us.
+%\fi
+
+% \paragraph{DDos attacks.}
+
+% \paragraph{Best practices in LDAP security.} 2011
+
+% \paragraph{Directory server security}
+
+% \paragraph{Addressing cloud computing security issues} 2012
+
+% \paragraph{Improve data security in a cloud environment by using LDAP and two-way encryption algorithm} 2016
+
+% Distributed security management using LDAP directories
+
+
+% Using LDAP Directories for Management of PKI Processes
+
+% LDAP injection techniques
+
+% Distributed security management using LDAP directories
+
+% Planning for Directory Services in Public Key Infrastructures
+
+%\todo{Vulnerabilities of LDAP as an Authentication Service ``This paper examines the danger in the use of LDAP for user authentication by executing a DoS attack exploiting the TCP three-way handshake required when initializing a connection to an LDAP server.''}
+
+%\todo{Deceptive directories and “vulnerable” logs: a honeypot study of the LDAP and log4j attack landscape: ``Moreover, the LDAP can be configured to operate on UDP, motivating adversaries to exploit it for Distributed Reflection Denial of Service attacks (DRDoS). This paper presents a study of attacks on the LDAP by deploying honeypots that simulate multiple profiles that support the LDAP service and correlating the attack datasets obtained from honeypots deployed by the Honeynet Project community.''}
+
+
+%\todo{When to use TCP or UDP LDAP? Active Directory has both.}
+
+% A Secure Corroboration Protocol for Internet of Things (IoT) Devices Using MQTT Version 5 and LDAP
+
+% Spoofed Packet Injection Attack-Resistant AAA-RADIUS Solution Based on LDAP and EAP
+
+% LDAP: a lightweight deduplication and auditing protocol for secure data storage in cloud environment
+
+% Users Sync Authentication using External Ldap in Organizations
+
+%\paragraph{Known Vulnerabilities}
+
+%- DDOS
+%- LDAP Injections
+% - ???
+
+
+%However, prior work revealed a lack of secure communication even using TLS certificates. Holz \etal showed weak authentication mechanisms in widely used E-mail and chat protocols such as IMAP, POP3, SMTP, and XMPP~\cite{holz2016}.
+%Similarly, in the modern web, extension headers such as HSTS and HPKP, designed to increase HTTPS security, are scarce and often deployed incorrectly, as studied by Amann \etal ~\cite{Amann2017}.
+%We also study how the TLS certificates are deployed on LDAP servers, but we go deeper into the impact on another scenario, equally important due to sensitive information stored in LDAP servers, that should be well protected from adversaries.
+
+%TLS certificates must be trusted to be valid, or an adversary could impersonate an entity.
+
+%Despite the efforts of Zlint~\cite{zlint} and Zcertificate~\cite{zcertificate} tools to evaluate the compliance of an issued TLS certificate with RFC-5280~\cite{rfc5280} and the CA/Browser Forum Baseline Requirements~\cite{_BaselineRequirementsTLS_}, they do not assert whether a particular root store can trust a chain of certificates.
+%Larisch \etal ~\cite{LarischEtAl_HammurabiFrameworkPluggable_2022} created a framework that can express the validation decisions of Chrome and Firefox web browsers but lacks generalization.
+%The original Goscanner~\cite{Goscanner2017} does validate a certificate chain but uses only the root store embedded in the running OS.
+%Our work goes beyond and validates certificate chains against major public root stores.
+

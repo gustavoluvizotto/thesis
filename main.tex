@@ -10,8 +10,8 @@
 	hidelinks,
 	bookmarksopen=true,
 	pdftitle={Title of the Thesis},
-	pdfauthor={PhD Candidate},
-	pdfcreator={PhD Candidate},
+	pdfauthor={Gustavo Luvizotto Cesar},
+	pdfcreator={Gustavo Luvizotto Cesar},
 }
 \usepackage{microtype} % better typesetting
 \usepackage[english]{babel} % typographical rules
@@ -27,6 +27,9 @@
 \usepackage[acronym]{glossaries}
 \makeglossaries{}
 \loadglsentries{texenv/acronyms}
+\loadglsentries{sections/ldap-2/src/acronyms}
+\loadglsentries{sections/dmarc/texenv/acronyms}
+\loadglsentries{sections/anycast/texenv/acronyms}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -39,8 +42,8 @@
 %\includepdf{cover.pdf}
 \frontmatter
 
-\newcommand{\AuthorName}{PhD Candidate}
-\newcommand{\AuthorNameShort}{PhD Candidate}
+\newcommand{\AuthorName}{Gustavo Luvizotto Cesar}
+\newcommand{\AuthorNameShort}{G. L. Cesar}
 \newcommand{\ThesisTitle}{Title of the Thesis}
 \newcommand{\ThesisSubTitle}{Subtitle of the Thesis}
 
@@ -65,7 +68,12 @@
 
 % References
 \bibliographystyle{IEEEtran}
-\bibliography{bibliography}
+\bibliography{bibliography,
+sections/anycast/references,
+sections/dmarc/references,
+sections/ldap-2/references,
+sections/ldap-1/references
+}
 
 \include{sections/publications}
 

@@ -1,0 +1,40 @@
+%-------------------------------------------------------------------------------
+\section{Ethical Considerations and Disclosure}
+\label{sec:ethics}
+
+% \todo{@Sebastian}
+
+Our overarching goal was to carry out an Internet-wide security analysis of public \acrshort{LDAP} deployments to uncover and responsibly disclose security risks to affected operators. The nature of this work and the characteristics of \acrshort{LDAP} led us to carefully consider the balance between improving the overall security of \acrshort{LDAP} deployments and introducing potential harm or risk to others in the course of our work.
+%Our analysis itself may also introduce additional risks to users and
+We hence designed our steps and analyses carefully to prevent any unnecessary risks. 
+For example, by interacting with LDAP servers, potentially sensitive data is transferred between our scanners and the scanned targets. In extreme cases, public \acrshort{LDAP} servers may even be configured to return the full directory when prompted with a simple, standard \acrshort{LDAP} query. To minimize the impact on users, we designed \mbox{\NAME} specifically to only request and process very few samples from each \acrshort{LDAP} server---even if the servers were configured to send more. To understand the grave problem of leaked credentials, we developed a method to count such credentials on a server \textit{without} actually transferring them.
+
+A further risk of our method lies in our scanning infrastructure becoming an attractive target itself, as attackers may aim at a cumulative view of our raw analysis results, including a list of \acrshort{LDAP} servers leaking credentials. To mitigate this, the processing of the data samples happens on an internal server whose access is restricted by VPN to the authors of this paper. After finishing the classification of a sample, we \textit{delete} it and only keep \textit{metadata} for the disclosure campaign.
+
+As a result, our analysis uncovered more than 1,800 \acrshort{LDAP} servers that leak user credentials to anyone. We note that the bar for this is as low as knowing how to use a standard \acrshort{LDAP} client.
+This is a potentially serious risk for well over 3 million users with data on these servers. On balance, we believe our minimally invasive testing is justified as it allows warning affected operators. Downloading a small sample set of credentials was necessary to reduce the rate of unnecessary reports to operators that do not expose real credentials or personal information (see \cref{sec:methodology_data_analysis_module}). We conducted a responsible disclosure campaign with a national CERT. Our focus was on notifying those operators responsible for LDAP servers that leak highly critical information such as user credentials or sensitive internal information. Three months after our initial disclosure, more than one-fourth of the credential-leaking servers are no longer exposed to the Internet.
+ 
+
+%responsibly disclose security risks to operators to mitigate these risks. 
+%that would balance the risks and positive outcomes. Because of the responsible disclosure campaign described later, operators can patch the leaks and mitigate these risks.
+
+
+
+% The data sampling module of \NAME{} is designed very carefully to only sample a small set. Even if a server is willing to provide larger samples, we limit the response as described in \cref{fig:scanning_pipeline}. The reason for this is that even though we only sample public LDAP servers, they may be misconfigured in a way that they return sensible information such as passwords. By itself, LDAP servers leaking credentials pose a high risk for users and by notifying the operators of these LDAP server, we substantially reduce this risk.
+
+% However, by requesting samples of these misconfigured servers, 
+
+% While analyzing these passwords could be interesting from a scientific viewpoint, we might need to download them over plaintext TCP or weak TLS connections, which might expose these passwords to middleboxes. This is not acceptable, which is why we limit the sampling.
+
+
+% UTwente: https://wiki.surfnet.nl/display/SURFcert/Richtlijnen+voor+scans
+% https://please-see-measurements.internet-transparency.org/
+%\todo{Desribe Coordinated Disclosure process}\\
+%-------------------------------------------------------------------------------
+
+In our measurements, we followed standard best practices, as outlined by Durumeric~\etal~\cite{durumeric2013zmap}. We sent only standard-conforming TCP and \acrshort{LDAP} packets and TLS handshakes, using rate limiting, in randomized order of destination addresses to reduce strain on the network and servers. On the scanning IPs, a website gives project details and contact information for opt-out requests. We honored all such requests. Our ISP, national CERT, and university network administrator cleared all scans.
+
+%For now, we do not plan to notify operators of LDAP servers with subpar TLS configurations as its security impact also depends on the behavior of LDAP clients, which are out of scope for this analysis. % However, we continue monitoring vulnerable LDAP servers during disclosure and will discuss any relevant insights in later versions of this paper.
+
+% \todo{Alle Passwort-Leaks disclosen}\\
+% \todo{Personal Data + schlechtes TLS/ohne TLS nicht disclosen weil LDAP Clients Zertifikat pinnen können}\\

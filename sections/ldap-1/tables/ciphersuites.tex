@@ -1,0 +1,22 @@
+\begin{table*}[tb]
+\centering
+\small
+\begin{tabular}{@{}lrrrrrr @{}}
+\toprule
+& \thead{Total IPs}     & \thead{Leak credentials} & \thead{Personal data} & \thead{SASL support}  & \thead{CVE}         & \thead{Internal info.} \\ 
+\midrule
+\midrule
+Supporting TLS         & 48,198 (100\%) & 910 (100\%)      & 7,378 (100\%)  & 18,502 (100\%) & 528 (100\%) & 7,118 (100\%)   \\
+\arrayrulecolor{gray!90}
+\midrule
+\arrayrulecolor{black}
+Recommended            & 65.92\%       & 36.59\%          & 44.20\%       & 57.49\%       & 94.89\%     & 61.42\%        \\
+Other       & 34.08\%       & 63.41\%          & 55.80\%       & 42.51\%       & 5.11\%      & 38.58\%        \\
+... RSA (key exchange) & 24.27\%       & 57.14\%          & 53.71\%       & 41.77\%       & 5.11\%      & 36.93\%        \\
+... CBC mode           & 12.26\%       & 8.35\%           & 6.3\%         & 3.64\%        & 5.11\%      & 5.49\%         \\
+... 3DES               & 0.31\%        & 0.00\%           & 0.03\%        & 0.00\%        & 0.00\%      & 0.00\%        \\
+\bottomrule
+\end{tabular}
+\caption{Recommended and non-recommended cipher suites on LDAP hosts supporting TLS.}
+\label{tab:ciphersuites}
+\end{table*}

@@ -1,0 +1,43 @@
+% !TEX root = main.tex
+\begin{abstract}
+    % *** intro: what is anycast, why is it important
+    IP anycast is a fundamental Internet technology where a prefix is made available in multiple locations
+    to bring services closer to users
+    and, most importantly, improve service resilience.
+    % *** problem statement: why do we do our study
+    Despite the growth in anycast---with censuses reporting \textbf{\num{1e3}} ASes and \textbf{\num{14e3}} /24-prefixes in 2026---
+    little is known about how operators provision services using anycast.
+    % *** proposed solution: what do we do to address the gap
+    We address this gap
+    by characterizing the deployment strategies used by anycast operators,
+    based on the locations behind anycast prefixes
+    and the topologies visible in routing data.
+    %
+    We design a pipeline that measures 120 ports on TCP and UDP, and evaluates the use of QUIC
+    and 32 different application-layer protocols to identify services replicated using anycast.
+
+    % *** main takeaways of findings
+    We show large differences in deployment strategies:
+    77\% of anycast Autonomous Systems (ASes)
+    announce prefixes with a few IP addresses hosting services,
+    whereas 7\% fully utilize their prefixes,
+    with five ASes alone accounting for more than 88\% of anycast IP addresses hosting services.
+    %
+    We find 18\% of ASes make use of the same \gls{byoip} infrastructure hosting provider,
+    highlighting hidden dependencies not visible without topological analysis.
+    %
+    Regional anycast is widespread,
+    with 35\% of operators replicating prefixes within a single continent,
+    including 23 ASes with regional prefixes in multiple regions.
+    %
+    While most anycast prefixes are used for web services (including deployments with significant QUIC adoption),
+    they are largely originated by a few \gls{cdn} ASes.
+    Conversely, we find most ASes use anycast to replicate DNS using a few prefixes,
+    highlighting distinct strategies between \glspl{cdn} and DNS operators.
+\end{abstract}
+
+\iffalse
+\begin{IEEEkeywords}
+Resilience, Internet Services, Anycast
+\end{IEEEkeywords}
+\fi

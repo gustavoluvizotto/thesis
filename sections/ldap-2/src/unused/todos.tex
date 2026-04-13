@@ -1,0 +1,55 @@
+% !TEX root = ../main.tex
+\onecolumn
+\section*{ToDos}
+\label{todos}
+\begin{itemize}
+    \item Fix date used of CAIDA data in references.bib;
+\end{itemize}
+
+\section*{Paper overview}
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=1.0\linewidth]{figures/LDAP_TMA24_BSc_project.pdf}
+  \caption{Paper overview - Mindmap}
+  \label{fig:mindmap}
+\end{figure}
+See \cref{fig:mindmap}
+
+\section*{Meeting notes}
+Meeting notes turn into text in the paper, in the ``ToDo'' list or not actionable in the scope of this paper.
+\begin{itemize}
+    \item Focus on TLS, X.509, one month of Censys + 1 month of Goscanner, small piece evidence of outsourcing
+    \item deployments of LDAP with poor cryptography
+    \item overall deployment of LDAP?
+    \item TLS X509 deployment LDAP; are there nerds running LDAP servers?
+    \item is it managed exchange server or an admin?
+    \item we changed the ToC of the paper to: \url{https://notes.dacs.utwente.nl/IpdSEfBxSau1s-SK8mqZ2Q#}. Rationale: it's more fluid to read. Before I was dumping numbers and results in one big section. It's better to split the results into parts where it answer my RQs;
+    \item Mattijs suggested: outsourcing: are the organizations under GDPR? under the same legislation?
+    \item this paper could go to: short IMC, CNSM or ANRW
+    \item do the servers meet Service contractual clauses?
+    \item US based company, no scc needed if following data privacy framework (us specific? prob. yes)
+    \item Meeting with Benjamin: Ben filtered his data in a different way which gives him slightly different results. He also used one snapshot per month, full year whereas I used 5 snapshots of a single month (different dataset). Org dataset is based on headquarters and not subsidiaries. Amazon is US and doesn't give any other EU hosting.
+    \item compare starttls and without it. does censys picked up ldap starttls?
+    \item Why censys found more LDAP servers? what the IP censys say is ldap and what do we see on the same IP? Censys could do plain LDAP and I don't... FHMS does
+    \item fig.3 where does censys get their DNS data? zdns? what is the input for the zdns then? OpenIntel data of 2023 to check against our own scans. What do we learn from this figure? Compare with hosting; see next bullet point to make sense of this fig.
+    \item New scan: hoster of fqdn; A, NS record of fqdn. Extract SAN (meaningful) from X.509 certs of goscanner and hand it over to Rick
+    \item \st{FHMS: tell about our meas. paper; goal: understand} what type of ldap server (version, is it MS exchange?)
+    \item table 2 - this speaks about operations - visit TLS table later
+    \item make a table of tls 1.3 x org (later)
+    \item key exchange difference of CUIDS and own scans; RSA and ECDHE (later); is it due to starttls?
+    \item self signed certs: look at the signature hash
+    \item CN of certs; look at the customers (gmbh, ... ); which AS the ldap IP is and what company is this cert issued
+    \item check which organization running the LDAP and not only the hosting; recommendations should not be the focus of the paper (not a RQ)
+
+    \item brainstorm (Jonas/Gurur): i/f of LDAP with other appl. (AD, DICOM, Unix, Apple...); -> would require passive meas.
+    \item clients connecting to LDAP servers?
+    \item AI/NLP/ML on LDAP attr/values; (word cloud) - on free text attributes (e.g. description - on sample data)
+    \item RSA Key Analysis: key size, exponent (berserk), key algorithm, FastGCD, badkeys tool (ROCA, weak keys, default keys), pwnedkeys.com, key reuse (historical data in censys) - ipv4,Full PEM encoded cert (TODO), 
+    \item MITM within Uni network to see how much clients still use plaintext when ldap server supports TLS
+    \item retrieve only attr name (no value) from ldap search
+
+\end{itemize}
+
+\vfill
+\pagebreak
+\twocolumn

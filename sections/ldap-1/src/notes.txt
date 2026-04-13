@@ -1,0 +1,24 @@
+Abstract
+Introduction
+Background
+Uncovering Data Leaks and Insecure Configurations in LDAP (method)
+- Scanning (ggf. Download rootDSE hier rein)
+- Crawling (Data Leaks) / include valid reasons @Christoph / Abgrenzen zu Webcrawling @Sebastian 
+- Welche Server sollten öffentlich sein, welche nicht. 
+    A. Klassifikation abh. von Inhalten auf dem Server
+    B. Reverse DNS
+- Data Leak
+    A. GDPR Violations
+    B. DICOM @Christoph
+    C. SIEVE
+    D. Credentials (Windows AD, ...)
+- Insecure Config
+    A. Authentication States - Ein paar Admins anschreiben und Fragen warum
+    B. TLS Config @Gustavo? PII im Klartext (Kein implizit, und kein STARTTLS) oder (schlechtes TLS)
+    C. CVE's, deprecated Servers, Fingerprinting (cherry picking)
+Large Scale Scans (results)
+Landscape Analysis (results)
+Classification of Results (discussion)
+Ethical Considerations + Disclosure (discussion)
+Mitigations
+Conclusions

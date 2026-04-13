@@ -1,0 +1,124 @@
+\section{Data Analysis}
+This section describes the results of the data analysis module described in~\cref{sec:methodology_data_analysis_module}.
+\label{sec:data_analysis_results}
+
+\subsection{Vendor and Type of LDAP Server}
+In total, we categorized $10,740$ servers using supported controls, vendor information, and attribute combinations.
+
+Using the supported controls (\glspl{OID}) during our scans, we were able to categorize $5,938$ hosts (of $35,083$ hosts that expose them)---predominantly Active Directory servers, Sun Java, and iPlanet directory servers (\texttt{OID} in \cref{tab:CatResults}).
+
+Only a small set of hosts ($2,382$) expose the \texttt{vendorName} and \texttt{vendorVersion} attributes, which allows us to identify $23$ different LDAP server types (\texttt{Version} in \cref{tab:CatResults}).
+
+We attempt to map all of the $3,668$ unique attributes observed in the samples to a server type. As a result, of the $16,218$ hosts for which we have samples, $5,577$ hosts could be categorized (\texttt{Attributes} in \cref{tab:CatResults}). Predominantly, this allowed identifying servers used for Linux user management and servers with Active Directory support for Apple.
+
+Merging all the described categorization approaches results in the LDAP server types shown in \cref{tab:CatResults}. Note that servers can be categorized into multiple categories---\eg a server that uses a specific server software and is used for Linux user management.
+
+%\input{tables/categorization_results}
+
+\subsection{Detected Sensitive Configurations}
+We found several sensitive server configurations that potentially are vulnerable to security flaws or expose sensitive data.
+
+\input{tables/supported_sasl_mechanisms}
+\paragraph{Supported SASL Mechanism.}
+
+\cref{tab:supported_sasl} lists the SASL mechanisms supported by servers. In total, $26,464$ servers support SASL authentication; however, less than one-fifth of them allow authentication over a secure connection. This is especially glaring for the servers supporting plain authentication, of which more than four-fifths do have issues within the TLS configuration---potentially leaking plaintext credentials to a \gls{MITM} attacker. The categorization of issues with TLS configurations is explained in \cref{sec:network_analysis}.
+
+We also find it worrying that a large share of servers support challenge-response and hash-based authentication only allow plaintext connections ($32.57\%$ and $31.67\%$ respectively). This puts the sole trust in the confidentiality provided by SASL.
+%and potentially exposes users to pass-the-hash and relay attacks.
+
+\paragraph{CVE Check.}
+We found $616$ servers with known vulnerabilities (identified by CVEs). Eight servers use a version of the \texttt{UnboundID LDAP SDK for Java} that might be vulnerable to CVE-2018-1000134---an authentication bypass using unauthenticated bind with a CVSS of $9.8$. Additionally, we detected two known vulnerabilities in servers identified as \texttt{389-Directory Servers}: $608$ servers might be vulnerable to CVE-2020-35518---an information disclosure on the directory structure with a CVSS of $5.3$---and $413$ might be vulnerable to CVE-2018-10935---a denial of service with a CVSS of $6.5$.
+The rather low number of servers with known vulnerabilities does not necessarily indicate that these servers are well maintained. On the contrary, we assume that we could not identify a large share of vulnerable servers due to missing product and version information.
+%\input{tables/cve_overview}
+
+%% APPLE Findings
+%A specialty here was a combination of the \texttt{vendorName} attribute with the value 'apple' of a specified \texttt{vendorVersion}. Based on a \texttt{vendorVersion} such as '528.60.1', it could be determined that this is most likely an OpenLDAP implementation for Apple operating systems. (\todo{cites \url{https://opensource.apple.com/source/OpenLDAP/}}). Regarding the highest package version listed on the official Apple open-source website, you can see that it uses OpenLDAP in Version 2.4.28. We found 547 hosts that are, therefore, vulnerable to 29 CVEs.
+
+%It was not checked whether Apple really uses this version unchanged or has backported patches. It is also possible that bugs have been fixed by Apple. However, the fact that Open LDAP is no longer reachable from Apple's official open-source landing page speaks for deprecated software versions.
+
+%Therefore  547 hosts might be vulnerable to 17 or more CVEs. \todo{Tabelle mit Apple + OpenLDAP versionen + liste von CVEs?}
+%\todo{Versions not in mapping {'526.20.15', '530.120.11.700.1', '491.5', '208.10', '528.140.3', '526.20.1', '526.20.4', '553', '547.100.1', '547', '526.10.1', '526.20.2', '526.10.2', '547.100.1.700.1', '528.140.14'}}
+
+
+\paragraph{Internal Information.}
+Based on the categorization explained in \cref{sec:methodology_data_analysis_module}, we could identify hosts exposing settings or parameters that, if accessed by unauthorized users, can lead to security breaches or data leaks.
+
+As shown in \cref{tab:CatResults}, we found $5,180$ hosts that are used for Linux user management and $4,465$ hosts that can be identified as Microsoft Active Directory. Neither of these should be exposed to the Internet.
+
+Additionally, there are $283$ hosts that expose password policies. These, for example, contain information about the minimum length of a password and thus provide conclusions about the strength of the passwords, which in turn helps in the creation of dictionary attacks.
+A notable risk involves the potential for targeted account lockouts~\cite{sermersheimPasswordPolicyLDAP2022a}. Malicious actors can exploit this by issuing bind requests with incorrect passwords, thereby intentionally locking out individual or multiple accounts. This becomes an issue if user enumeration is possible and lockout policies are in place.
+
+Further sensitive information in the form of hosts with \gls{DICOM} configurations could be found. The \gls{DICOM} standard for the storage and transport of medical radiologic images proposes the usage of LDAP for configuration data~\cite[Part~15,~H.1]{dicom}. DICOM's standardized secure authentication methods are often not supported in commercial products and rarely used in productive systems~\cite{ChallengesPacs}. One common way of securing access is the usage of the \gls{AET} as a password in a way that the client must provide the correct \gls{AET} before the connection is allowed by the server.
+The DICOM configuration data in the LDAP scheme contains, besides the medical institution name, device name, and software version of the \gls{DICOM} device, the \gls{AET} title. 
+We found $145$ publicly accessible LDAP servers with \gls{DICOM} configuration values. The publication of the \gls{AET} title on a public LDAP server is, to the best of our knowledge, not meaningful, and if the \gls{AET} is used for authentication, a severe security vulnerability.
+
+%\input{tables/sensitive_configs}
+
+\input{tables/personal_data_tls}
+
+
+\subsection{Detected Personal Data}
+\label{sec:personal_data}
+LDAP servers are commonly used to manage users. These servers provide user authentication or serve as public or internal address books. Therefore, it is plausible that these servers contain personal data such as names or email addresses. The question arises as to how many servers provide us with personal data and what form of data is accessible. The \emph{Sampling Module} collected a limited sample set (see \cref{subsec:samplingModule}) from $16,218$ LDAP servers, which serves as the basis for the investigation in this section. 
+
+The samples can be used to determine which server makes which type of personal data publicly available. We divided the attributes we observed in our sample set that potentially hold personal data into groups. We have listed these groups together with the number of servers that provide us with the corresponding personal data in at least one sample in \cref{tab:personal_data_attributes_tls}. A complete mapping of all LDAP attributes to a group can be found in \cref{tab:personal_data_attribute_groups} in \cref{appendix:attribute_anaylsis}.
+
+We identified a total of $12,179$ servers publishing one piece of personal information. We also categorized the number of servers from which the corresponding information can only be transmitted in plain text on port 389. If a server offers TLS, we have listed how many servers have issues with TLS configuration for the transmission. The classification of issues in TLS configurations is explained in \cref{sec:network_analysis}.
+
+In addition to the names and email addresses, LDAP servers also hold public keys. This category includes S/MIME certificates, which usually contain the certificate owner's name. Since LDAP servers are often used within a \gls{PKI} to distribute S/MIME certificates, the publication of this information is common. More concerning, we found that some LDAP servers return entries with a date of birth, a photo, or even a social security number. Although management of such information in an LDAP directory is plausible, the publication of such information may indicate a misconfigured LDAP server.
+
+In particular, servers that publish attributes such as name, address, city, country, email, or telephone number can only transmit the data in plain text in at least a third of cases. Even the servers that can transmit this information via TLS use TLS configurations with issues in more than a third of cases.
+
+
+%The range of found data on the public internet starts at email directories, including digital certificates like S/MIME certificates, and ends at complete employee directories with names, addresses, birth dates, phone numbers, and job titles.
+
+
+
+
+%An example: There are servers that act as address books. Whether the address book data should be publicly viewable or not depends on the individual consent of each user.
+
+%\mycomment{
+%Another limitation is that we do not individually examine each sample entry of an LDAP server. Rather, we extract all employed attributes from the samples of an LDAP server and, based on this set, determine which personal data is exposed by that server.}
+
+\input{tables/passwords_manual_analysis}
+\subsection{Detected Credentials}
+\label{subsec:05:credentialAnalysis}
+
+As LDAP can serve authentication services, it is a common practice to store credentials on these servers. In this chapter, we analyze the security implications that arise from misconfigurations by admins, posing a risk to stored credentials. Our analysis reveals that such misconfigurations lead to exposed credentials on $1,817$ (2.21\%) of the LDAP servers we examined.
+RFC 4519~\cite{RFC4519} recommends storing passwords in the \texttt{userPassword} field as plaintext strings without any form of encryption. We speculate that this recommendation may have contributed to a substantial proportion of servers (0.71\%) exposing plaintext passwords. 
+
+
+\paragraph{Verification of Credential Leaks.}
+%\begin{figure}[!tb]
+   %\centering
+   %\includegraphics[width=.9\linewidth]{img/credentialsDistribution.png}
+   %\caption{Distribution of exposed credentials.}
+   %\label{fig:credentialDistribution}
+%\end{figure}
+
+In our investigation of servers that may leak credentials to unauthorized entities, we faced the challenge of verifying the authenticity of these credentials. A first analysis of the data samples indicated that the exposure of a potentially sensitive attribute does not mean the information is actually sensitive. As a result, we eliminated a proportion of servers (26.7\%) where passwords were displayed in a redacted form (\eg partially masked by asterisks). To reduce potential harm to users as much as possible, we limit credential sampling to 10 entries per password attribute and server, even if a server is willing to return more. This intentionally small sample size made further automated evaluation challenging.
+
+An analysis of the credential distribution indicates %(\cref{fig:credentialDistribution})
+that the vast majority of credentials were stored on relatively few servers. This prompted a \textit{manual} examination of our samples of all servers harboring over $1,000$ credentials. \cref{tab:PasswordsManualAnalysis} shows that the majority of servers ($18$) expose only plausible plaintext credentials within our samples, while $15$ servers expose plausible plaintext credentials mixed with hash values. We suspect that this is due to the migration of some servers, for example, from plaintext to salted hashes. We also classified some servers as implausible when the sample consisted of very few, repeating identical hash or password values.
+
+
+\paragraph{The Scope of Credential Exposure.}
+
+%Credentials are stored in various schemes. Common schemes are: Plaintext; Crypt, which uses the Unix \texttt{crypt} function, 
+%LDAP allows many common password storage schemes, including simple MD5 or SHA1 hashes, salted hashed passwords as salted SHA1 (SSHA1), or PBKDF2, and Argon2.
+%\cref{tab:CredLeaksGroupedByCommonSchemesShort} provides a breakdown of password encryption types across all server samples, showing that plaintext is the most common format, with 36.05\% of the 1,817 IPs examined. MD5, despite its known vulnerabilities~\cite{libedEnhancingMD5Collision2018, priyatnaPasswordDataAuthentication2020}, is still used on 14.09\% of the IPs analyzed. 
+
+% \input{tables/password_types_short}
+
+To reduce potential harm for users, we only requested samples of user credentials from \gls{LDAP} servers with a hard limit of ten entries. That way, we can detect \emph{if} an LDAP server exposes credentials, but not \emph{how many}. However, to determine the risk a credential-leaking server poses, we need to estimate the number of credentials on the server. We accomplished this by performing an enumeration of entries (as outlined in \cref{subsec:samplingModule}) containing at least one of the identified sensitive attributes (\eg \texttt{userPassword=*}), but only requesting the \texttt{DN} of these entries, ensuring minimal data exposure. The returned \texttt{DN}s are then counted and discarded.
+
+The outcomes of this enumeration are presented in \cref{tab:CountCredentialLeakingAttributes}. We found that more than $3.9$ million credentials were publicly accessible at the time of our data collection in January 2024. 
+Moreover, %\cref{fig:credentialDistribution} shows the distribution of enumerated credentials:
+very few servers expose the majority of credentials.
+
+
+For ethical reasons, we chose not to download the entire dataset of passwords, and we therefore checked the plausibility of the credential samples. \cref{tab:PasswordsManualAnalysis} summarizes our efforts to check the plausibility and distribution of plaintext and hash values of these passwords.
+
+\input{tables/count_of_credential_leaking_attributes}
+
+

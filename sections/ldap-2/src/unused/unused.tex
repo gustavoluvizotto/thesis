@@ -1,0 +1,997 @@
+% all sections are just the place where the text was removed/taken out from. this .tex file should (and will not) be included in the main pdf (final version). It's to keep track and my own documentation.
+
+\section{abstract}
+%We show two main types of \gls{LDAP} deployments: \gls{AD} on Windows Server and OpenLDAP. 33.5\% of \gls{LDAP} instances are deployed using OpenLDAP in contrast to 48.1\% instances of \gls{AD} on some version of Windows Servers.
+%We draw attention that it is of utmost importance that servers are protected under a firewall, require authentication, communication is secure and servers are running up-to-date software.
+% self-declared attributes: " An LDAP server SHALL provide information about itself and other information that is specific to each server.  This is represented as a group of attributes located in the root DSE." https://datatracker.ietf.org/doc/html/rfc4512#section-5.1
+%We also perform a number of manual checks but find no evidence of...
+
+% key results listing:
+%no host centralization like the web
+%evidence of cloud and identity providers running LDAP
+%8% of servers running LDAP with deprecated/with issues version, with Amazon leading
+%majority of the chain errors are signed by unknown auth/self signed, different from the web
+%few LDAP runs x509 v1
+%LDAP servers with no valid leaf certs (not reported before)
+%important issuer issuing valid cert with long validity period
+%certs with known private key
+
+% Examples on the web:
+% https://is.oregonstate.edu/it-infrastructure-services/server-support/active-directory/ldap-connections-exchange-global-address
+
+% recent removals:
+%We also measure \acrshort{TLS} connection state, X.509 certificates, and the self-declared attributes of public \gls{LDAP} servers.
+%Although diversification makes monitoring harder, it reduces the risk of a large single-point-of-failure in hosters.
+% G: I think the following phrase is a candidate for shortening because has no statistical significance.
+%The use of \gls{PKI} in \gls{LDAP} is very diverse across different products, with an attempt (5 out of 200 samples) at private \gls{PKI} deployment.
+%From the collected certificates, 32 cases out of 200 samples showed real companies, and five indicated that the certificate was issued by the company's \acrshort{CA}. 
+
+\section{introduction}
+%\gls*{PKI} information can also be stored in \gls{LDAP} servers, \eg with \gls{AD} Certificate Services, such that certificates are issued internally to an organization's clients~\cite{cert-pre-owned}.
+%The \gls*{PKI} of an organization can be managed using \gls{AD} Certificate Services with considerations~\cite{Orin-Thomas_PKIDesignConsiderations_2023}. Certificates are issued to \gls{AD} clients of the \gls{AD} \gls{LDAP} server~\cite{cert-pre-owned,HarwoodSaisang_WhatActiveDirectory_2023} and thus, enabling \gls{TLS} to the server~\cite{_CreatingEnterpriseSubordinate_2022}. Adding \gls{TLS} capability to the \gls{LDAP} server is also possible through a third-party certification authority~\cite{_CreatingEnterpriseSubordinate_2022}, which such practice is well known in the Web ecosystem.
+
+%A number of vulnerabilities in the \gls{LDAP} ecosystem have been discovered. These include semantic \gls{DoS} attacks on various \gls{LDAP} server implementations \cite{CVE-2013-1282,CVE-2010-0211}, use of weak cryptography \cite{CVE-2015-3276}, and remote code execution~\cite{CVE-2011-3406}, to name a few.
+
+%Given the sometimes sensitive nature of the data on LDAP servers, these security risks are particularly concerning.
+% MS AD, OpenLDAP DoS \cite{CVE-2013-1282, CVE-2013-3868, CVE-2010-0211}
+% OpenLDAP weakning cipher \cite{CVE-2015-3276}
+% OpenLDAP ACE \cite{CVE-2010-0211}
+
+%\todorh{I would like to rewrite this paragraph into a contribution statement. We name the contributions and give a key result for each or a summarizing result}
+%We improved a measurement pipeline to collect \gls{LDAP} information to study and advance our understanding of the \gls{LDAP} ecosystem. Our improvements enable and increase the identification of software products and, when applicable, the underlying operating systems.
+
+\iffalse
+Our key findings and contributions are:
+\begin{enumerate}[leftmargin=*]
+ \item We improve a measurement methodology to identify LDAP servers and their characteristics. We provide the necessary toolset to discover \gls{LDAP} deployments for exposure assessment.
+ \item We collect a comprehensive data set of public-facing \gls{LDAP} servers that we will share with the community.
+ \item We analyze the hosting landscape of \gls{LDAP} servers. The analysis offers direct insights that allow identification on how LDAP deployment vary across hosting types and show network segments that are more likely to harbour outdated \gls{LDAP} servers. For example, we identified products of 69.1k of \gls{LDAP} servers, 6.5$\times$ more than prior work \cite{landscape}.
+\end{enumerate}
+\fi
+
+    %\item[\textbf{RQ2}] How the \gls{LDAP} servers are hosted? % maintainance; how long this?
+    %\item[\textbf{RQ3}] How well are these servers managed? % protection/security
+    %\item[\textbf{RQ1}] How are publicly accessible \gls{LDAP} servers on the Internet maintained?
+    %\item[\textbf{RQ3}] How the above practices correlate to hosting of \gls{LDAP} servers?
+    % turn RQ from contribution to a real RQ!
+    %\item[\textbf{RQ1}] What are the types of \gls*{LDAP} servers do we see on the Internet?
+%\todorh{I commented the following out, it was a repetition}
+%This article investigates the hosting and security of communication in the context of publicly accessible \gls{LDAP} servers. Specifically, we aim to understand how these servers are distributed the \gls{AS} and network prefixes. Furthermore, we examine different types of \gls{LDAP} servers observed on the Internet and assess the security practices they implement.
+
+%Maintaining \gls{LDAP} servers comprehends several tasks where some of them we explore in the scope of this paper. We understand that well maintained servers run \gls{LDAP} software that has support or receives security updates, and similarly the OS they run on. Besides specific use cases, \gls{LDAP} servers should be guarded behind a Firewall. And even though, the servers should ensure server-side authentication with X.509 certificates and client-side with password protection (servers not always mandate client certificates \cite{rfc4513}). The communication between server and client also should make use of secure and modern \gls{TLS} \cite{rfc9325}, and \gls{LDAP} administrators should configure them \cite{OpenLDAPSoftwareAdministratorUsingTLS}. 
+
+    %\item The correlation of deployment type, hosting, and security posture in terms of cipher suites and valid chains of X.509 certificates on \gls{LDAP} servers.
+    %\item Insights on how public \gls{LDAP} servers are managed and the implications when it is not done right.
+    
+%\todo{rework this}: Overall, the results of our research show 91.7k \gls*{LDAP} servers are publicly facing the Internet. However, we obtained metadata from 74.7k servers, and we could see that 34.7\% are deployments using OpenLDAP, and 53.7\% of them have issues in chains of X.509 certificates. Furthermore, we found 46.8\% of instances of Windows Server with or without \gls{AD}, and from those, 86.9\% have issues in their chain of X.509 certificates. These and other insights are discussed in richer detail in this paper.
+
+\iffalse
+This paper is divided as follows: background, our methodology, an overview of the data set, results on the deployment and hosting characteristics, discussion, conclusions, and related work, and we end with our view for future work.
+
+By analyzing snapshots of this data for 2022, we attempt to answer the following research questions: 
+\begin{itemize}
+    \item[1:] What was the state of LDAP services TLS properties within the CUID, including TLS version, TLS ciphers, and certificate-signing practices in 2022?
+    \item[2:] How were LDAP services distributed across countries, organizations, and top-level domains (TLDs) within the CUID in 2022?
+    \item[3:] Who are the top service providers of LDAP services, and what are their characteristics regarding protocol security and service type, and can we establish any evidence for outsourcing? 
+\end{itemize}
+
+\todorh{This is a bit out of the blue, and more relevant when discussing outsourcing}
+Modern service infrastructures increasingly rely on outsourcing their services to third parties such as \gls{CDI}, cloud hosts \cite{doan2022}, and also \gls{IdP}. DDoS incidents with botnets substantiate the magnitude of an overt reliance on dependencies~\cite{woolfDDoSAttackThat2016, Wainwright2019, GRILLENMEIER202113}. Furthermore, transitive dependencies (two levels or more) exacerbate the issue, increasing the attack surface and revealing a fragile ecosystem \cite{Kashaf2020}. A single point of failure implies that all these customers are at risk, independent of whether the LDAP service implementation is hacked or just the provider hosting it.
+
+\todorh{Move this to background or methodology. Censys is well known.}
+Despite these vulnerabilities, no investigations into the security posture of LDAP services on the Internet have been conducted thus far. The difficulty herein lies in orchestrating the systematic collection of Internet data and evaluating representative data sets. Some companies dedicate their efforts to helping the community with Internet scan data sets. Censys published the \gls{CUIDS}, a comprehensive collection of scan data, providing snapshots of the Internet, including information about devices, services, and protocols \cite{censys15}.
+
+\begin{description}
+    \item[\textbf{RQ1}] How LDAP servers are deployed on the Internet?
+    \item[\textbf{RQ2}] What type of providers are offering LDAP service?
+    \item[\textbf{RQ3}] What characteristics can we observe on major vendors of LDAP servers?
+\end{description}
+
+\begin{description} 
+    \item[\textbf{RQ1}] How protected is the communication with \gls{LDAP} servers? 
+    \item[\textbf{RQ2}] What type of \gls{LDAP} servers do we see on the Internet?
+    \item[\textbf{RQ3}] What organizations are running these \gls{LDAP} servers?
+    \item[\textbf{RQ4}] How do these organizations operate regarding service provisioning?
+    \item[\textbf{RQ5}] Should \gls{LDAP} servers be open to the Internet?
+    \item[\textbf{RQ6}] How can system administrators protect their \gls{LDAP} server?
+\end{description}
+
+Additionally, we can discuss the following:
+\begin{enumerate}
+    \item Should \gls{LDAP} servers be open to the Internet? Answer based on previous findings and manual lookup on the Internet - Metrics?
+    \item How can system administrators protect their \gls{LDAP} server? give references to literature and tutorials, just say the highlights (most important concepts because online tutorials may change).  - \todo{from 0} - default config as safenet
+\end{enumerate}
+\fi
+
+
+%We provide insights into networks where \gls{LDAP} servers are hosted, the impact of network size on security posture, and the risks of service unavailability should a disruption event occur -- whether due to \gls{AS}-level incidents or issues with \gls{LDAP} servers themselves (\eg adversary causing application crash). The latter requires server's running patched versions via regular updates \cite{238331, LiPaxson_LargeScaleEmpiricalStudy_2017a} to maintain service availability in the face of attacks and to prevent data exposure.
+
+
+\todorh{hmmmm... can we give a ballpark number of how often that happens?}
+% to test custom applications ``ldap.forumsys.com''. 
+%https://ldapwiki.com/wiki/Wiki.jsp?page=Public%20LDAP%20Servers - dangerous operation: ldapsearch -H ldap://x500.bund.de:389 -x -b ''  'cn=*'
+
+
+%\gls*{LDAP} servers can enable \gls{SSO} within an organization's intranet. %~\cite{okta-auth-sso} "Companies may use the LDAP protocol to provide SSO services to their employees within an intranet. LDAP based SSO is not common outside of company intranets." --  \cite{okta-auth-sso}
+
+Despite the importance of the study, there is a paucity of evidence on network operators hosting \gls{LDAP} servers and their security settings. We dig down into network segments we find most \gls{LDAP} servers, the software types of accessible \gls{LDAP} instances and, their use of \gls{TLS} and \gls{PKI}.
+
+
+find \gls{LDAP} instances using deprecated software, weak TLS configuration, or failed todeploy \gls{PKI}, prioritizing specific network segments.
+
+Our paper extends this to the \gls{LDAP} ecosystem and aims to explain the security of \gls{LDAP} across various types of networks and hosters. 
+
+% To the best of our knowledge, we are the first to report chains of X.509 certificates without a leaf certificate on \gls{LDAP} servers, which is also unlikely to be seen on the Web
+% key results listing:
+%no host centralization like the web
+%evidence of cloud and identity providers running LDAP
+%8% of servers running LDAP with deprecated/with issues version, with Amazon leading
+%majority of the chain errors are signed by unknown auth/self signed, different from the web
+%few LDAP runs x509 v1
+%LDAP servers with no valid leaf certs (not reported before)
+%important issuer issuing valid cert with long validity period
+%certs with known private key
+
+
+% We decided to remove the hypothesis (and all subsequente mentions of it).
+%We hypothesize a tri-partite division of \gls{LDAP} products deployed: \gls{AD}, OpenLDAP and others. Our hypothesis is based on the first view from Rapid7's blog post in 2016, the dominance that Microsoft has with their \gls{AD} product in general businesses, and the long-term presence of OpenLDAP as an open-source competitor.
+
+%~\cite{CVE-2013-1282,CVE-2010-0211,CVE-2015-3276,CVE-2011-3406}.
+
+
+\section{background and related work}
+The \gls{LDAP}v3 protocol specification is compatible across directory services of multiple vendors and their respective versions, such as \gls{AD}, \gls{AAD}, or OpenLDAP.
+
+%Typical data stored on \gls{LDAP} servers would be email addresses, persons' names, phone numbers, but also passwords~\cite{landscape}.
+
+ %\gls{LDAP} was standardized by the \acrshort{IETF} in 2006 \cite{rfc4511}.
+
+%We show this example in \cref{fig:comm-example}.
+
+\iffalse
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/ldap-dit-example.pdf}
+    \caption{Exemplification of a directory tree structure. Extracted from \cite{10.5555/773289/Ch2}} 
+    \label{fig:dit-example}
+\end{figure}
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/directory-enabled-server-app.pdf}
+    \caption{Example of LDAP usage. Adapted from \cite{tim-howes-ldap-bible}} 
+    \label{fig:comm-example}
+\end{figure}
+\fi
+
+
+%Various products implement \gls{LDAP}. Typical products are: Microsoft \acrfull{ADC}, \acrfull{LDS} (a mode used by applications via API), or simply \gls{AD}; KerioConnect; VMware \acrfull{PSC}; 389 Directory Server; OpenLDAP. Of these products, only the latter two are open source.
+%\textbf{\acrfull{AD}:} Microsoft's implementation of \gls{LDAP} protocol, storing information using the directory tree and make it accessible on the network to users and administrators \cite{iainfoulds_ActiveDirectoryDomain_2024,n-ableLDAPVsActive2020}. \gls{AD} name is mostly used but the nomenclature changed to \gls{AD} \gls{DS}.
+%\textbf{\acrfull{ADC}:} "A domain controller is a server that is running a version of the Windows Server\textregistered~operating system and has Active Directory\textregistered~Domain Services installed." \cite{Archiveddocs_DomainControllerRoles_2014}. You configure the domain controller role in the server by installing \gls{AD} \gls{DS}.
+%\textbf{\acrfull{LDS}:} A mode of \gls{AD} that operates as standalone data store or replication, providing an API to applications \cite{REDMONDmarkl_WhatActiveDirectory_2018}.
+%\textbf{OpenLDAP:} Open-source implementation of \gls{LDAP} that includes load balancer, the server code, libraries and tools.
+%\textbf{Kerio Connect:} It's a proprietary product that offers e-mail, calendar, contact and instant message platform.
+%\textbf{389 Directory Server:} Open-source implementation to access directory services made for Linux machines. We show in our paper the former name \textit{Fedora Project 389 Directory Server}.
+%\textbf{VMware \gls{PSC}:} A platform with different VMware products such as \gls{LDAP}, licensing, certificates and authentication, to name a few.
+%\textbf{IBM Domino LDAP Server:} IBM's proprietary implementation of the directory to accesses information through \gls{LDAP} \cite{_DominoDirectory_}.
+
+
+%With the forest feature of \gls{AD}, one or more \gls{AD} domains share ``a common logical structure, directory schema (class and attribute definitions), directory configuration, and global catalog''~\cite{iainfoulds_UnderstandingActiveDirectory_2024}\todo{FI: This is missing context}. 
+
+%\gls{TLS} uses cryptography algorithms to establish secure communication, called cipher suites. Insecure and outdated suites are classified as deprecated as per \cite{rfc9325}. 
+
+Certificates map the identity of an individual or organization (\eg a domain name) to a cryptographic public key.
+
+
+%During the \gls{TLS} handshake, client and server must exchange keys to encrypt the communication channel, choose an encryption mode, authenticate the message using a hash algorithm for data integrity, and authenticate the parties via X.509 certificates. Modern cipher suites have \acrshort{PFS} and are better suited for secure communications with \gls{LDAP} servers. ~\cite{rfc5280}
+
+%\gls{TLS} uses X.509 certificates so that clients can verify the server's authenticity during the communication.
+
+
+
+ Usually, certificates are signed by an intermediate \gls{CA}. However, server administrators may use self-signed certificates for testing purposes.
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REMOVED 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\textbf{\acrfull{TLS}:} \gls{LDAP} supports \gls{TLS} to protect client-server communication. \gls{TLS} is a standard protocol defined by the IETF, with the most recent version TLSv1.3 released in the year 2018. Previous versions of \gls{TLS}, excluding 1.2, have been declared deprecated \cite{rfc8446} with \gls{TLS} 1.2 being limited to a set of ciphers suites such as \acrshort{AES} in \acrshort{GCM} \cite{rfc5288}.
+\gls{TLS} uses a set of cryptography algorithms to establish secure communication, called cipher suites. Insecure and outdated suites are classified as deprecated as per \cite{rfc9325}. During the \gls{TLS} handshake, the client and server must exchange keys to encrypt the communication channel. This includes long-term keys (or master keys) that facilitate the key exchange of short-term keys (or session keys) during the key exchange process. As defined in  \cite{handbook-applied-crypto} ``A protocol is said to have perfect forward secrecy if compromise of long-term keys does not compromise past session keys.'' Modern cipher suites have \acrshort{PFS} and, hence, are better suited for secure communications in \gls{LDAP} servers.
+
+
+subsection{Directory Services}
+\gls{LDAP} servers host Directory services and have the following use cases:
+(1) Authentication: Directory services are used to authenticate users and applications between the organization's network services with user- and service accounts. In addition to storing organizational information such as users and assets, access policies can be configured for users, applications, and groups \cite{desmond_active_2008}.
+(2) Organization Management: Due to the tree-like structure \cite{x500}, \gls{LDAP} is commonly used to hierarchically structure users in an organization's database. It facilitates storing data in a tree structure, \ie a corporation with its division, locations, teams, and room numbers \cite{IYER2020112}. Additionally, it enables other applications to interact with this data, such as e-mail.
+(3) Network Management: Storing network resources and device (such as printers) data. This allows for the management of devices by mapping physical locations to network assets in combination with access management and authentication \cite{IYER2020112}.
+(4) \gls{SSO}: An authentication method that enables access to multiple services and devices with the benefit of using single credentials. This prevents users from having to authenticate to every service under the same domain \cite{subbarao_microsoft_2023}. In general, multiple corporations use this service nowadays.
+
+subsection{LDAP}  % some extras that I removed
+%It also contains the schema of the \gls{LDAP} server, which has definitions and constraints about the structure of the directory tree \cite{rfc4512}.  %The \gls{LDAP} server is called the \gls{DSA} \cite{ldap-auth-redhat}
+
+\todorh{No need to explain this for the TMA audience}
+subsection{DNS}
+\gls{DNS} maps \gls{IP} addresses to host names, and by querying the \gls{FQDN} of the server, its address will be resolved and returned. This can also be done in reverse: Querying the \gls{IP} address returns the \gls{FQDN}. The \gls{FQDN} is comprised of the sub-domain (SD), second-level domain (SLD), and top-level domain (TLD), i.e.: ``\verb|ldap.domain.com|'' is comprised of ``\verb|SD.SLD.TLD|''. Additionally, it enables the separation of responsibilities about organizations' services. This facilitates multiple services sharing the same domain, including \gls{LDAP}. We point the readers to \cite{VANDERTOORN2022100469} for further details about \gls{DNS}.
+\fi
+
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%REMOVED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+Other works showed the impact of dependent services. Kashaf \etal investigated the prevalence and impact of \gls{DNS}, \gls{CDN}, and certificate revocation checking third-party \gls{CA}s dependencies. They observed an increase of 1\% to 5\% in critical dependencies on websites and an increase in the concentration of these dependencies around service providers \cite{Kashaf2020}.  The consequences of a high dependency of domains on third parties have been demonstrated in the war in Ukraine. Jonker \etal observed a high reliance on Western \gls{CA}s, which must now rapidly be replaced by Russian ones \cite{jonker2022}.
+\fi
+
+%Studies show that 90\% of sysadmins update the system once a month \cite{10.1145/1294261.1294283} or that it is necessary for people to be convinced about updating the system \cite{238331}. \cite{10.1145/3243734.3243794} shows that delayed or missing system updates are, among a few others, the most frequent source of misconfiguration. Hence, 
+
+%Holz \etal conducted active and passive measurements of X.509 certificates used in \gls{TLS} authentication purposes, identifying multiple issues with the X.509 \gls{PKI} such as incorrect identification chains of \gls{CA}’s and highlight the prevalence of self-signed certificates in use \cite{holz2011}.
+
+\gls{TLS} deployment has been studied on the Web \cite{muhammad2023,holz2016,quirin2018,Kotzias2018} but not yet on \gls{LDAP} servers.
+
+%The use of \starttls to upgrade from clear text to encrypted connections has been explored. Poddebniak \etal introduced a toolkit to explore several vulnerabilities of \starttls in the context of email \cite{274731}. Durumeric \etal studied servers that cannot protect against \starttls corruption that leads to downgrade connections to clear text \cite{10.1145/2815675.2815695}.
+
+ Ma \etal work analyzed multipurpose root stores in the context of the Web \cite{maTracingYourRoots2021}.
+
+%Doan \etal observed that the number of dependencies on \gls{CDI}s nearly doubled for .com, .net, and .org domains between the years 2015 and 2022 \cite{doan2022}. 
+%Moura \etal studied the consolidation of DNS in a few organizations \cite{Moura2015}. 
+
+%Zembruzki \etal showed that five hosting providers own 1/3 of domains \cite{9789881}. Holz \etal studied the adoption of TLSv1.3 deployment and revealed centralization on the Web \cite{holz2020}. In our research, we study the hosting of \gls{LDAP} to find whether there is centralization in the \gls{LDAP} ecosystem. \todo{FI: Think about moving this before the conclusion. Currently it uses a lot of information outlined in the methodology/rest of the paper}
+
+
+%\gls{LDAP} must be, besides specific use cases, used with \gls{TLS} \cite{hassler500LDAPSecurity1999, findlayBestPracticesLDAP,tim-howes-ldap-bible, rfc4511}. 
+ \gls{LDAP} supports \starttls \cite{rfc4511} and we investigate its deployment in our research.
+
+% recent removals:
+%There are very few empirical analyses of the \gls{LDAP} ecosystem. 
+
+%The study collected overall numbers of publicly accessible \gls{LDAP} servers by scanning on TCP ports 389, 636, 3268, and 3269 alongside port UDP (\gls{CLDAP}) and the identification of \gls{LDAP} version. Rapid7 found more instances of \gls{LDAP} than our study, indicating a decline over the years. 
+%Additionally, their study explored how Connectionless LDAP (CLDAP) contributes to Distributed Reflection Denial of Service (DRDoS) attacks. 
+
+% and possible vulnerabilities \todo{FI: Aren't vulnerabilities also listed in Landscape?}
+%It shows the influence of hosting environments and software configurations on security, highlighting differences in implementation and product lifecycle, particularly concerning the use of X.509 certificates and TLS configurations.
+
+%We extended the analysis of X.509 certificate chains to versions of \gls{LDAP}, and show a new class of error not present in \cite{landscape}.
+%Furthermore, we investigate leaf certificates in-depth.
+%We identify the operators of the \gls{LDAP} servers and 
+%We analyze the certificate issuers across different groups of validity periods of valid certificate chains. Additionally, we highlight cases where compromised certificates or certificates sharing the same key are used on \gls{LDAP} servers.
+%While Kaspereit \etal only examines LDAP servers' security settings and the extent of leaked sensitive data—focusing on the risks posed by misconfigured servers to organizations and users — 
+%We offer a broader context by examining structural and systemic aspects of LDAP server management. By analyzing hosting environments and security practices, we contribute valuable insights for long-term improvements in LDAP server security. We build upon the previous results to address not just the symptoms but the underlying causes of LDAP server misconfigurations by highlighting systemic issues.
+
+%On the Web, domains that wish to serve common browsers commonly rely on public \glspl{CA} as the trusted authorities that issue their certificates; their root certificates are added to the root store by the vendors of operating systems (typical for Windows, macOS, Linux), although browser-specific root stores also exist (\eg Firefox). For the Web, the verification steps (\eg domain ownership) that these \glspl{CA} must undertake before issuing a certificate are defined by the CA/Browser Forum. 
+
+\section{Methodology}
+%We make our scanning data available to the community at \texttt{anonymized-for-review}.
+
+%We build on the tool chain that the authors of~\cite{landscape} created, although we omit the parts of the chain that are used for relatively intrusive probing (such as attempts to determine whether personal data or other sensitive information is stored on a server). The tool chain provides us with the means to extract the Root DSE and carry out TLS handshakes, including a download of the certificates. Our final tool, \textit{Hostscape}, extend the original tool's capabilities in the following ways. 
+%\todorh{I would suggest to describe our tool in two paragraphs. One says what it has in common with LanDscAPE and which functions we use. The other lists our extensions.}
+
+% % our measurements: hosts (636+389), certs (636+389), LDAP (636), \starttls (389) ~= 1.5Gb
+%\textbf{Measuring LDAP metadata.} To obtain \gls{LDAP} metadata, we requested several attributes from the Root \gls{DSE} of the \gls{LDAP} servers. To retrieve Root \gls{DSE} information, we crafted a \gls{LDAP} search request using the filter ``(objectClass=*)'', with empty \gls{DN}, limiting the scope to the base entry node and no subordinates of the directory tree and, a list of attributes like vendor name and version, \gls{LDAP} supported version, Microsoft Exchange related attributes \cite{ms-ldap-attr}, and other attributes to help identify different types of \gls{LDAP} servers.
+
+%This allows us to  leverages Ruby expressions to match Root \gls{DSE} responses to known server response patterns. We used this tool in lieu of the manual identification mechanism from~\cite{landscape}. 
+
+%Additionally, we updated ``recog's'' regular expressions to improve accuracy. The tool allows us to better recognize \gls{LDAP} server products and the operating system, notably for instances running OpenLDAP or Microsoft \gls{AD}.
+%We make our improvements available to the community at \texttt{anonymized-for-review}. %\cite{recog-fork}
+
+%We also infer all the prefixes announced by each \gls{AS} to compute the size of its announced address space. 
+% RH: I commented this out, it makes it sound as if there is no correlation, when the reality is there is no obvious correlation:
+%\replyg{We faced the problem of no correlation of network size and the deployment of \gls{LDAP}, which is one of our research's goal.}
+
+At first glance, \gls{LDAP} servers seem to run in networks and prefixes of all kinds of sizes, and neither visual inspection of plots nor manual sampling suggest a typical kind of network segment (or network size) where \gls{LDAP} instances can be found.
+
+% By repeating this process multiple times, we arrive at 20 intervals, the first and last being $(0,2\textsuperscript{8}]$ and $(2\textsuperscript{26},2\textsuperscript{27}]$, respectively.
+%This allows us to understand better the relation between network size and \gls{LDAP} server deployment.
+
+
+
+% MJ: The below paragraph contains many "problem statement" related elements (e.g., which standards should be met). It feels a bit off
+%     to first outline/repeat these in the methodology
+%Ideally, a public key should belong to one owner, who holds the related private key in a safe air-gap environment. 
+%A public key's length should meet security standards. For example, RSA keys must be at least 2048 bits long according to \gls{TLS} Baseline Requirements~\cite{cabr-6.1.5}.
+%Compromised keys should self-evidently no longer be used.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% REMOVED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+%%%%%%%%%%%%%%%%%%%%%%%%%%% PASSWORD POLICY - JONAS 
+\textbf{Identifying password policy.} 
+To retrieve different password policies from various LDAP servers, we developed a Python script leveraging the \texttt{ldap3} library that connects to these servers via anonymous binding and queries for specific policy-related information.
+
+First, the script connects to the target LDAP server using its IP address and port number. It then retrieves the server's naming context, essential for constructing accurate search queries within the directory structure. With the naming context identified, the script performs searches for specific object classes and attributes associated with password policies in different LDAP implementations:
+
+\begin{itemize} \item \textbf{OpenLDAP}: The script searches for entries with the \texttt{objectClass} of \texttt{pwdPolicy}. This class contains password policy attributes defined in OpenLDAP servers. \item \textbf{Active Directory (AD)}: For AD servers, it searches for: \begin{itemize} \item \texttt{objectClass=queryPolicy} to retrieve LDAP query policies. \item \texttt{objectClass=domainDNS} to obtain domain-level password policies. \item Entries with \texttt{CN=ms-DS-Password-Settings} to find fine-grained password policies introduced in Windows Server 2008 and later. \end{itemize} \item \textbf{Red Hat Directory Server}: The script looks for entries under \texttt{CN=config} and retrieves the \texttt{nsslapd-pwpolicy-local} attribute, which holds the local password policy settings. \end{itemize}
+
+By querying these specific object classes and attributes, the method systematically gathers password policy information across different LDAP server implementations. 
+
+Additionally, the script attempts to retrieve Access Control Information (ACI) by searching for entries with the \texttt{aci} attribute. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Typically, empirical researchers implement Internet-wide scanning techniques for research purposes. This involves facing technical, legal, and ethical considerations to answer simple questions.
+
+subsection{Limitations}
+The combination of these data sets and the evaluations face limitations. For ethical reasons, organizations have the option to ``opt-out'' of scans. We cannot determine their block list apart from Censys' published paper \cite{censys15}. 
+We used different data sets to enrich and verify our measurements. The limitation herein lies in the correlation of multiple sources of information. \gls{IP} addresses are not static and can be re-assigned regularly due to internal network lease \cite{Moura2015}. We correlate the snapshots and scan dates of all datasets as closely as possible. This introduces uncertainty in the time since a portion of the \gls{IP} addresses could have been assigned to different organizations in the delta of days we could access.
+
+subsection{Tools}
+We decided to convert the Censys dataset into Parquet format (column-oriented) to achieve improved processing time since we can process only desired columns, which is common when processing a dataset. To process it, we used a Spark cluster. Finally, we used Python and the necessary modules to make the mappings from routing data to organizations. We made our code publicly available to the community.
+
+Additionally, we manually investigate the characteristics of a few service providers by looking at the structure of the \gls{FQDN}s, \ie if the naming of the subdomains indicates whether the host is cloud-service oriented or customer-oriented. The latter hosts ``ready-to-go'' servers (solutions) that come pre-configured to a certain extent and traditionally deploy multiple services, requiring less configuration from the customer side. Cloud-service providers on the other hand are typically more ``off-hand'' - providing the infrastructure to be configured by the customer.
+
+subsection{off-the-shelf data sets}
+Censys regularly provides off-the-shelf Internet-wide measurements of applications in the public IPv4 and IPv6 address space to researchers \cite{censys15} and professionals. We leverage the IPv4 dataset to enrich our scans with additional X.509 certificates and \gls{TLS} connection data for a superset of \gls{IP} addresses. We used \gls{CUIDS} to verify our results.
+
+We also investigate the distribution of LDAP servers by organizations and countries on the Internet using the following data sets:
+\begin{itemize}
+    \item[(1)] The Route Views Project data set \cite{routeviews} to map \gls{IP} addresses to \gls{ASN}s provided via \gls{BGP} data in the same period of the measurements.
+    \item[(2)]  \gls{CAIDA} data set \cite{as_organizations} to map \gls{ASN}s to organizations that participate in Internet routing from the same period of the measurements.
+\end{itemize}
+
+subsection{Detecting outsourcing}
+\todorh{This is optional. Maybe we do only part of it here?}
+We analyze the organizations hosting LDAP servers to classify whether they act as third parties (outsourcing destinations). Accurately determining whether a service is outsourced is hard without further insights into the contacts, which lies outside the scope of this research. We have devised two methods (M. 1 and M. 2) to determine outsourcing evidence:
+
+\todorh{I am not a fan of the listing. Better describe in words and argue why accurate}
+\todo{This methodology is not accurate}
+\begin{itemize}
+\small
+    \item [M1:] Let $X$ := \{Leaf Certificate Names\} \\
+    $\text{$Y$ := \{DNS Names\} }\cup\text{ \{Reverse-DNS Names\}}$ \\
+    $\forall x \in X \text{: If } x \in Y\text{, no evidence is found.}$\\
+    $\text{If } x \notin Y\text{, evidence is found.}$
+
+    \item [M2:] Let $X$ := \{Reverse-DNS Names\} \\
+    $\text{$Y$ := \{DNS Names\}}$ \\
+    % you have a list of DNS names and rDNS names from a given IPv4 host
+    $\forall x \in X \text{, if } x \notin Y\text{, evidence is found.}$\\
+    % if there is an element that is an element in the lists that are not matching, then there is evidence of outsourcing
+    % the set of elements in Y which are not in X
+    $\text{If } x \in Y \land \left| Y \setminus X \right| > 0 \text{, evidence is found.}$ \\
+    % if all elements of rDNS are in fDNS, then no outsourcing
+    $\text{If }x \in Y \land \left| Y \setminus X \right| = 0 \text{, no evidence is found.}$
+\end{itemize}
+
+In both (1) and (2), each element $X$ and $Y$ are stripped into ``\verb|SLD.TLD|'' as explained in \cref{subsec:dns}. We use the union of methods 1 and 2 on an intersection of a set of hosts that both methods apply. By following these methods, we can identify, for a given \gls{IP}, whether the X.509 certificate was issued to the domain the LDAP server was registered. Or that <m2>
+Take X as an example on the Web. <develop idea here>
+
+%%%%%%%%%%%%%%%% REMOVED %%%%%%%%%%%%%%%%%%%%
+\textbf{Measurement period.}
+We conducted a measurement in November 2024 to observe publicly accessible \gls{LDAP} servers on the Internet. 
+Our measurement pipeline follows \cite{landscape-anonymous}.
+The measurement comprises scans of common \gls{LDAP} ports 389 and 636 and the known \gls{LDAP} global catalog ports 3268 and 3269.
+We limited ourselves to retrieving information that does not require any form of authentication with the \gls{LDAP} servers.
+%To confirm \gls{LDAP} servers' presence on such ports, we extended Goscanner \cite{goscanner-fork} and followed up with application layer scans to collect \gls{LDAP} metadata. This step rules out false positives of devices running on the scanning ports \cite{LZR2021, Sattler2023}. On ports 389 and 3268, we perform an in-band upgrade to \starttls. Then, we do \gls{TLS} handshakes to collect X.509 certificates, cipher suites, and protocol versions. The cipher suites sent by our scanner are ordered, with the modern and secure according to RFC-9325 \cite{rfc9325} first. We store the information that the server selected. Finally, we extract attributes from the \gls{LDAP} server Root \gls{DSE}.
+%\todo{, one measurement site is dedicated only to collecting LDAP servers password policy}.
+
+
+%LANDSCAPE anonymization: WE ARE THIRD PARTY AND AUTHORS OF LANDSCAPE PROVIDED THEIR TOOLS}
+% Anonymize citation landscape paper to shorten this meas pipeline. Just a continuation of work...
+%-- use third party view of the landscape paper and say the authors of that work shared part of their tool that does not retrieve personal and sensitive information; say what the tool gives (means, root dse, tls)
+
+%Furthermore, we combined different data sets to determine where the \gls{LDAP} servers were hosted. We collected IPv4 prefixes from the following publicly available cloud providers: Akamai, AWS, Azure, Cloudflare, DigitalOcean, Fastly, Google, Linode, and Oracle. Additionally, we looked into the \textit{namingContext} field of the \gls{LDAP} Root \gls{DSE} and the subject field from obtained X.509 certificates, looking for names referring to a cloud deployment. 
+
+%\footnote{The certificate validation tool has been used in a previously published paper and hence, we refer to as an available tool to use.}
+
+%These types of networks indicate organizations that provide off-the-shelf \gls{VPS} or cloud solutions to their customers.
+%We observed from our dataset that \gls{LDAP} servers do not comply and reply with additional operational attributes and sometimes even reply with user-specific attributes such as \textit{``telephoneNumber''}, \textit{``mobile''}, \textit{``mail''} or \textit{``customerNumber''}. The values on those attributes are not real, such as telephone/mobile number 123456789, customer number 111113, or mail coming from an e-mail tool interact@s.h. We see that all cases are just misconfigured servers.
+
+%We revamped the Root \gls{DSE} retrieval functionality and extended it with support for raw data.
+%We updated the Goscanner to retrieve Root \gls{DSE} information. 
+
+%Microsoft Exchange-related attributes~\cite{ms-ldap-attr}.
+% Unlike previous work (where the research goals required it), we do not carry out any authentication that requires input username and/or password (\ie we only perform anonymous authentication), nor do we collect any potentially sensitive information.
+%personal, and sensitive data collection and sampling features of~\cite{landscape}. 
+
+
+%We are interested in validating the server's TLS certificate. As existing X.509 certificate chain validation tools (\eg ``openssl-verify'') proved inadequate for our use case, which requires processing thousands of chains of certificates, we created our own. Our tool uses Go's Standard library, which implements a subset of the X.509 standard.
+
+
+When a certificate is cross-signed, there can be multiple paths toward a valid chain. Our tool spawns multiple Go routines in parallel to identify possible paths and checks if at least one path is valid for a given leaf certificate. 
+
+Unlike existing tools, we also discern chains in which all certificates, notably including the ``leaf'' certificate presented by a server, have the ``\textit{isCA}'' flag set. This is an additional feature from what has been used in prior work~\cite{landscape}. Furthermore, their focus was solely to show results on validation where in this paper we deepen and give a first view on the \gls{LDAP} \gls{PKI}.
+
+%\footnotetext{Apple and Microsoft's root certificates are extracted from the latest MacOS and Windows 11 stores.
+
+% MJ: is this relevant? 
+%The latter two are distinct since Chrome contains certificates trusted by the browser
+% ANS: That's because one may think that both should provide with the same certificates
+
+
+% MJ: a reader may wonder why you are singling out openssl verify (and if there are no other tools that would have sufficed)
+% We build \cite{cert-validator} to validate chains of X.509 certificates using Go's standard package because ``openssl-verify'' fell short to address that chains might not have any valid leaf certificate.
+% ANS: I added as the only tool available that could do this job.
+
+% MJ: isn't the below obvious/common practice?
+% We checked whether leaf certificates are self-signed by verifying that the public key present in the X.509 certificate matches the signature present in the same certificate \cite{rfc5280, handbook-applied-crypto}.
+% ANS: because the Go standard package does not do that and I had to make a script in python that does this.
+
+\gls{LDAP} servers can be behind a firewall. In our research, we focused our measurements on publicly accessible \gls{LDAP} servers only; the results do not include private deployments of \gls{LDAP} servers.
+
+
+%We have used IP2Location data set in our study. We use it relying on the truthfulness of the information we receive, but we don't have details on how the data is collected and how, for example, the ''ISP`` and ''network usage`` fields are determined. We assume that the error is small from the total of \gls{LDAP} servers we measure.
+We use \iptwolocation data in our study, and hence, we inherit some of the limitations from this data, namely geolocation accuracy and the network operator name~\cite{_IPGeolocationCapabilities_2024}.
+
+
+One could infer these via the ``objectVersion'' schema attribute~\cite{robinharwood_FindCurrentActive_2024}, but this requires an \gls{LDAP} Bind to access sensitive content, which we avoid for ethical reasons. We partly address this blind spot by identifying Windows Server 2022 using TLS version 1.3~\cite{alvinashcraft_ProtocolsTLSSSL_2024}. 
+
+%\gls{LDAP} servers do not send information about their build number or patch level to determine whether a security update is in place. We can only infer the version from the attributes in the Root \gls{DSE} that \textit{recog} identifies.
+
+
+
+%Finally, we could not obtain the version of KerioConnect and OpenLDAP instances from our measurements; hence, we don't report on their product lifecycle. 
+%We found only 2 instances of OpenLDAP version through vendor version attribute of the Root \gls{DSE}, but as they are not significant to the analysis, we don't distinguish them apart from the other OpenLDAP instances.
+% https://www.openldap.org/software/download/OpenLDAP/openldap-release/
+% https://git.openldap.org/openldap/openldap/-/tags?sort=version_asc
+%Oracle and VMware replied with information about their product lifecycle. Scalix \gls{LDAP} servers have no website with information about their product support, however they appeared in small number in our dataset.
+
+\todorh{Generally, no threat model is needed in papers at measurement venues. It's a USENIX thing that you must have a threat model or some reviewers go for an automatic reject.}
+\textbf{Threat model.} We assume that attackers attempt to access publicly accessible \gls{LDAP} servers via their known ports, using a \gls{LDAP} browser or custom tool. The attacker would then query the Root DSE information to identify the version it runs and launch their attack based on known vulnerabilities (CVEs). Furthermore, we assume the attacker act as a \gls{PitM} and either lower the cipher suites strength or make use of pwned certificates, to decrypt the communication and gain knowledge of sensitive information of the server.
+\fi  
+
+%Our tool is made to identify and extract relevant information about \gls{LDAP} servers without attempting to exfiltrate the internal content of the server. \textit{Synzack/ldapper} can authenticate or brute force into a \gls{LDAP} server \cite{synzackldapper}, which is not the goal of our tool. \textit{shellster/LDAPPER} and \textit{ldapsearch} are tools designed to do operations to individual servers, with a human-readable output, lacking the ability to do large-scale \gls{LDAP} measurements and ease processing \cite{ldappershellster, LdapsearchCommandLineTool}. Hence, our tool enables measurements of \gls{LDAP} without trespassing ethical boundaries.
+
+% https://github.com/hadiasghari/pyasn/blob/master/pyasn-utils/pyasn_util_download.py#L147
+% route-views2.oregon-ix.net - https://archive.routeviews.org/
+
+% recent removals:
+%We extend our tools from our prior work~\cite{landscape}. Previously, we scanned \gls{LDAP}, collected their \gls{TLS} information, confirmed the presence of an \gls{LDAP} server with different types of \gls{LDAP}-binding, collected and classified sensitive information (securely stored and then discarded this data), and performed analysis on the \gls{LDAP} location and their \gls{TLS} configuration based on different detected misconfigurations. 
+
+%We also study key reuse across certificates for different subjects. Finally, we consider the cryptographic algorithms that are accessible to \gls{LDAP} servers.
+
+%It is possible that there is a small impact due to us missing \gls{LDAP} servers that are inaccessible due to geo-blocking~\cite{10.1145/3278532.3278552} or censorship devices~\cite{10.1145/3555050.3569133}. % no evidence of this occurring, hence removing the limitation as per review remark.
+
+\section{results}
+%We agree on the number of \todorh{what are these? and they are not numerous. if there is nothing significant to say about them, merge them with the mainline OpenLDAP} \replyg{Apple on OpenLDAP, with 449 instances against 574 from~\cite{landscape}. Apple had the OpenDirectory product, a fork of OpenLDAP, shipped with MacOS server. However, Apple discontinued this product. As it is a specific variant of OpenLDAP, we cannot identify such a product with certainty, and hence, we merge the numbers with all other OpenLDAP instances in our \cref{tab:ldap_types}.}.
+% RH: by removing these cites, we also save references
+%\cite{Microsoft-WindowsServer2012}
+%\cite{Microsoft-WindowsServer2003, Microsoft-WindowsServer2008, Microsoft-WindowsServer2008-R2, Microsoft-WindowsServer2016, EndSupportMicrosoft, ProductLifeCycle, IBMDominoServer-90X-2021}
+% These updates are free if the server is hosted on Azure. For on-premises or hybrid hosting setup, the price can aggregate up to thousands of dollars \cite{Microsoft-ProductLifecycleFAQ,Microsoft-WindowsServer2012-price}.
+%\$14k USD (for datacenter license, assuming the three years purchasing the security updates) 
+
+%One difference to the methodology in \cite{landscape} that we know of is that the OID for the iPlanet servers (an Oracle product) actually identifies several \replyg{different} products and \replyg{hence}, cannot be simply grouped together \todorh{all iPlanet? or also totally different vendors?}.
+% About Apple on OpenLDAP: 
+% https://en.wikipedia.org/wiki/Apple_Open_Directory
+% https://en.wikipedia.org/wiki/Mac_OS_X_Server
+% The iPlanet OIDs \cite{ldap-oid-reference} could not uniquely identify a server type, \ie the iPlanet OID served different types of \gls{LDAP} products, and so we cannot compare it with \cite{landscape}.
+
+%\todo{G: remove the next ones as they are not relevant.} About the same number as \todorh{We do not mention these---why?}IBM Domino servers. We do not instances of Inovaphone's unified communication solution \todorh{Are these relevant?}.
+
+%Below is dependent on IPv6 scanning
+%We also believe that all Windows Server deployments were not patched and hence suffer from CVE-2024-38063 \cite{CVE-2024-38063}, which is remotely exploitable and has an 8.5 score. However, we cannot know the patch level of the observed LDAP servers using our methodology.
+
+
+
+%We categorized these hosters according to the number of to indicate the provider's dimension. We show this distribution in \cref{fig:ldap-per-nr-ips-cnt} at the \cref{sec:appendix_host_size}.
+
+%We presented our results in \cref{fig:cloud-ldap-types-correlation}. 
+%We looked at the product listing of the hosting companies, and we see that Amazon offers pre-installed \gls{AD} VMs for their Windows Server users as part of their portfolio, Contabo offers the option of Windows Server 2016 through 2022 in their service catalog, and Hetzner is a well-known German hoster.
+%Looking at the size of the organizations presented in \cref{fig:cloud-ldap-types-correlation}  by the number of IP addresses they have \cite{as_organizations}, we observe that even with a smaller number of owned IP addresses, Hetzner surpasses Google, Amazon and Microsoft on hosting \gls{LDAP} servers.
+
+% RH: Previous text:
+%We observe a few differences across \gls{LDAP} server types and the status of chains of X.509 certificate. \gls{AD} on Windows Server presents a smaller distribution of valid certificates led by unknown authority signatures. However, the invalid chains on Windows Servers earlier than 2012 are either expired or not-yet-valid certificates. Self-signed certificates are significantly higher in Windows Server deployments than OpenLDAP and other types. We speculate that it is due to \gls{LDAP} servers using ``in-house'' signed certificates. OpenLDAP deployment stands out with more invalid leaf certificates. Our takeaway is that the \gls{LDAP} server's use of PKI differs from the Web and relies on internal CAs. We summarize these results at \cref{tab:type_valid_chains}.
+%While \gls{AD} on Windows Server has less valid chains (<2012 with 15.2\% out of 2.6k and >= 2012 with 12.5\% out of 11.6k chains), OpenLDAP and other types of \gls{LDAP} fare better with 44.0\% (out of 17.7k) and 45.0\% (out of 7.8k). Newer \gls{AD} on Windows Server presented the most invalid signatures with 52.7\& of the cases, followed by old Windows Server with 37.4\% against OpenLDAP 22.2\% and others with 27.4\%. Windows Servers have the most self-signed certificates with 13.0\% and 15.5
+
+
+%We also observe that \todorh{Give numbers! ``Most'' is not a precise word.} \replyg{slightly more (0.1k higher)} valid chains are found for \gls{LDAP} over implicit TLS \replyg{on port 636, while on \gls{GC} ports the numbers are about the same}. \replyg{The \gls{GC} ports show more errors with certificates signed by unknown authorities, with 3.2k (50\%) of the cases.} \todorh{I don't understand: most invalid chains? Most other errors among chains with unknown roots?}
+
+%Based on the analysis of our sample, we offer the following conclusions. There is some use of subCAs in valid chains. The names we find generally seem to refer to a particular hosting situation or product, however, and do not provide evidence of an organization choosing to run their own private PKI. We do not find evidence of (at least semi)-professionally run private PKIs in invalid chains at all.
+
+%In \cref{fig:cert_validity}, we detail the validity period of certificates on \gls{LDAP} servers. 
+
+We expect that CAs treat  ``\gls{LDAP} certificates'' just as the Web, with the same validity period. 
+%Indeed, the vast majority of certificates that we find for \gls{LDAP} servers have expiry times that are consistent with those of Web certificates. 
+
+%and 6.8\% are unknown.
+%In 272 cases, however, the \gls{LDAP} product using these certificates is  deprecated (without vendor support).
+
+%OpenLDAP makes up 3.2k (44.6\%) and \gls{AD} 1.4k (19.9\%) of G2's \gls{LDAP} product types.
+%, and 4.9\% of servers could not be identified.
+%\todorh{I am baffled. You almost never find certs with more than 13 months. But then, AD makes for at most 20\% of the chains. At the same time, AD is more numerous than OpenLDAP. How do these numbers fit together?}
+
+%On the Web, short-lived certificates were proposed long ago \cite{TopalovicEtAl_ShortLivedCertificates_} with the benefit of limiting the exposure of a compromised certificate \cite{Wilson_ReducingTLSCertificate_2020} or that more modern technologies could potentially break valid but old certificates.
+
+%We observe that the majority of valid chains respect the agreement of certificates with a validation period smaller than 398 days (13 months), advised since September 1\textsuperscript{st}, 2020 \cite{cabr-6.3.2}\todo{FI: Playing devil's advocate here: These guidelines for the web, LDAP's requirements might be different.}.
+
+%We divided valid chains into groups of different validity periods (in months), x, such as x is in: G1=(0,3], G2=(3,13], G3=(13,27], and G4 is 39 months or older. 
+
+%Our motivation is to study the validity period of certificates used by \gls{LDAP} servers based on periods of time popular on the Web. 
+
+%For instance, G1 is widely used on Let's Encrypt and with an attempt to become standard \cite{_WhyNinetydayLifetimes_, Inc_90Days47_2025}. The upper bound of G2 is the current standard. G3 is an old standard that was in place from March 2018 \todo{to} \cite{_MaximumValidityChanges_,_Ballot193825day_2017}. Finally, G4 is the oldest standard we found \cite{_Ballot193825day_2017}.
+
+% G2 represents the rest of the valid chains except for four cases. There are 110 different issuers where Sectigo dominates with 34.7\%. 
+
+%\todorh{This is the group of expiry of 13 months. Also a candidate for removal:}
+%We detected 241 cases of deprecated \gls{LDAP} products with certificates with this lifetime on G2. They are also spread over many hosters (2.6k), but interestingly, they are most common on Amazon (12.4\%) and much less so on Hetzner (3.2\%). This hints at certain operational preferences---use of the free Let's Encrypt correlated with the use of the VPS provider Hetzner, whereas use of other CAs correlates more strongly with the use of the Amazon cloud.
+
+%RH: I commented this out. I think it's too much, despite the nice sleuth work.
+%We found one instance on G3 where the issuer is an SSL.com intermediate certificate, with the server running KerioConnect, and the certificate issued to a Turkish travel agency company where the subject is set to the email of its founder. The server runs on a Turkish network (SAGLAYICI). G4 includes three instances of 389 Directory servers, all with a security issue attached to them (DoS on the servers' availability). The issuer is DVV, an organization that servers certificates for the Finish citizens, organizations, social welfare, and healthcare sectors. All three certificates were issued to InstaAdvance, a Finnish company that provides services on a national level for industries, cybersecurity, defense, and critical infrastructure. Such long-term certificates are not supposed to be issued. The possible sensitivity of the data stored by such a company is concerning. The takeaway is that although there are no clear guidelines for certificates used by \gls{LDAP} servers, best practices adopted by the Web ecosystem are seen.
+% G3 subject: atilla@tinkon.com (travel agency, Actilla is the founder)
+
+%Together, the 81 compromised certificates span 60 hosters, indicating wide dispersion.
+%``Provider Sewan'' hosts the most (six), but overall, 81 compromised certificates span 60 hosters, indicating wide dispersion.
+
+
+%\input{tables/pwnedkeys_hosters}\cref{tab:hosting-compromised_certs} highlights t
+%We located the hosters with at least two LDAP servers delivering compromised certificates are located. 
+
+%\todorh{I would drop the following. It is not very relevant:}
+%\textbf{Public-key reuse.} We found one public key that occurred 62 times in our data set of unique certificates. The chain of certificates this public key appears to be invalid (either self-signed or expired/not yet valid). They are all issued by \textit{``communigate.com''}. \gls{LDAP} servers using such public key are hosted mainly in \gls{ISP} networks, data centers, or commercial networks, with the majority on small-sized hosting companies. Most servers are deployed with \gls{AD} on Windows Server 2000. We speculate that the provider issued a default certificate. The implication is that every server with this private key can impersonate all others.
+
+\todorh{I don't understand where the following text should go---it starts with stuff about version 1, and then seems to talk more generally about other CAs? Is it important?}
+
+\textbf{Other issues with certificates --}
+We found 1k certificates using X.509 version 1, which is considered deprecated (current standard is version 3). In all cases, the chain of certificates are invalid and 0.6k uses self-signed certificates. Synology and ``communicate.com'' (self-signed) each issued 0.2k certificates. 
+%Additionally, 138 issuers comprise the rest of the X.509 version 1 (\eg``LINUXMUSTER.LAN'', ``Vodia Root CA'', ``Sharetech'') without any clear trend. 16\% of the servers are hosted on the companies we showed in \cref{tab:hosting}. 
+OpenLDAP and \gls{AD} on Windows Server 2000 account for 78.5\% of servers with such a certificate.
+%\glspl{ISP} and data center networks (42\% each) are the top two networks where these certificates are found. 
+%\replyg{A manual inspection of the certificates' subject names from the \gls{LDAP} servers shows that a few of these servers belong to real organizations (\eg \textit{Auerswald GmbH \& Co. KG}, \textit{dfconsultec.com.br}, \textit{brain4.care}) alongside many stale and placeholder names in the certificates.} 
+%Such certificates should not be used.
+%but also bogus names (\eg \textit{dc=TAQUIN, cn=socket}).
+
+%In the following, we investigate the immediate issuers (intermediate certificates) of the 38.4k unique leaf certificates in our data set. \todorh{We previously discuss chains on hosts and accept that chains are not unique. We should follow the same pattern here}. We divided into two groups, with \replyg{\gls{LDAP} servers that have} valid (12.9k) and invalid (25.5k) chains.
+% 38.4k unique leaf certificates in our data set. \todorh{We previously discuss chains on hosts and accept that chains are not unique. We should follow the same pattern here}. We divided into two groups, with \replyg{\gls{LDAP} servers that have} valid (12.9k) and invalid (25.5k) chains.
+
+\todorh{There was text here (now commented out) on use of these certs on cloud providers. If relevant, we can bring it back.} \todo{G: I brought the text in as a takeaway of this paragraph.}
+\replyg{Our takeaway is that valid chains of certificates show domains of cloud service providers or identity providers as evidence of \gls{LDAP} servers hosted on data centers, while other cases local instances (\eg universities) using their own infrastructure.}
+
+\begin{figure}[tb]
+    \centering
+    \subfloat[Analysis on valid chains of certificates.]{\includegraphics[width=1.\linewidth]{figures/valid_issuers_top_10.pdf}\label{subfig:top_issuers_valid_chain}}
+    \hfill
+    \subfloat[Analysis on invalid chains of certificates, excluding public known CAs (3.3k occurrences).]{\includegraphics[width=1.\linewidth]{figures/invalid_issuers_top_10}\label{subfig:top_issuers_invalid_chain}}
+    \caption{Top 10 issuers of leaf certificates on valid and invalid chains.}
+    \label{fig:top_issuers}
+\end{figure}
+
+%For \textit{valid} chains, we often find names relating to identity providers (duosecurity.com, okta.com), cloud providers (ptcmscloud.com, cloud50.co.uk), \gls{ISP}s (relaix.net), cloud-based phone systems (vpbx.iway.ch), email providers (eleane.com, bigmountainmail.com), and educational institutions (ldap-test.berkeley.edu --- issued by InCommon RSA Server CA 2, directory.cornell.edu). \todorh{And really, ldap-test.berkeley has a valid chain???} \todo{G: issued by InCommon RSA Server CA 2} %9.3\% of subjects are present in more than one host, \todorh{I don't understand what you mean here:} indicating multiple uses of the IP address.
+
+%\textbf{Operators of LDAP servers.}
+%\todorh{We need numbers here! How many chains are covered by the following? What do they mean? Are they subCAs?}
+%\replyg{We used the 38.4k unique leaf certificates from our data set, with 12.9k valid and 25.5k invalid chains to find the companies that the certificates belong to give evidences of the operators of \gls{LDAP} servers. 
+
+%We manually analyzed 200 subject names to understand what type of organizations are hosting \gls{LDAP}.}
+
+%For \textit{invalid} chains, the situation is very different. \todorh{Again, we need numbers here:} There are many certificates that do not use the available fields in appropriate ways. Examples are setting the so-called \textit{Common Name} in the subject to strings like \textit{localhost} or \textit{unknown} or using placeholder content such as \textit{default city} or \textit{default company}. We find some evidence for specific products that happen to run an LDAP server as well: there are certificates with the Common Name set to \textit{synology.com}, a popular vendor of network-attached storage devices, Samsung devices (\textit{Samsung End Certificate (App. Server)}) and middleboxes, \eg ``FortiMail''. 7.2\% of subject names are present in more than one host.
+%On the other hand, invalid certificate chains presented gibberish or not formatted well (``CN=localhost'', ``Unknown''), placeholder content (``C=XX, L=Default City, O=Default Company Ltd'', or names leading to real organisations (``CN=synology.com'', ``Samsung End Certificate (App. Server)'', ``FortiMail''). 7.2\% of subject names are present in more than one host.
+
+%\todorh{Can we split the following up into valid/invalid? Is it worth it?} Across all chains (valid and invalid), 7.3k certificates contain the string \textit{mail} in the subject, hinting at multi-role servers. 
+
+
+
+%\todorh{I would drop the following:}
+%\textbf{Cipher suites and chains of certificates.}
+%Servers using valid certificate chains generally offer more secure cipher suites. The ciphers that use RSA for key exchange (``TLS\_RSA\_WITH*'') have a more significant adoption on servers with invalid certificate chains. Although ECDHE is a modern cipher, CBC and SHA1 are not up to standard, and we observe more invalid chains for servers using these cipher suites. Our takeaway is that valid chains on \gls{LDAP} server correlate with the modern use of cipher suites.
+
+%99\% are identifiable legal entities such as ``inc.'' or ``GmbH'' in Germany, indicating that unknown cloud providers are organizations hosting \gls{LDAP} servers in their premises. -> IP2location gives \gls{ISP}. \gls{ISP} is for sure an organization.. that's why 99\%
+%sum all count 16805
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%The top ten cipher suites cover 98\% of what \gls{LDAP} servers selected from our dataset. \todorh{We only send a list of ciphers, and the server picks. Keep in mind that we cannot tell what else the servers would be willing to support. Remove this TODO when read.}
+%\todo{G: Remove this paragraph if ok. We first inspect the Microsoft products. Here, we find that} \todorh{give results: which ones use TLS 1.3, TLS 1.2, or the deprecated TLS 1.0/TLS 1.1, at which percentages? Please characterize, maybe even consider table?}. \todorh{I rephrased this: we can identify TLS 1.3 in the version extension of TLS, so why did we seem to use the cipher suite to identify it? If we are sure the version is actually TLS 1.2, this may be interesting. Otherwise, especially if the number of such servers is low, we can drop it.} \todo{G: tlsv1.3 cases only exchanged ciphers that belong to 1.3} 
+%In a), we were intrigued by a few old Windows Servers communicating with a modern cipher suite used in TLSv1.3\todo{FI: Unclear to me, do they use TLS1.3 or a cipher suite from TLS1.3?}. We hypothesize that devices are behind a TLS reverse proxy \cite{yarrpbox, _SSLForwardProxy_, _WhatSSLTermination_}.
+% We divided these into four categories of \gls{LDAP} servers: a) running on Windows Server with version older than 2012; b) the remaining Windows Server; c) servers running OpenLDAP or; d) servers running other \gls{LDAP} products. 
+
+This was in Section IV.D:
+% RH: I commented this out due to space constraints and because we did not check revocation
+%In either case, the organization would need to be cautious: the X.509 standard allows to limit the issued leaf certificates to certain parts of the DNS namespace or to set a limit for the number of intermediate certificates. It would also need to build its own revocation infrastructure, a complex topic~\cite{10.1145/2815675.2815685, 9230363, 7958597}. Such \todo{FI: what extensions?}extensions should be used to minimize attack vectors. We note that any compromise of the company's systems that allows the attacker to control the root certificate (but maybe not the Active Directory) will enable them to issue correct certificates for domains of the attacker's choosing.
+
+%The system administrator of an organization would instruct the clients to trust the root certificate of the organization's CA itself, for example, by pushing the organization's root certificate to the clients within an Active Directory.
+%server or servers that are visible but stale on the Internet.
+%We understand that \gls{LDAP} clients and servers could agree on a certificate once and use it for a long time to avoid rolling out certificates regularly in an organization setup.  Our takeaway is that there are efforts to keep certificates valid for a short period of time, which is a common practice on known certification authorities such as Let's Encrypt. \todo{FI: Shouldn't this be before the takeaway?}
+
+
+We divided our data set into two groups with valid and invalid chains. 
+
+\iffalse
+%\cref{fig:ldap-per-nr-ips-cnt} shows the correlation between the number of LDAP servers and the size of the AS in which they reside. 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/ldap_per_nr_ips_cnt.pdf}
+    \caption{Distribution of LDAP servers across IP addresses owned by ASes.}
+    \label{fig:ldap-per-nr-ips-cnt}
+\end{figure}
+\fi
+
+% We added a table to the  \cref{sec:appendix_host_size_ldap_type}.
+
+%\todorh{I find the following impossible to understand: if we do not know the version, how can we be sure that it is vulnerable? Can we? If not, let's drop this.}
+%Furthermore, we manually investigated the most common types of \gls{LDAP} servers without a specific version to find a matching product's CVEs. We summarize it in \cref{tab:ldap_types_vuln}. Besides VMWare \gls{PSC}, all types have at least one severe vulnerability that attackers could exploit to retrieve sensitive information from \gls{LDAP} servers.
+
+%To the best of our knowledge, no other study reported such an issue with chains of X.509 certificates. 70.6\% are under \gls{ISP} networks.
+%, and these certificates are shown in all sizes of networks (from 2\textsuperscript{8} to 2\textsuperscript{27} large). Furthermore, several hosters have servers with such a certificate (\eg Charter Communications at the top with 3.25\%). The 2\textsuperscript{26} to 2\textsuperscript{27} network size is where such an error is prevalent, and Comcast and AT\&T dominate with most chains with no valid leaf certificates (both large access providers).
+
+%\textit{Use of public CAs.} \cref{subfig:top_issuers_valid_chain} shows the top public CAs for valid chains. We find distinctive differences. Let's Encrypt is the leading CA (issuing from six root certificates). \todorh{Once Fig 5 is a horizontal bar chart, explain the distribution across LDAP products} \todo{Or correlate with hoster?}. About 30\% of OpenLDAP instances use Let's Encrypt versus only 4\% of \gls{AD} instances that do so.
+
+% recent removals:
+%- How much of \gls{LDAP} are publicly available and not blocked by Firewall?
+%\textbf{Overview --} 
+
+% where 264.5k, 72.2k, 96.3k, and 29.7k servers were found on ports 389, 636, 3268, and 3269, 
+
+%to identify trends among public-facing \gls{LDAP} servers. We find on average 107.5k servers ($\sigma=8.7k$), with a minimum of 91.5k in the most recent snapshot. Using linear regression, we observe a decreasing trend of 550 servers per month with high statistical confidence ($p-value \approx 0.0001$).
+
+%\mypara{Prefix distribution}
+
+%\todorh{Say where we discuss these---they are most likely the private boxes in large ISPs/access providers.} \todo{G: we discuss this in operators of LDAP servers, but I removed that part.}
+
+\todorh{And then continue from here. If the above examples are classified in some helpful way in ip2location, e.g., OVH is data centre but not cloud, and Amazon is cloud but not data centre, we may be able to state whether most LDAP/AD servers are likely in Category 1 etc.}
+
+%We can only speculate that is either there is no customer preference for \gls{AD} or, more generally, that the servers are protected under firewall.
+%As expected, \gls{AD} is a go-to choice under Microsoft's network.
+%\gls{AD} deployment on Comcast is much higher than Chunghwa, where we can speculate as well on the customer's local preference.
+
+%\todorh{The following doesn't really tell me much, see comment above: Contabo is the dominant hoster on networks with prefixes longer than /23. It is known to provide \gls{VPS} and dedicated servers. Using IP2Location notation, Contabo's IP address is categorized as a data center or hosting, and this category accounts for 47.2\% of 22.1k \gls{LDAP} servers. The prefix interval between /16 and /18 appears more dominantly on networks between 4.2M and 8.4M IP addresses.}
+%\todorh{I am not sure I completely understand the following, or whether it is evident from the figure?}\todo{not from the figure, but from analysis in the notebook}
+%On such prefixes, we find a variety of known hosting companies such as OVH, Hetzner, Amazon, and Aliyun, and ISPs such as Chunghwa Telecom, home.pl, and Telefonica Brasil. Both categories account for 87.1\% of the 30k \gls{LDAP} servers. On networks with more than 16.8M IP addresses, \gls{LDAP} servers appear on /8 to /10 prefixes. There is a dominance on \gls{ISP}s such as Comcast and Deutsche Telekom (and others with smaller numbers) with 46.0\% and Microsoft with 26.9\%, out of 2k servers. The trend is that the larger the network, the smaller the prefix used by the \gls{LDAP} server.
+
+%It is surprising since \gls{AD} supports implicit \gls{TLS}, and issues have been revealed with the use of \starttls~\cite{274731}.
+
+%We contacted Broadcom to determine support for their product.
+
+%We examine what type of \gls{LDAP} server is prevalent among hosting organizations. We divided the categories into four: OpenLDAP, \gls{AD} on Windows Server versions earlier than 2012, later than and including 2012, and other types. Our dataset shows that the Microsoft network mainly hosts \gls{AD} deployments.  
+
+%This is also reflected in the categorization that \iptwolocation gives for these prefixes: most are data centers (61.6\%), and the rest are in the broad \glspl{ISP} category (fixed-line residential and business access networks).
+%\gls{AD} on Windows Servers are concentrated in large hosting organizations, with 35\%, while OpenLDAP into medium-size hosters with 36\%. Other types of \gls{LDAP} servers are concentrated in small-size hosters with 43\%.
+
+%Among the top hosters, Microsoft, Chunghwa, and Comcast have the smallest percentages of valid chains of X.509 certificates, with 1.4k, 0.9k, and 0.6k, respectively ($<$ 22\% of their chains are valid). The primary error is chains with certificates signed by an unknown authority (49.4\%, 67.4\%, and 43.9\%, respectively). Intuitively, \gls{AD} and OpenLDAP common error is spread across hosting companies. 
+
+%It is instructive to compare these numbers to studies of other \gls{TLS}-based protocols. For example, Durumeric \etal~\cite{10.1145/2504730.2504755} reported around 40\% of valid chains in an Internet-wide scan of HTTPS
+%, with Holz \etal~\cite{holz2011} reporting significantly higher percentages for domains on the Alexa Top 1 million list.
+%A study of \gls{TLS}-enabled email protocols from 2016 also found the percentages for valid chains to be between 30-40\%~\cite{holz2016}, although the number of self-signed certificates was much lower.
+%Generally, non-Microsoft \gls{LDAP} products resemble these numbers from other studies more than instances on Windows Server, irrespective of version.
+
+%In such cases, the certificate subjects help to identify the company domain names.
+%All the chains are invalid, and they contain one or two certificates.
+
+%Short-lived certificates are found on a wide range of hosters (2.1k), although they are particularly popular on Hetzner 0.6k (7.3\%).
+
+\iffalse
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=1.\linewidth]{figures/valid_chains_cert_validity_all_cdf.pdf}
+    \caption{Certificate validity window for valid chains on LDAP servers.} 
+    \label{fig:cert_validity}
+\end{figure}
+\fi
+
+%, ``communigate.com'', to various subjects. 
+%The remaining nine certificates (out of the 71 from \textit{badkeys}) contain keys affected by the Debian SSL vulnerability . 
+
+%If we correlate these results with the issuers of the certificates,
+%(\cref{tab:issuers-compromised_certs})
+%we see that, in most cases, the issuers are not well-known. 
+
+%in different types of networks such as data centers (51.9\%), \glspl{ISP} (29.6\%), commercial (13.6\%), and educational (4.9\%). 
+
+%\textbf{Other issues with certificates --}
+%We found 1k certificates using X.509 version 1, which is considered deprecated (current standard is version 3). In all cases, the chain of certificates is invalid, and 0.6k uses self-signed certificates. Synology and ``communicate.com'' (self-signed) each issued 0.2k certificates. 
+%Additionally, 138 issuers comprise the rest of the X.509 version 1 (\eg``LINUXMUSTER.LAN'', ``Vodia Root CA'', ``Sharetech'') without any clear trend. 16\% of the servers are hosted on the companies we showed in \cref{tab:hosting}. 
+%OpenLDAP and \gls{AD} on Windows Server 2000 account for 78.5\% of servers with such a certificate.
+%\glspl{ISP} and data center networks (42\% each) are the top two networks where these certificates are found. 
+%\replyg{A manual inspection of the certificates' subject names from the \gls{LDAP} servers shows that a few of these servers belong to real organizations (\eg \textit{Auerswald GmbH \& Co. KG}, \textit{dfconsultec.com.br}, \textit{brain4.care}) alongside many stale and placeholder names in the certificates.} 
+%Such certificates should not be used.
+%but also bogus names (\eg \textit{dc=TAQUIN, cn=socket}).
+
+%During the \gls{TLS} handshake, client and server agree on cryptographic parameters such as algorithms for encryption and integrity. The method of key exchange can also differ. We characterize the use of \gls{TLS} among \gls{LDAP} servers. 
+
+%This analysis differs from~\cite{landscape}, where the support of \gls{TLS} was studied concerning servers leaking sensitive information or used for authentication, and the cipher suites negotiated by different \gls{LDAP} clients, in general terms.
+
+%Even assuming that these servers rarely hold critical data, this remains poor practice.
+%, although our earlier findings show more use of \starttls. 
+%The case of VMWare PSC is interesting: just over half the instances enable \gls{TLS}. Given that PSC is a critical piece of software and has been deprecated for years, this remains concerning.
+
+%Interestingly, we find a few cases of older Windows Server versions ($<$ 2012) running \gls{TLS} 1.3, even though the OS versions predate this most recent \gls{TLS} version by half a decade. We attribute this to the use of reverse proxies, also known as \gls{TLS} terminators.
+
+%These ciphers use RSA signatures, and nearly all servers (90.4\%, 9k cases) use the recommended, 2048-bit key length.
+
+%discouraged due to known weaknesses~\cite{_PaddingOraclesDecline_2016}.
+% G: I removed below as the RSA signature is not relevant, only TLS_RSA is (key exchange).
+%OpenLDAP servers use, in 17.0k (62.6\%), ciphers without CBC or RSA for key exchange.
+%3.0k (38\%) of OpenLDAP instances uses RSA signature with keys length shorter than 2048 bits. This suggests older installations.
+
+%Very few \gls{LDAP} servers hosted at Microsoft networks exchange cipher suites use RSA as the key exchange method, and the cipher suites mostly align with the cipher suites of \gls{AD} instances, 
+
+%Interestingly, the cipher suite \textit{TLS\_ AES\_ 128\_ GCM\_SHA256}, used with TLSv1.3, is specific to non-\gls{AD} servers.
+
+
+
+% Candidate to bring back in case of extend version:
+%\replyg{\textit{Use of default configuration.} 
+%We investigate the top immediate issuers (intermediate certificates) of 25.5k unique leaf certificates from invalid chains, which exclude 3.3k instances that use publicly known CAs. 
+%We observe, from the immediate issuers (intermediate certificates) of 25.5k unique leaf certificates from invalid chains, the deployment of \gls{LDAP} servers using Docker (240 instances).
+%and using a default mechanism to obtain certificates (``authentik default certificate'', 188 instances). 
+%OpenLDAP is used in 68.8\% of cases of Docker images. Such images primarily use two modern cipher suites, and in 14 cases, the public key is shared between two or three hosts. This suggests the use of default configurations that adversaries could exploit if the user retains them, such as passwords.
+%We could not identify the \gls{LDAP} products for the ``authentik'' instances. Similarly to Docker, this issuer uses two modern ciphers, and in 10 cases, the public key is shared between 2 and 8 times. ``authentik'' is an Identity provider offering Single-Sign-On solutions.
+
+%\todorh{Check this sentence:} In 40 cases, we find ciphers that use ``3DES'' (deprecated) in /24 prefixes of networks of size 4k-8k IP addresses. This finding is compatible with the hypothesis that these are servers of small businesses, on small hosters, that have not been upgraded in a long time.
+%indicating the \gls{LDAP} server serves a small business.
+
+\section{discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% REMOVED %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%In this section, we discuss the meaning and implications of the results found in the previous section.
+%There is no plausible reason we can think of for individuals to host an \gls{LDAP} server in their home networks.
+%
+%Finally, we analyzed the issuers of \gls{LDAP} server certificates to understand if servers use a private PKI. We found too few instances to draw meaningful conclusions. Otherwise, this would show \gls{LDAP} servers that adopt such practice being systematically exposed to the Internet, with a high level of confidence that contains sensitive data from private organizations and their employees.
+%Otherwise, this {\color{red} should call the attention of administrators, as such servers should not be exposed}.
+
+%The security posture of such servers is concerning. Although a small percentage (<1\%) run deprecated TLS versions and the cipher suites that are mostly seen on \gls{AD} follow best practices from the RFC, the number of invalid chains is higher than we expected it to be. The number of certificate errors, such as self-signed, expired or not yet valid, and invalid leaf certificates, surprised us. These servers are mainly hosted under Microsoft's network, and we expected that such numbers would be smaller. However, we cannot confirm whether these servers are self-managed.
+
+%Regarding the validity period of certificates, we see that when chains are valid, they are often short-lived certificates. Using such certificates is recommended because it reduces exposure time should the certificate be compromised or upgraded to a more secure certificate in case of an incident~\cite{cabr-6.1.5}.
+
+%The most common error in chains of X.509 certificates is due to unknown authorities. As we wrote in \cref{subsec:security_practices}, organizations can deploy a small-scale PKI and sign certificates for internal use. This practice differs from certificates used on the Web, where domains rely more on external trust parties to sign certificates attesting to their identity. We believe that such servers should be behind firewall protection. Their visibility to the Internet shows a failure to evaluate the organization's attack surface.
+
+%Better cipher suites are more dominant for servers with valid certificate chains. Our evidence indicates that PKI and the use of recommended practices of \gls{TLS} are correlated and thought about by administrators of \gls{LDAP} systems.
+
+%OpenLDAP is mainly deployed on port 389 with \starttls, which contrasts with \gls{AD} and other products. \starttls has been studied and shown to have flaws that lead to downgrades to clear text channel \cite{10.1145/2815675.2815695}, and several other issues \cite{274731}. We do not have data to confirm whether the \gls{LDAP} servers are susceptible to such \starttls issues as it needs an investigation beyond this paper's scope.
+
+%The analysis of certificates for compromised keys revealed that 81 certificates utilize keys whose private components are either publicly available or easily computable, according to various databases. These correspond to 20 unique keys, one of which is used in 62 certificates and is known from a firmware image. Our findings demonstrate that inherently insecure default keys are still used in practice. Additionally, nine certificates with Debian SSL keys confirm that server maintenance --- particularly regarding certificate security—is not consistently performed. This observation is further supported by outdated LDAP server versions, such as MS ADC on Windows Server 2000, which are still active and distribute affected certificates.
+
+%When examining the certificate chains of the affected certificates, we found that, with one exception, they are neither trustworthy nor valid. A closer look at the issuers shows that many are test certificates or come from unknown certificate authorities. The LDAP servers distributing these certificates are hosted across various providers and are nearly evenly distributed among them. While Sewan and OVH host the highest number of affected certificates, with 6 and 5, respectively, this low number does not indicate any significant pattern.
+
+%These findings reinforce the conclusions of previous analyses, confirming that many LDAP servers remain outdated.
+
+
+
+% https://www.ietf.org/rfc/rfc3045.txt
+% https://ldap.com/dit-and-the-ldap-root-dse/
+% vendorName: This specifies the name of the vendor (or organization) that created the directory server software.
+% vendorVersion: This specifies the version for the directory server software (which also often includes the product name, like “Ping Identity Directory Server 7.0.0.0”).
+
+%  of the directory (or log into the machine running the \gls{AD} \cite{Inc_HowCheckActive_2024})
+%Properties cannot be queried from the Root \gls{DSE}. One would need to authenticate and look into the \textit{objectVersion} property of the server schema.
+
+%
+% https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/deploy/find-active-directory-schema
+%https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/3ed61e6c-cfdc-487d-9f02-5a3397be3772
+%https://support.globalsign.com/Certificate-Automation-Manager/how-check-active-directory-schema-version
+%https://ldapwiki.com/wiki/Wiki.jsp?page=Active%20Directory%20Functional%20Levels
+
+
+% MJ: Why does this argument need a landscape citation?
+% As demonstrated in \cite{landscape}, that is transmitted over the Internet when querying \gls{LDAP} servers. Consequently, the \gls{TLS} connection to these servers—and thus the transmission of sensitive data—must be secure.
+% ANS: Actually, it is not needed. I think he tried to motivate the study pwned certs or certs with known vulnerabilities. It's safe to remove the ref.
+
+\iffalse
+paragraph{Information security}
+\gls{TLS} properties in \gls{LDAP} servers were concerning. Most (93.69\%) of deployed \gls{TLS} versions were not deprecated, and the deployment of version 1.3 is growing as predicted in a previous study \cite{Kotzias2018}. Overall, strong encryption algorithms were used. When observing the combination of the overall TLS version and cipher suite ``weakness'', a staggering amount of 40.25\% of services fulfilled these criteria. While this proportion reduced to 34.82\% by the end of the year, it will take several more years to replace them at this rate. High numbers of deployments of CBC and RSA can be observed. Considering that LDAP services are primarily used for authentication purposes, many services are susceptible to attacks on the version and cipher suites alone.
+
+
+paragraph{Services location}
+Overall, there is a highly skewed distribution of LDAP Services with a growing concentration around service providers in the United States. Germany, France, and Poland are the main service providers in Europe. Examining the distribution of TLDs among services show that a lot of addresses resolve to the commercial and network provider sectors. The distribution of TLDs is similar to what was already observed \cite{doan2022}: a high number of CDIs host under the \verb|.com|, \verb|.net|, and \verb|.org| domains. From the distribution of services per organization, it can be seen that Microsoft, Amazon, and Comcast are among the top 10 service providers, but with much lower market shares in proportion to LDAP services per country of the respective organization. This implies that a variety of U.S. based providers (Amazon having the highest share), are extensively used for hosting LDAP services.  
+
+When examining the top service providers in more detail, some differences become immediately apparent. The distribution of ports across providers appears to be similar, except home.pl S.A., where the dataset counts services running exclusively on port 389. Observing the results, a difference between service providers, including their deployment model of services and hosts can be seen: Amazon (hosting the majority of LDAP servers found in the CUID), is primarily cloud-hosting oriented, with a microservice architecture. Nearly all (97.53\%) of LDAP servers appear to be ``outsourced''. These services also have the highest number of certificates signed by CAs, with the Amazon CA having a large share of the CA dependencies.  OVH SAS also appears to have a large portion of ``outsourced'' services, itself also advertising cloud-based microservices. This is in stark contrast to Hetzner Online GmbH having primarily a customer-oriented model, providing server solutions that host multiple services simultaneously.  Amazon and OVH SAS have the highest number of weak TLS implementations with an increase of over 50\% in comparison to Hetzner Online GmbH. These outsourced services could potentially be a target of attacks due to weak TLS configuration \cite{fardan2013}. This could also be an indication that providers like Hetzner offering ``ready-to-go'' virtual server solutions, are compliant than custom-configured cloud services. Finally, all services hosted by these providers rely on CAs such as Let's Encrypt, Digicert and Sectigo.
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REMOVED - ALL BELOW BLOCK IS UNDER \iffalse STATEMENT!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+subsection{Longitudinal view using Censys}
+To establish a longitudinal view of \gls{LDAP}, we looked into \gls{CUIDS} of 2022. In the average, we found Xk distinct servers \todo{numbers reported in the thesis should be revalidated} and 12.6k distinct hosters, with the same organizations as presented in this paper. We see a drop of discovered \gls{LDAP} servers over the course of the year \todorh{confirm this}. Our take is 
+%In terms of version of TLS used, we observed a decrease in usage of deprecated versions. 
+
+\begin{figure}[tb]
+    % MAYBE CHANGE THIS 4 FIGURE INTO ONE, Y IS CLOUD PROVIDER, X IS % AND EACH BAR IS ONE TYPE OF LDAP SERVER -> FILTER BY TYPE, THEN UNIQ IPV4, AGGR. INSTEAD OF LOOKING INTO PORTS AND INTERSECTION...
+    \centering
+    \subfloat[Top cloud providers that use MS AD]{\includegraphics[width=0.5\linewidth]{figures/cloud_providers_msad.pdf}\label{subfig:cloud-ms-ad}}
+    \hfill
+    \subfloat[Top cloud providers that use OpenLDAP]{\includegraphics[width=0.5\linewidth]{figures/cloud_providers_openldap.pdf}\label{subfig:cloud-openldap}}
+    \hfill
+    \subfloat[Top cloud providers for other type of LDAP server deployment.]{\includegraphics[width=0.5\linewidth]{figures/cloud_providers_other_ldap.pdf}\label{subfig:cloud-others}}
+    \hfill
+    \subfloat[Distribution of LDAP server types on unknown cloud providers.]{\includegraphics[width=0.5\linewidth]{figures/ldap_server_types_unknown_cloud.pdf}\label{subfig:unknown-cloud-types}}
+    \caption{Cloud providers and LDAP types.}
+    \label{fig:cloud-ldap-types-correlation}
+\end{figure}
+
+\begin{figure*}[!ht]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+        %trim=left bottom right top
+        %\fbox{\includegraphics[]{}}  % no 'clip' (find optimal)  %width=\textwidth
+        \includegraphics[width=\textwidth]{figures/valid_chains_cert_validity_separate_cdf.pdf}
+        \caption{Using valid chain.}
+        \label{fig:valid_chains_cert_validity}
+    \end{subfigure}
+    %\hfill % width=0.23\textwidth
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+        \includegraphics[width=\textwidth]{figures/invalid_chains_cert_validity_separate_cdf.pdf}
+        \caption{Using invalid chain.}
+        \label{fig:invalid_chains_cert_validity}
+    \end{subfigure}
+    \caption{Overview of end-host X.509 certificates.}
+    \label{fig:cert_validity}
+\end{figure*}
+
+%a total of X identified \gls{LDAP} servers where X responds to \starttls, X to \gls{LDAPS} servers, and X responds to both queries. This number decreases when we prompt for the \gls{LDAP} \gls{GC}, with a total of X, divided into X, X, and X for \starttls, LDAPS, and both. When we looked into servers that protects the connection with \gls{TLS}, we find We looked into discrepancies of \gls{LDAP} servers have when using different \gls{TLS} channels.
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[b]{0.23\textwidth}
+    \centering
+        %trim=left bottom right top
+        %\fbox{\includegraphics[]{}}  % no 'clip' (find optimal)
+        \includegraphics[width=\textwidth, trim=3.3cm 2cm 3cm 2cm, clip]{figures/ldap_servers_overview.pdf}
+        \caption{Identified servers.}
+        \label{fig:ldap_only_overview}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.23\textwidth}
+        \includegraphics[width=\textwidth, trim=3.2cm 2cm 2.8cm 2cm, clip]{figures/ldap_servers_w_tls_overview.pdf}
+        \caption{Uses TLS.}
+        \label{fig:ldap_w_tls_overview}
+    \end{subfigure}
+    \caption{Overview of identified LDAP servers}
+    \label{fig:ldap_overview}
+\end{figure}
+
+We see organizations hosting \gls{LDAP} servers with due diligence by using TLSv1.3, which is the current best practice for secure communications. However, the numbers are still very small. We grouped the organizations using the IP2Location data set, and we showed it in \cref{fig:ldap_org_tlsv3}.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=1.0\linewidth]{figures/ldap_tlsv3_org.pdf}
+  \caption{Top 10 over 3.4k organizations hosting LDAP with TLSv1.3}
+  \label{fig:ldap_org_tlsv3}
+\end{figure}
+
+We investigated the top 10 issuers of end-host X.509 certificates from \gls{LDAP} servers that showed valid and invalid X.509 chains. When looking at issuers for valid chains, we observe InCommon, which provides SSO for cloud, and local service access, as well as domain certificates. This issuer uses Sectigo service management. We also noticed GEANT, which is responsible for the European Research and Education network. When we look at invalid chains, however, R3 is on top, which was an intermediary certificate in the Let's Encrypt hierarchy until June 2024, and Go Daddy, which are known as CAs. In these cases, our validator tool identified as Unknown authority in most cases (one is self-signed) or that the certificate is expired or not yet valid. We see deployment of docker images. We also observed a long tail of issuers, where, in a few instances, we detected Microsoft Exchange servers, Governments, and the Police. 
+
+\textbf{Takeway:} Comparing issuers of both valid and invalid X.509 chains, we see public LDAP servers in one hand with valid chains are predominantly with certificates issued by known and trusted authorities, which gives an indication that the system administrators did their due diligence, and in the other hand with invalid chains with careless hosting, by either individuals or organizations. We'll look further into such type of hosting and how they fare in terms of \gls{TLS} secure posture.
+\begin{table}[!ht]
+\small
+    \begin{subtable}[h]{0.2\textwidth}
+    \small
+    \begin{tabular}{lr}
+        \toprule
+        issuer & \% \\
+        \midrule
+        Sectigo & 38.2 \\
+        DigiCert & 10.8 \\
+        RapidSSL & 10.5 \\
+        AlphaSSL & 5.8 \\
+        Go Daddy & 4.7 \\
+        InCommon & 4.2 \\
+        GlobalSign & 3.4 \\
+        GEANT & 3.3 \\
+        Thawte & 2.7 \\
+        Amazon & 2.5 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Valid X.509 chains}
+    \end{subtable}
+    \hfill
+    \begin{subtable}[h]{0.3\textwidth}
+    \small
+    \begin{tabular}{lr}
+        \toprule
+        issuer & \% \\
+        \midrule
+        R3 & 21.4 \\
+        Philip Newman & 8.7 \\
+        CA & 3.0 \\
+        VPN & 2.2 \\
+        Certificate Authority & 1.9 \\
+        Synology Inc. CA & 1.5 \\
+        innovaphone & 1.2 \\
+        Go Daddy& 1.0 \\
+        www.mail.org & 0.8 \\
+        docker-light-baseimage & 0.7 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Invalid X.509 chains}
+    \end{subtable}
+    \caption{End-host X.509 issuers.}
+    \label{tab:end_host_issuers}
+\end{table}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=1\linewidth]{figures/ldap_org.pdf}
+  \caption{Top Organisations Hosting LDAP in \gls{CUIDS}}
+  \label{fig:ldap_org}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\linewidth]{figures/ldap_hosts.pdf}
+  \caption{\todorh{Not very insightful figure.} Average over of month of found of LDAP Hosts in \gls{CUIDS} and our own scans}
+  \label{fig:ldap_hosts}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\linewidth]{figures/ldap_tld.pdf}
+  \caption{LDAP Hosts Top TLDs in \gls{CUIDS}}
+  \label{fig:ldap_tld}
+\end{figure}
+
+\input{tables/org_country}
+See \cref{tab:outsourcing_org_country}. \todo{Explanation: In this table, I have filtered from my dataset for \gls{LDAP} servers that either method 1 or 2 found evidence of outsource and then I calculated the percentage per country. So, if we have 100 LDAP servers in US, where 20 is detected to be outsourced, then I show 20\%}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\linewidth]{figures/ldap_country.pdf}
+  \caption{Top Countries Hosting LDAP in \gls{CUIDS}}
+  \label{fig:ldap_country}
+\end{figure}
+See \cref{fig:ldap_country}
+
+subsection{Outsourcing evidences}
+
+\input{tables/applicability_outsourcing_methods}
+Both methods explained in \cref{sec:methodology} (individually but also in combination) provide insight into whether an LDAP service might be outsourced to a third party (outside of the original domains), but can only be applied to a limited portion of the data set. \cref{tab:apply_methods} provides an overview of how many samples in the total data set each method could be applied to respectively. For methods 1 and 2, if either $X$ or $Y$ are not available, the item is classified as ``Not Applicable''.
+
+\input{tables/org_outsource_weak_tls}
+See \cref{tab:outsourcing_weak_top3}
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%% REMOVED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Only 12 cases (4.5\%) of such \gls{LDAP} instances use RSA as a key exchange method with short key size, which is significantly smaller than OpenLDAP.} \todorh{Some numbers may be useful here, keep to one sentence. Possibly highlight vendor if very convincing case.}
+
+%In d), other types of \gls{LDAP} servers \todo{FI: What?} employ a variety of ECDHE and ciphers that are used in \textit{TLSv1.3}, painting a better picture than the major \gls{LDAP} product types.
+%The takeaway is that many OpenLDAP servers use RSA-based cipher suites, indicating unmaintained server installations.
+
+% RH I shortened here.
+%It is worth mentioning that only 3.3\% of the data set use deprecated versions of \gls{TLS} such as \textit{TLSv1.0} and \textit{TLSv1.1}. This contrasts significantly with the study of emails and instant messaging by Holz \etal where such deprecated versions appeared 39\% in their data set in 2016 \cite{holz2016} and more recently studying the Web in 2020 where hosting organizations played an important role \cite{holz2020}.
+
+%We looked into \gls{TLS} configurations via JARM fingerprints \cite{Lindeman_EasilyIdentifyMalicious_2020}, but we did not find fingerprints that could uniquely identify the host we measured. The results were cross-checked against Censys data set and for one fingerprint, we matched different OSes. Hence, we decided not to report it in this paper.
+
+
+\iffalse
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/top_ciphers_ldap_servers.pdf}
+    \caption{Top cipher suites per type of LDAP server. Percentages are from the total of servers that communicate with TLS and respond to RootDSE queries.}
+    \label{fig:top-ciphers-ldap-servers}
+\end{figure}
+\fi
+
+%self-hosting servers, and they are the top hosters that adopt modern cipher suites (from TLSv1.3\todo{FI: only from TLS1.3 or do they use TLS1.3?}).
+%Our takeaway is that modern \gls{TLS} ciphers are concentrated on Amazon, Hetzner, OVH, and Contabo, having similarities to what is observed by Holz \etal when tracking the deployment of TLSv1.3 \cite{holz2020}. \todorh{Unclear: what is the similarity?}
+%We also find insecure cipher suites in a few cases, for instance, suites that use ``3DES'' (172 cases). All of them are old Microsoft \gls{AD} instances (versions 2000 and 2003), spread over a wide range of \glspl{ISP}, commercial networks, and a few education networks.
+%The top hoster is ``Windstream Communications'' (a hoster with 6.7k IP addresses,  17 cases).
+
+% recent removals:
+%We scanned for public-facing \gls{LDAP} servers to understand how they are hosted.
+%Most \gls{LDAP} servers are located in data centers and \gls{ISP} networks, indicating a diverse and distributed hosting environment.
+%Hosting centralization has been studied in other ecosystems, such as the Web, showing that it can help organizations adopt modern technology.
+%However, centralization also introduces dependencies on a limited set of hosters, leading to a broader impact if a large hoster becomes unavailable or is compromised.
+
+% below are summary of results as Ralph pointed out, hence I removed.
+%We identified outdated \gls{LDAP} instances hosted by companies such as Amazon, Hetzner, and OVH -- all providers of self-managed \gls{VPS}---as well as by the \gls{ISP} Comcast.
+%We do not find evidence of individuals hosting \gls{LDAP} in their home network.
+%There is evidence that these are servers of smaller businesses, and clear indications that they are self-managed.
+%of self-managed systems on these hosters, which have lower costs but with the tradeoff of manual work to maintain the servers and keep them up to date.
+%Comcast is a large TV company with millions of subscribers.
+
+%There is a tri-partite division of \gls{LDAP} products, with \gls{AD}, OpenLDAP, and a long tail of other products. We found 4.3k \gls{LDAP} instances running a deprecated product.
+%An adversary could exploit such a scenario and launch attacks toward known vulnerabilities of these products, putting users and organizations at risk.
+
+%Microsoft \gls{AD} emerged as one of the most dominant types of LDAP servers in our study. This result aligns with our initial hypothesis, given the widespread use of \gls{AD} in enterprises and educational institutions for managing user identity and resources.
+
+%This suggests bad \gls{TLS} practices, which may put users and organizations at risk as \gls{LDAP} servers are often used for authentication.
+%In our certificate analysis, we also looked at compromised certificates. Although we found a modest number of instances, it is still relevant to note that such servers pose an immediate problem, as adversaries holding the private key may easily eavesdrop on sensitive communications.
+
+%Additionally, we recommend the use of modern \gls{TLS}. 
+
+%collaboration between operators through an organized communication and reporting mechanism can help improve the overall hygiene of the Internet.
+\section{Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+% REMOVED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\iffalse
+We have investigated \gls{LDAP} servers and the dependencies in service providers using active measurements and \gls{CUIDS}. We were able to observe a generally weak posture of TLS implementations by using deprecated TLS versions or weak cipher suites. While those weak implementations are being upgraded and replaced, it will require several more years (if ever) until completion at this rate. A high number of services concentrate around multiple service providers, which could lead to significant impacts on the availability should any of them go offline or be affected by a security breach.
+
+Finally, this research can be expanded significantly in multiple aspects: it would be beneficial to investigate these scans over a longer period and use different data sets to give a more enhanced perspective. Overall, TLS properties themselves could be investigated in more depth, \ie by measuring the properties of X.509 certificates.
+\fi
+
+% recent removals:
+%, and together with off-the-shelf data, we characterized \gls{LDAP} hosting.
+%We have observed that larger networks use shorter prefixes for hosting \gls{LDAP} while smaller networks use longer prefixes. 
+%Both leave \gls{LDAP} communications vulnerable and susceptible to misuse.
+
+%We analyzed the leaf certificates and reported on operators of the \gls{LDAP} servers. \todo{FI: So what?} We found identity and cloud providers, as well as educational institutions, where the server operator does not necessarily match the network operator. Furthermore, we found a Finnish issuer providing a long-term certificate for a vulnerable \gls{LDAP} server, which serves a critical sector of the country.
+
+%Other than those reported in this paper, there are essential aspects to analyze the status of \gls{LDAP} server. For example, understanding whether the servers keep regular backups, maintain replicas of the servers, audit changes in the directory with logs, or have the \gls{LDAP} server hosted with DDoS protection. We pose such challenges as future work to the community. We believe qualitative or quantitative surveys can shed more light on \gls{LDAP} deployment around the globe. Building on our previous work with \gls{LDAP}, we aim to raise awareness among researchers and system administrators to foster a more secure ecosystem.

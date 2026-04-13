@@ -1,0 +1,36 @@
+\begin{table}[!hb]
+\centering
+\footnotesize
+\setlength\tabcolsep{4pt}
+\begin{tabular}{@{} l rr p{0cm} rr @{}} 
+\toprule
+\thead{LDAP Error} & \multicolumn{2}{c}{\thead{Port 389}}  && \multicolumn{2}{c}{\thead{Port 636}} \\
+\cline{2-3}\cline{5-6}
+\thead{Result Codes} & \multicolumn{1}{c}{\thead{v2}} &  \multicolumn{1}{c}{\thead{v3}} && \multicolumn{1}{c}{\thead{v2}}& \multicolumn{1}{c}{\thead{v3}}\\
+\midrule
+\midrule
+authMethodNotSupported        & 4 & 4 && 19 & 19 \\
+authorizationDenied           & 2 & 2 && - & - \\
+confidentialityRequired       & 12 & 100 && - & - \\
+inappropriateAuthentication   & 2,810 & 7,578 && 487 & 3,636 \\
+insufficientAccessRights      & 98 & 330 && - & 145 \\
+invalidCredentials            & 1,159 & 1,154 && 1,497 & 1,575 \\
+invalidDNSyntax               & 10 & 10 && 1 & 1 \\
+namingViolation               & - & 6 && - & 8 \\
+operationsError               & 87 & 102 && 3 & 15 \\
+protocolError                 & 32,353 & 56 && 12,870 & - \\
+strongerAuthRequired          & 3 & 3 && - & - \\
+timeLimitExceeded             & - & 18 && - & 1 \\
+unavailable                   & 1 & 1 && - & 1 \\
+unwillingToPerform            & 44 & 68 && 97 & 93 \\
+%[0.4em]
+%\midrule
+%Client-side                   &&&&& \\
+%SERVER\_DOWN                  & 105 & 124 && 54 & 48 \\
+%TIMEOUT                       & 148 & 38 && 9 & 4 \\
+%None                            & 44132 & 71374 && 19058 & 28549 \\
+\bottomrule
+\end{tabular}
+\caption{LDAP error result codes.}
+\label{tab:ldap_error_messages}
+\end{table}

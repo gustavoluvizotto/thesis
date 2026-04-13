@@ -1,0 +1,71 @@
+\onecolumn
+
+\section{Major Revision}
+\begin{itemize}
+    \item [Done, Jonas] ip:port (x) combinations vs. ip-port combinations vs. ip, port combinations
+    \item [Done, 22.05 15:25, @Gurur] IP vs. ip
+    \item [Done, 22.05 22:00, @Gurur] naiive vs. naive (x) vs. naïve
+    \item [Done, 22.05 22:15, @Gurur] Internet vs. internet, not sure but used Internet
+    \item [Done, 22.05 22:20, @Gurur] RFC-1337, RFC1337, RFC 1337 (x).
+    \item [Done, 22.05 11:54 @Jonas - 1,2 times strong does still occur, i contacted gustavo about this, he aims to fix it, maybe some one else can have a look here, too?]strong/weak TLS vs. recommended/not recommended TLS.
+    \item [Done, @Jonas] 1.234 vs. 1,234 vs. 1234
+    \item [Done, @Jonas] Listing 1
+    \item [Done, @Jonas] Bibliography hat Typos, alle durchgehen.
+    \item [Done, @Gurur] The numbers of sections 4.1 (scanning) and 4.2 (confirmation) are not matching.
+    \item merge, shorten, and fix numbers in 5.1 and 5.2 (maybe later work, because the reviewers didn't request any changes about this section)
+    \item [Done, @Jonas] The phrasing in section 4.3 is hard to understand (I could not get the meaning to be able to rewrite it).
+    \item [Done, @Jonas] layout of tables 14 til 17. Maybe merge them all into one big table.
+    \item [Done, 22.05 15:15, @Gurur] root\_dse, Root DSE, root DSE (WOULD SUGGEST THIS), root dse, ...
+    \item [Done, @Gurur] MitM vs. PitM
+    \item [Done, @Gurur] \eg vs e.g.
+\end{itemize}
+
+\textbf{Before submission}
+\todo{All paper submissions, including Major Revisions, should be at 
+most 13 typeset pages, excluding bibliography and well-marked 
+appendices.}
+\subsection*{Typos and Stuff}
+\begin{itemize}
+    \item \todo{IMPORTANT:} Purge any author identifying information! No Gurur, Jonas, Gustavos, FHMS, in the text and Figures! This will lead to auto-rejects from USENIX!!
+    \item STARTTLS vs StartTLS vs Start TLS - Correct one is StartTLS for LDAP (and STARTTLS for SMTP, POP3, and IMAP)~\rh{I defined a newcommand for that in acronyms.tex}
+    \item Consistent use of acronyms
+    \item Bibliography is missing numerous attributes
+    \item Clarify early on that we do not look at LDAP DDoS amplification (UDP).
+    \item TCP, UDP lower or upper case? \rh{always upper}
+    \item Table: Reasons for invalid X.509 certificate chain -> PII to personal data (if image is used)
+    \item Decided Names: paper title, framework - and their correct spelling
+    \item Unify numbering in tables and text (10000 vs. 10,000)
+%    \item unauthenticated, vs simple bind: two different things, what do you mean?
+    \item Landscape Pipeline: Analyse => Analyze
+%    \item remove Gustavo's name in the reference (code ref)
+    \item remove refs on repos of authors? 
+    \item naming contexts not explained anywhere
+    \item e.g., and et al. (macros) italic?
+    \item dots in paragraph headings?
+    \item table headers bold vs plain
+%    \item Remove Table 13: Grouping of LDAP attributes containing personal data?
+    \item Remove Table 16: Recommended and non-recommended cipher suites on LDAP hosts supporting TLS?
+\end{itemize}
+
+\textbf{Checked 08.02. - 21.00}
+\begin{itemize}
+    \item Landscape Pipeline: rename Validation Module to Confirmation Module
+
+    \item clear text (dont) vs. clear-text (dont), vs cleartext (do)
+    \item Analyse vs. Analyze => US: Analyze
+    \item LDAP v3 vs LDAPv3 (same with v2) => LDAPv2
+    \item ZMap (not ZMAP) => fixed
+    \item use Person in the Middle instead of Man in the Middle or better yet: Meddler in the Middle to keep the acronym
+    \item Spelling use US-style: Analyze, color, behavior
+    \item plain text vs plaintext => plaintext in cryptocontext. Plain text in ASCII/Text context
+    \item Cites with multiple items (do) vs. multiple cites (don't)
+    \item Cites need non-breaking spaces before them($\sim$) %asdf~\cite{ref}
+    \item ref vs. cref vs. autoref  => CREF
+    \item consistently use \eg and \etal as macros
+    \item Optimize table 12 'Grouping of LDAP attributes containing personal data' wrt white spaces
+\end{itemize}
+
+
+\vfill
+\pagebreak
+\twocolumn

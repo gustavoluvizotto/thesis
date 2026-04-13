@@ -1,0 +1,35 @@
+\begin{table*}[!tb]
+\centering
+\footnotesize
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \thead{Total IPs} & \thead{Leak credentials} & \thead{Personal data}  & \thead{SASL support}   & \thead{CVE} & \thead{Internal info.} \\ 
+\midrule
+\midrule
+Supporting TLS & 48,198 (100\%) & 910 (100\%) & 7,378 (100\%) & 18,502 (100\%) & 528 (100\%) & 7,118 (100\%) \\
+\arrayrulecolor{gray!90}
+\midrule
+\arrayrulecolor{black}
+TLSv1.3 & 36.67\% & 20.00\% & 27.24\% & 42.04\% & 28.41\% & 49.34\% \\
+TLSv1.2 & 59.46\% & 77.03\% & 68.91\% & 55.92\% & 71.59\% & 46.90\% \\
+TLSv1.1 & 0.33\%  & 0.33\%  & 0.16\%  & 0.23\%  & 0.00\%  & 0.10\% \\
+TLSv1.0 & 3.54\%  & 2.64\%  & 3.69\%  & 1.81\%  & 0.00\%  & 3.67\% \\
+\midrule
+\arrayrulecolor{black}
+Recommended cipher suites           & 65.92\%       & 36.59\%          & 44.20\%       & 57.49\%       & 94.89\%     & 61.42\%        \\
+Other cipher suites        & 34.08\%       & 63.41\%          & 55.80\%       & 42.51\%       & 5.11\%      & 38.58\%        \\
+\ldots with RSA key exchange & 24.27\%       & 57.14\%          & 53.71\%       & 41.77\%       & 5.11\%      & 36.93\%        \\
+\ldots using CBC           & 12.26\%       & 8.35\%           & 6.30\%         & 3.64\%        & 5.11\%      & 5.49\%         \\
+\ldots using 3DES               & 0.31\%        & 0.00\%           & 0.03\%        & 0.00\%        & 0.00\%      & 0.00\%        \\
+\midrule
+\arrayrulecolor{black}
+Valid Cert. Chain                    & 36.81\% & 17.69\% & 24.10\% & 40.38\% & 32.20\% & 47.78\% \\
+Invalid Cert. Chain                   & 63.19\% & 82.31\% & 75.90\% & 59.62\% & 67.80\% & 52.22\% \\
+... Self-signed           & 32.30\% & 21.87\% & 22.61\% & 16.53\% & 1.70\% & 10.97\% \\
+... Expired/not yet valid & 19.65\% & 43.63\% & 35.52\% & 25.15\% & 6.63\% & 14.34\% \\
+... Unknown authority     & 11.20\% & 16.70\% & 17.74\% & 17.91\% & 59.28\% & 26.89\% \\
+\bottomrule
+\end{tabular}
+\caption{Overview of the results of the Network Analysis Module.}
+\label{tab:tls_overview}
+\end{table*}

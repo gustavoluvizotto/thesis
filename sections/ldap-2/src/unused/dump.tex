@@ -1,0 +1,39 @@
+\section{dump}
+Found 10 LDAP servers (<1\%) on a single snapshot in port 389 that speak ONLY LDAPv2. dc=pbx.local. Explain: A private branch exchange (PBX) is a telephone system within an enterprise that switches calls between users on local lines, while enabling all users to share a certain number of external phone lines. - \url{https://www.techtarget.com/searchunifiedcommunications/definition/private-branch-exchange}
+
+\input{tables/dump}
+See \cref{tab:dump1}
+
+Manual check on IPs having namingContext attribute with value "['o=Searchable PGP keys', 'o=Uploaded PGP keys', 'o=Users', 'o=Prefs', 'o=CRL', 'cn=PGPServerInfo', 'o=PGP keys']". Around 70. \cref{fig:dump1}.
+% http://69.58.105.244/vkd/SubmitSearch.event
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\linewidth]{figures/dump/216.58.166.87.png}
+  \caption{216.58.166.87}
+  \label{fig:dump1}
+\end{figure}
+See \cref{fig:dump1}
+
+Issuers of certificates filtered by self-signed or signed by unknown authority \cref{fig:dump2}
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/dump/issuers-389.png}
+  \caption{Issuers on p389 - goscanner nov 2023}
+  \label{fig:dump2}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/dump/issuers-636.png}
+  \caption{Issuers on p636 - goscanner nov 2023}
+  \label{fig:dump3}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/dump/validity_cdf.pdf}
+  \caption{Validity window - goscanner, uniq ips over Nov 2023}
+  \label{fig:dump4}
+\end{figure}
+
+See \cref{fig:dump3} and \cref{fig:dump4}

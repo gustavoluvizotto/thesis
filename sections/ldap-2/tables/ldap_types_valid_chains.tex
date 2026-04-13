@@ -1,0 +1,54 @@
+\begin{table}[tb]
+\centering
+\scriptsize
+\caption{Validation of chains of certificates across LDAP products.}
+\begin{tabular}{l@{\hskip 3pt}r@{\hskip 3pt}r@{\hskip 3pt}r@{\hskip 3pt}r@{\hskip 3pt}r}
+\toprule
+ &  & \multicolumn{2}{c}{\textbf{Windows Server}} &  &  \\
+\cmidrule(lr){3-4}
+ & \textbf{All} & \textbf{$<$ 2012} & \textbf{$\geq$ 2012} & \textbf{OpenLDAP} & \textbf{Others} \\
+\midrule
+Valid chain & 16.7k & 0.4k & 1.5k & 7.8k & 3.5k \\
+Signed by unknown CA & 15.4k & 1.0k & 6.1k & 3.9k & 2.1k \\
+\dots Self-signed & 3.6k & 0.3k & 1.8k & 0.5k & 0.4k \\
+Expired/Not yet valid & 8.8k & 0.9k & 2.2k & 3.2k & 1.3k \\
+No valid leaf certificate & 5.8k & 32 & 44 & 2.3k & 0.5k \\
+\midrule
+Total & 50.3k & 2.6k & 11.6k & 17.7k & 7.8k \\
+\bottomrule
+\end{tabular}
+\vspace{-15px}
+\label{tab:type_valid_chains}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+\iffalse
+\begin{table*}[tb]
+\centering
+\footnotesize
+\caption{Validation of chains of certificates across LDAP products.}
+\begin{tabular}{lrp{2.3cm}p{2.3cm}rr}
+\toprule
+ & \textbf{All} & \textbf{Windows Server $<$ 2012} & \textbf{Windows Server $\geq$ 2012} & \textbf{OpenLDAP} & \textbf{Others} \\
+\midrule
+Valid chain & 16.7k & 0.4k & 1.5k & 7.8k & 3.5k \\
+Signed by unknown CA & 15.4k & 1.0k & 6.1k & 3.9k & 2.1k \\
+\dots Self-signed & 3.6k & 0.3k & 1.8k & 0.5k & 0.4k \\
+Expired/Not yet valid & 8.8k & 0.9k & 2.2k & 3.2k & 1.3k \\
+No valid leaf certificate & 5.8k & 32 & 44 & 2.3k & 0.5k \\
+\midrule
+Total & 50.3k & 2.6k & 11.6k & 17.7k & 7.8k \\
+\bottomrule
+\end{tabular}
+\vspace{-15px}
+\label{tab:type_valid_chains}
+\end{table*}
+\fi

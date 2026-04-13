@@ -1,0 +1,42 @@
+\begin{table*}[tb]
+\newcommand{\goodtls}{\multicolumn{1}{c}{\normalsize\usym{1F512}}}
+\newcommand{\badtls}{\multicolumn{1}{c}{\normalsize\usym{1F513}}}
+\newcommand{\notls}{\multicolumn{1}{c}{\normalsize\usym{1F6AB}}}
+\newcommand{\plainpwd}{\multicolumn{1}{c}{Plain}}
+\newcommand{\hashedpwd}{\multicolumn{1}{c}{Hashed}}
+\setlength\tabcolsep{3.3pt}
+\footnotesize
+    \centering
+    \begin{tabular}{l r r p{0cm} rrr p{0cm} rrr p{0cm} rr}
+         \toprule
+                 \multirow{2}{*}{Region}&\multicolumn{1}{c}{Total}&\multirow{2}{*}{Credentials} && \multicolumn{3}{c}{PII} && \multicolumn{3}{c}{Authentication} && \multicolumn{1}{c}{Sensitive} &\multirow{2}{*}{Vulnerable} \\
+                 \cline{5-7} \cline{9-11}\noalign{\vspace{0.5ex}}
+         & \multicolumn{1}{c}{\scriptsize(Per 1M inhabitants)} & && \goodtls & \badtls &\notls && \goodtls & \badtls & \notls && \multicolumn{1}{c}{Config} &\\
+         \midrule
+         \midrule
+         World &100K (66.85) & 1K (1\%) && 2K (20\%) & 1K (10\%) & 2K (20\%) && 1K (10\%) & 1K (10\%) & 1K (10\%)&& 1K (1\%) & 1K (1\%)\\
+         \arrayrulecolor{gray!90}
+         \midrule
+         \arrayrulecolor{black}
+         United States &   & && & & && 2.7k (4.77\%) & 793 (1.40\%) & && & \\
+         China &   & && & & && 350 (0.62\%) & 195 (0.35\%) & && & \\
+         Japan &   & && & & && 155 (0.27\%) & 96 (0.17\%) & && & \\
+         France &   & && & & && 1.1k (1.94\%) & 793 (1.40\%) & && & \\
+         Germany\\
+         India\\
+         Canada\\
+         Italy\\
+         Brazil\\
+         South Korea\\
+         \bottomrule
+    \end{tabular}\\[1em]
+    \begin{tabular}{ l l l l }
+    \toprule
+    \goodtls & Proper TLS\\
+    \badtls & Improper TLS\\
+    \notls & Only in plaintext\\
+    \bottomrule
+    \end{tabular}
+    \caption{Results of the Data and Network Analysis Modules grouped by region. Percentages are from total servers in the region.}
+    \label{tab:results_overview}
+\end{table*}

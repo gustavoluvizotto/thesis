@@ -1,0 +1,158 @@
+% !TEX root = ../main.tex
+\section{Results}
+\label{sec:results}
+\input{tables/overview_scans}
+\cref{tab:overview_scans} shows how many servers were responsive on \textit{at least one} of the ports we scanned. We find that about 93.9k public-facing \gls{LDAP} servers respond with \gls{LDAP} messages on at least one port, using either plaintext connections, \starttls, or implicit TLS. This number is higher than we reported in prior work, as in this paper we broaden the scope to \gls{GC} ports. Only 74.7k distinct IP addresses also respond to our Root DSE requests. Compared with the 2016 data by Rapid7~\cite{project_sonar_rapid7}, we find 4.6$\times$, 2.6$\times$, 4.7$\times$, and 5.1$\times$ fewer instances for ports 389, 636, 3268, and 3269, respectively.
+
+To determine whether the number of public-facing \gls{LDAP} servers is falling, we carry out an analysis using the \gls{CUIDS} data. We find an average of 107.5k servers over the previous years. Using linear regression, with high statistical confidence ($p$-value $\approx 0.0001$), the trend is one of a decreasing number of public-facing \gls{LDAP} servers, converging towards the numbers we identify in this paper.
+A plausible explanation for this reduction over time is that operators have recognized the problems with unintentionally public-facing \gls{LDAP} servers and have corrected them.
+
+\subsection{Who hosts LDAP?}
+\cref{fig:prefix-len-slices} shows the distribution of \gls{LDAP} servers across network sizes, based on our slicing method (see \cref{sec:methodology}). Each row groups hosters by IP allocation size within a certain interval, \eg between 256 ($2^8$) and 512 ($2^9$) addresses (second row). Each horizontal bar represents the percentage of \gls{LDAP} servers located in a routeable (sub-)prefix of a given length inside that allocation size interval.
+
+For instance, nearly 40\% of \gls{LDAP} servers are in either /23 or /24 sub-prefixes, and a similar share is seen between /19 and /22 in hosters with an allocation size of 16k to 32k IPs. This suggests that hosters often place \gls{LDAP} servers in dedicated network segments---a pattern that aligns with operational practices of service deployment. As the hoster size increases, the sub-prefixes tend to become longer (/16 to /18). The exception appear to be the very large hosters with more than $2^{24}$ ($\approx 16.7M$) IP addresses, which use longer prefixes.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\linewidth]{figures/prefix_len_slices.pdf}
+    \caption{LDAP servers by prefix length and hoster IP allocation with confidence interval of 95\% (horizontal dark bars).}
+    \label{fig:prefix-len-slices}
+    \vspace{-15px}
+\end{figure}
+
+\input{tables/hosting}
+With our geolocation and BGP data, we identify \gls{LDAP} servers on 15.3k hosters in 9.4k ASes. The top 10 hosters account for 24\% of the total \gls{LDAP} population, and 2.2k hosters are responsible for 80\%. \cref{tab:hosting} shows the most common hosters. This distribution is \textit{significantly wider across several network operators}, compared to what other studies found for protocols for the Web, DNS, and email~\cite{doan2022, Moura2015, liuWhoGotYour2021}.
+
+We find 46.1k (49.1\%) \gls{LDAP} servers in data centers and 37.0k (39.4\%) in \gls{ISP}s, similarly to what was reported in~\cite{landscape} (44.4k and 35.9k respectively).
+
+We identify three categories among the top common hosters. Categories 1 and 2 include data centers and well-known hosting providers, while Category 3 covers \glspl{ISP}, responsible for 13\%, 7\%, and 3\% of the \gls{LDAP} servers we find, respectively. Category 1 is composed of smaller hosting providers (in terms of allocated IPs) than category 2. For each hoster in \cref{tab:hosting}, we provide the dominant prefix, \ie the network segment hosting the most \gls{LDAP} servers. Furthermore, we observe the dominance of \gls{AD} on the top hosters, except for home.pl and DigitalOcean. DigitalOcean does not offer native support to install Windows Server instances, only by uploading a private image to the VM~\cite{digital_ocean_ws}. We could identify only a small number of the \gls{LDAP} products on home.pl.
+% about digitalocean and windows server:
+% https://www.digitalocean.com/community/questions/does-digitalocean-host-windows-servers
+
+Hosters in the first category have products such as \gls{VPS}, managed hosting, and/or dedicated hardware solutions, where customers manage their own environment. They also have between $2^{17}$ and $2^{23}$ IPs allocated. They host more \gls{LDAP} servers than those in Category 2, which groups cloud providers offering hosted \gls{AD}. Category 2 consists of large networks (between $2^{23}$ and $2^{26}$ IPs). The third category consists of access providers such as Chunghwa (Taiwan) and Comcast (USA), which are large \glspl{ISP} that also offer custom business solutions. Neither offers hosted \gls{LDAP} services accessible via public IP addresses.
+
+\subsection{What LDAP products are in use?}
+\input{tables/ldap_types}
+
+\mypara{Overview}
+We verify our changes to the \gls{LDAP} recognition software with a selected subset of Windows Server (2012, 2019, and 2022) and OpenLDAP instances running in our Universities (in the Netherlands and Germany) to confirm the correctness of our modified tooling.
+\cref{tab:ldap_types} summarizes the \gls{LDAP} products we encounter in our scans. We can identify 93\% of all servers. The results show a tri-partite division. 47.6\% of \gls{LDAP} servers are \gls{AD} products, including the \gls{LDS} running on Windows. 33.5\% are instances of OpenLDAP, which is free and open-source software (FOSS), with some running on Apple operating systems. Finally, a group (under 12\%) is formed by other vendors, with Kerio Connect leading, followed by 389 Directory Server (FOSS and Fedora-based) and VMWare PSC. The latter is used to provide directory services and SSO functionality in the vSphere virtualization platform. It has been deprecated since 2020.
+
+Our results differ from earlier studies, including our own~\cite{landscape}. We identify 35.9k instances of \gls{AD} ($\approx$ eight times more), 1.8k instances of 389 Directory Server ($\approx$ 1.3 times more), and just 16 cases of Sun Java System Directory Server (more than 100 times fewer)---the latter is a discontinued \gls{LDAP} server now known as Oracle Directory Server Enterprise Edition (ODSEE).
+We do not find ApacheDS (FOSS) or DICOM (a medical software that uses \gls{LDAP}) instances in our dataset. There are a few reasons that may explain these discrepancies. We take measurements months later, include \gls{GC} ports (commonly running \gls{AD}), and use a different product identification methodology compared to our previous work. It is important to note that we identify 69.1k products compared to 10.7k from~\cite{landscape}. In~\cite{landscape}, product identification was based on public lists of OIDs and vendor-specific attributes. In contrast, we extended a tool (\textit{recog}) by Rapid7, which uses a comprehensive list of OIDs, attributes, and specific byte sequences from \gls{LDAP} responses. Our numbers are best comparable to the Rapid7 blog of 2016 due to the use of \textit{recog}. However, we believe that our numbers do not contradict the findings in \cite{landscape} and are merely due to scanning more ports and having a more comprehensive tool to identify previously unknown deployments at our disposal.
+
+Compared to Rapid7's 2016 work~\cite{project_sonar_rapid7}, Windows Server 2016 is now much more common (24.6k vs. 224 on port 389). We find 5.1, 3.5, 4.7, and 5.0 times fewer \gls{AD} servers than Rapid7 on ports 389, 636, 3268, and 3269, respectively. OpenLDAP's absolute number decreased by more than half, while that of 389 Directory Servers has grown by a factor of 4.1. These may  indicate a declining number of publicly accessible servers.
+
+\mypara{Active Directory}
+Newer Windows \gls{AD} versions ($\geq$2012) are prevalent (31.9k, 88.9\%). The versions from 2016 and later still receive free security updates. Customers of Windows Server 2012 who run instances outside of the Azure cloud can purchase extended support until the end of 2026.
+
+We find that 99\% of the \gls{AD} instances on Windows Server, running on ports 3268 and 3269, have the LDAP attribute set that identifies them as instances of \gls{GC}.
+We find only 20 instances of OpenLDAP, Kerio Connect, or 389 Directory Server on ports 3268/3269 with the attribute not set, \ie they are regular \gls{LDAP} instances deployed in the \gls{GC} ports.
+
+Surprisingly, more \gls{AD} servers use \starttls--vulnerable to downgrade attacks--than implicit TLS. For versions older than 2012, \starttls is twice as common; for $\geq$2012, four times. For \gls{GC}, the gap widens to factors of 10 and 32, respectively.
+
+\mypara{OpenLDAP}
+Instances of this second-most-common product generally do not send sufficient data in the \gls{LDAP} reply for a positive version identification; hence, we cannot break down our results by release year. However, as before for \gls{AD}, we find that significantly more instances (65.9\%) use \starttls rather than implicit \gls{TLS}. A possible reason may be an outdated FAQ by OpenLDAP that recommends \starttls \cite{OpenLDAPFaqOMaticStart}. 
+
+\mypara{389 Directory Server}
+Almost all (1.6k out of 1.8k) servers run versions that have at least one CVE record assigned to them, describing, for example, attacks on availability, information leakage, privilege escalation, forcing the use of a disabled cipher, or reading newly saved passwords in clear text.
+
+\mypara{VMWare PSC}
+According to Broadcom, versions 8.x, which account for 32\% of the instances we find, have support until 2027, and versions 7.x (38\%) until the end of 2025. However, version 6.x, which is still widely used (30\%), has not been supported since March 2020.
+
+\mypara{Correlation to hosting} 
+\cref{fig:cloud-ldap-types-correlation} shows \gls{LDAP} products by common hosters. Below, we analyze them based on our categories (see~\cref{tab:hosting}).
+In category 1, Hetzner's hosting options focus on Linux-based solutions, but the company also provides colocation services that allow customers to run their own servers, including Windows Server. This may explain the presence of many (both old and new) \gls{AD} versions as well as OpenLDAP.
+OVH and Contabo offer options for recent versions of Windows Server \gls{AD} alongside self-managed private servers.
+DigitalOcean offers several solutions but lacks native support of Windows Server. In contrast, installing OpenLDAP is a straightforward process, which may help explain its dominance.
+We are unable to identify the products of 97.1\% of the \gls{LDAP} on home.pl---among other reasons, there are too few entries in the Root DSE.
+
+%https://community.hetzner.com/tutorials/install-windows
+In category 2, unsurprisingly, Microsoft’s IP ranges are dominated by \gls{AD} versions with active support ($\geq$2012).
+Amazon offers pre-installed virtual machines with various products through its Marketplace, which may help explain the balance of \gls{LDAP} products we observe.
+Similar to Amazon, Aliyun offers Windows Server and Linux OSes via its Marketplace; however, we observe more OpenLDAP instances than other products.
+%https://technicalsahil.com/how-to-install-windows-server-on-digitalocean/
+A plausible explanation for the differences we observe is that Microsoft's bundling of services and cloud infrastructure enables it to migrate its customers to newer versions, which may be more challenging for other hosters. Licensing considerations during upgrades may also play a role.
+
+In category 3, Comcast and Chunghwa have the highest proportion of \gls{AD} with unsupported versions compared to the other categories.  Both are \glspl{ISP} that allow business customers to run their servers on their networks.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\linewidth]{figures/hosters_types_ldap.pdf}
+    \caption{Most common hosters vs. hosted LDAP products with confidence interval of 95\% (horizontal dark bars).}
+    %\vspace{-10px}
+    \label{fig:cloud-ldap-types-correlation}
+    \vspace{-15px}
+\end{figure}
+
+We find 4.3k (5.8\%) of \gls{LDAP} servers running software past the end-of-life date. These appear in at least 5\% of instances within Aliyun (5.4\%, 42), Chunghwa (7.2\%, 98), and Comcast (14.7\%, 180). In absolute numbers, Comcast and Amazon host most outdated \gls{AD} versions on Windows Server.
+
+\subsection{How does LDAP use PKI?}
+We investigate the certificate chains of 50.3k \gls{LDAP} servers, of which 14.6k are duplicates (with 5k valid chains). %Duplicates indicate reuse in \gls{TLS} configuration across different instances of \gls{LDAP}.
+
+\input{tables/ldap_types_valid_chains}
+\mypara{Validity of chains}
+\cref{tab:type_valid_chains} summarizes the cryptographic validity of the certificate chains (without checking the hostname). There is a significant difference between \gls{AD} and other \gls{LDAP} products. Valid chains are found in only 12.5\% of recent \gls{AD} versions and 15.3\% of unsupported Windows Server versions (pre-2012). 
+For \gls{AD} products, the most common reason is certificates where the root certificate is not in any of the root stores (52.7\% for Windows Server $\geq$ 2012, 37.4\% for $<$ 2012), with some cases of self-signed certificates (15.5\% and 13\% respectively). This is followed by expired certificates (18.8\% and $33.1\%$, respectively).
+We find a higher percentage of valid chains for non-Microsoft products.
+For OpenLDAP, for instance, we find 44\% valid chains; only 22.2\% of chains have an unknown root certificate. However, the percentage of expired chains is similar to that of Windows products $\geq$ 2012. Self-signed certificates are rarer on OpenLDAP (2.6\%).
+
+The percentages for other \gls{LDAP} products are generally closer to those for OpenLDAP than to \gls{AD}. We also find invalid chains where every certificate in the chain has the \textit{CA} attribute set to true, \ie declares itself to be a root or intermediate certificate. In other words, there is no leaf certificate in the chain. This occurs rarely in \gls{AD} (76 cases) and is more common in OpenLDAP (13.1\%) and other products (6.4\%).
+
+We observe that valid chains are more common on hosters from category 1 (see categories in~\ref{tab:hosting}), with at least 34\% of their \gls{LDAP} servers. The exception is home.pl, with no significant number of instances using \gls{TLS}. From category 2, Amazon has the most valid chains, which is in contrast to Aliyun and, surprisingly, Microsoft ($<$23\%). Invalid chains are prevalent among hosters in category 3 ($>$ 88\%), which may be an indication of problems that small organizations face in managing PKI.
+\todo{followed a later comment to abstract this sentence: "That Microsoft products have such poor certification is a surprise. That VPS and colocated products do as well is consistent with the typical challenges in managing PKI that small organizations face. I'd say that in one sentence and done."}
+Compared to our findings, prior studies reported 30–40\% valid chains for HTTPS~\cite{10.1145/2504730.2504755} and \gls{TLS}-enabled email protocols~\cite{holz2016}, with notably fewer self-signed certificates for the latter, while chat protocols also showed few valid chains ($\le$30\%).
+
+\mypara{Certificate management practices}
+These findings raise the question of whether specific certificate management practices are in use. As there are no standards or documented best practices, it is not trivial to verify the existence of in-house CAs. We hence inspect the \textit{subject} fields of 200 randomly selected root certificates of chains that \gls{LDAP} servers offer.
+%We only consider invalid chains, as otherwise would be validated by a public and trustworthy CA (\ie not in-house).
+
+In our sample, 168 certificates contained placeholder values (\eg ``CN=TurnKey OpenLDAP'' and ``O=Default Company Ltd'') in the subject, or the subject consisted of gibberish or placeholder content, \ie the subject names indicate a non-existing domain name. In the remaining 32 certificates, we find the names of real companies from different sectors, \eg pharma, ICT, and civil construction.
+In 5 cases, we see an indication that the certificate is from a company's CA, \ie contains ``CA'' in the subject, \eg ``Pingzapper CA''. Our manual inspection did not reveal statistically significant evidence for attempts to run a private PKI professionally.
+
+\textbf{Validity period of certificates.}
+Unlike the Web, where the lifetime of certificates has been consistently reduced (13 months, and 90 days in the case of Let's Encrypt), there are no standards for the lifetimes of X.509 certificates for \gls{LDAP}.
+
+We analyze the validity period of \textit{valid} chains. Except for just four cases (three certificates issued by a Finnish CA and one by SSL.com), all certificates have lifetimes of no more than 13 months. Certificates with expiry times of $\leq$90 days (short-lived certificates) occur in 8.4k valid chains. Of these, 97.8\% are issued by Let's Encrypt. OpenLDAP instances account for 4.5k (68\%) servers. Short-lived certificates are much less common for \gls{AD} (any version) with just 425 (6.4\%). 
+The validity period of \textit{invalid} chains varies from one to thousands of years. Similar numbers have been reported for the Web~\cite{holz2011} and contribute to our overall finding of a lack of well-managed private PKIs.
+
+\mypara{Other notable certificate issues}
+We use \textit{badkeys}~\cite{badkeys} and \textit{pwnedkeys.com}~\cite{pwnedkeys} to identify 81 certificates with compromised keys. Of these, 71 certificates have a key listed on \textit{badkeys} (the private key is known), where nine are keys affected by the Debian SSL vulnerability (CVE-2008-0166) and 62 certificates share the same hard-coded default 512-bit RSA key known from a specific firmware image (all with the same issuer).
+The public keys in the remaining 10 certificates have corresponding private keys in pwnedkeys.com and should no longer be used. In total, the 81 affected certificates share 20 unique keys.
+We find that \glspl{CA} not in the root stores sign 60 certificates containing a compromised key, 18 are no longer valid, and two have no valid leaf certificates.
+Only one certificate has a trusted chain and is issued by Sectigo. Further analysis reveals that the certificate is not only used on the LDAP server but also on the website of the associated domain. We reported this issue to the website operator. 
+We find that the compromised certificates are used mainly on Windows servers: 59.3\% were deployed on Microsoft \gls{AD} on Windows Server 2000, 19.8\% on OpenLDAP instances. We could not identify the otherating system for the remaining 20.9\%. 
+
+There are 5.8k (11.6\%) certificate chains where all certificates in the chain have the \textit{isCA} flag set, a surprisingly high number.
+We manually inspect the intermediate certificates of 200 certificates. We find properly formatted entries showing real businesses (``Holitec Computers Ltd'' and ``maxcrc GmbH'') as well as indications of private NAS devices (``QNAP Systems, Inc.'') and careless entries (``CN=mail'').
+%, adding support for the hypothesis that private PKI is not widely used.
+
+\subsection{How does LDAP use TLS?}
+\label{subsec:security_practices}
+We find 50.3k unique servers that use \gls{TLS}, 2.1k (4.4\%) more compared to~\cite{landscape}. In the following, we analyze the cipher suites that \gls{LDAP} servers selected in \gls{TLS} handshakes and correlate this with the common hosters and products.
+
+\mypara{Support for TLS}
+We find that many \gls{AD} instances are not configured to use \gls{TLS}. Of the nearly 30k instances of recent versions (\cref{tab:ldap_types}, rows 1-2), over half do not enable \gls{TLS}. The ratio is even worse for \gls{GC} instances (3:1).
+Interestingly, the opposite is true for Windows 2022 and also \textit{older} versions, such as Windows 2000 and 2008 R2. \gls{AD} instances with no \gls{TLS} usage are mostly found in data centers (52.3\%) and ISPs (38.4\%), less so in cloud-ready solutions.
+We find different relations for other \gls{LDAP} products. OpenLDAP servers with \gls{TLS} outnumber those without by more than 2:1.
+Nearly all KerioConnect and 389 Directory Server enable \gls{TLS}.
+
+We find that only 1.6k \gls{LDAP} instances (3.3\%) use deprecated TLS versions (1.1 and 1.0), 27.2k use TLS 1.2, and 21.5k use TLS 1.3. This aligns with findings  for the Web~\cite{holz2020}.
+
+\mypara{Cipher suites}
+\gls{AD} instances on Windows Server versions $\geq$ 2012 commonly use Elliptic Curve Diffie-Hellman Ephemeral (ECDHE) as the key exchange mechanism, with TLS 1.2 used in 10.2k cases (87.6\%) and TLS 1.3 in 1.4k cases (12.4\%). This follows current recommendations~\cite{rfc9325}. 
+We observe 2.4k cases of newer \gls{AD} using \gls{CBC} encryption and the SHA1 algorithm, more than older Windows Server (1k) or OpenLDAP instances (0.5k). SHA1 is in phase-out and CBC does not offer authenticated encryption.
+
+\mypara{Correlation to hosting}
+\cref{fig:cloud-cipher} shows the correlation between common \gls{LDAP} hosters and cipher suite selection. RSA key exchange is rare in Microsoft's networks, which typically favor secure setups using TLS 1.2, AES at 256 bits in Galois Counter Mode, and a SHA-2 hash function at 384 bit.
+
+We find a diverse set of cipher suites on Hetzner, OVH, Amazon, and Contabo (category 1 in \cref{tab:hosting}), as expected on \gls{VPS}-focused providers aimed at self-hosting. The LDAP instances on these hosters use TLS 1.3 with modern ciphers significantly more often. This is in contrast to a study of 2020~\cite{holz2020}, which tracked the deployment of \gls{TLS} 1.3 on the Web. The hosters of our Category 1 are significant actors in the deployment of the new \gls{TLS} version. From category 2, we observe that Amazon and Microsoft have a clear preference for the RFC-recommended ciphers, while Aliyun has a wider spread, with a few deployments using deprecated ciphers. Hosters in Category 3 use more deprecated ciphers, providing yet another indication that organizations face issues with configuring \gls{TLS} properly.
+%Network operators can use this metric to spot problematic \gls{LDAP} instances in their network.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=1.\linewidth]{figures/hoster_cipher.pdf}
+    \caption{Percentage of the top 10 cipher suites negotiated with servers on important hosters. The last three entries are TLSv1.3 and use ECDHE for key exchange. These ciphers cover 98\% of what servers selected in our data.}
+    \label{fig:cloud-cipher}
+    \vspace{-15px}
+\end{figure}

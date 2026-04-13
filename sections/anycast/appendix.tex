@@ -1,0 +1,100 @@
+
+% !TEX root = main.tex
+\appendices
+\section{Ethics}\label{sec:ethics}
+%\jz{Potentially move to appendix for space. CFP: All papers must include a statement about ethical issues in the appendix. }
+We follow best practices for measurements~\cite{ZMapInternetScanner2013}, and we have obtained ethical approval from our institution.
+No sensitive information is collected.
+We received one complaint from our \gls{cert} due to high scanning traffic.
+We limited the scanning rate by distributing the pipeline over a 24-hour period and used a blocklist from prior measurements.
+
+\section{IPv6 Anycast}\label{sec:ipv6-anycast}
+
+\begin{table}[H]
+    \centering
+    \caption{Top 10 ASes by number of anycast IPv6 /48-prefixes (n=\num{13007})}
+    \begin{tabular}{l r@{~}l}
+        \toprule
+        Org (ASN) & \multicolumn{2}{c}{/48-Prefixes} \\
+        \midrule
+        Cloudflare Spectrum (209242) & \num{6421} & (49\%) \\
+        Cato Networks (214040) & \num{1795} & (13\%) \\
+        Fastly (54113) & \num{760} & (6\%) \\
+        Cloudflare (13335) & \num{620} & (5\%) \\
+        Incapsula (19551) & \num{587} & (5\%) \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:top_ases_v6}
+\end{table}
+
+To understand the ASes that deploy the most IPv6 anycast services, we present~\cref{tab:top_ases_v6}.
+Unlike IPv4, we do not know the number of active IPs for IPv6 due to the large number of addresses within /48-prefixes.
+However, based on the number of /48s covered by \laces, we find that Cloudflare is, by far, the largest operator of IPv6 anycast.
+We note that \laces has limited IPv6 visibility, as their hitlists do not cover the full IPv6 address space.
+
+\section{Anycast upstreams}\label{sec:anycast-upstreams}
+
+\input{data/tables/anycast_upstreams}
+
+Table~\ref{tab:anycast_upstreams}
+shows the most frequent upstream ASes for routed prefixes covering the /24, and /48 anycast prefixes of \laces.
+%
+Unsurprisingly, these are all tier-1 networks (except Cogent for IPv6). % https://en.wikipedia.org/wiki/Tier_1_network
+%
+Comparing IPv4 and IPv6, we find they provide roughly equal connectivity.
+
+\section{Multi-Regional Providers}\label{sec:regional-anycast}
+
+\begin{table}[H]
+    \centering
+    \caption{ASes with multiple regional anycast deployments inside different continents (n=\num{23})}
+    \begin{tabular}{lr}
+        \toprule
+        Org (ASN) & Regions (\# of /24s) \\
+        \midrule
+        AWS (16509) & AS (11), NA (7), EU (1), OC (1), SA (1) \\
+        BunnyCDN (200325) & NA (2), AS (1), OC (1), SA (1) \\
+        Akamai (33905) & AS (10), NA (10), OC (10), EU (1) \\
+        Fortanix (23013) & AS (1), EU (1), NA (1) \\
+        GCORE (199524) & EU (2), NA (2), AS (1) \\
+        Vultr (20473) & NA (3), AS (1), OC (1) \\
+        Fortinet (40934) & NA (5), AS (2), EU (2) \\
+        Bytedance (396986) & EU (3), AS (2), NA (1) \\
+        Cato networks (13150) & NA (5), EU (3), AS (1) \\
+        Level 3 (3356) & NA (8), EU (1) \\
+        Fastly (54113) & NA (180), EU (1) \\
+        Radware (48851 \& 25773) & EU (18), NA (14), OC (1) \\
+        Radware (48851) & EU (18), OC (1) \\
+        F5 (35280) & NA (2), EU (1) \\
+        RIPE-NCC-RIS-AS (12654) & AS (1), NA (1) \\
+        Voxility (3223) & EU (1), NA (1) \\
+        Cache Networks (30081) & AS (1), EU (1) \\
+        Akamai (21342) & NA (4), EU (1) \\
+        FLASHSTART (204903) & EU (1), NA (1) \\
+        Radware (198949) & EU (2), NA (2) \\
+        ACE (139341) & NA (3), AS (2) \\
+        Huawei Clouds (136907) & AS (2), EU (2) \\
+        Netactuate (63911) & NA (16), EU (1) \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:anycast_multi_continent}
+\end{table}
+
+Table~\ref{tab:anycast_multi_continent} lists all ASes for which \laces detects regional (\ie, confined within a single continent) anycast prefixes in multiple continents.
+We note that the iGreedy~\cite{igreedy} geolocation method used by \laces struggles with detecting regional anycast and may miss certain prefixes.
+
+\section{DNS Software}\label{app:dns-software}
+We request \texttt{TXT CHAOS} records for commonly used records such as \texttt{id.server} and \texttt{version.bind} to investigate the DNS software running on anycast prefixes.
+%
+For example, \textit{ns.es.hk2.bind} strongly indicates that this particular DNS server in Hong Kong uses BIND\@.
+%
+We perform this measurement using Ark~\cite{ark} that lets us request these records from 350+ different \glspl{vp}.
+
+In total, \num{658} ASes run an anycasted DNS service
+and \num{190} ASes (29\%) reveal the software used in the requested TXT records.
+%
+As observed by Cicalese et al.~\cite{CicaleseEtAl_CharacterizingIPv4Anycast_2015}, we find BIND is the most commonly used DNS software, seen in \num{92} ASes, followed by PowerDNS with \num{86} ASes.
+
+Interestingly, we find \num{25} ASes that deploy multiple DNS software using the same anycast IP address, where, depending on the \gls{pop} reached, a different DNS software is observed.
+%
+Examples include: K- and B-root, AS112, AWS, Google, Verizon, CIRA (.ca), and RIR (LACNIC, RIPE, APNIC) DNS infrastructure such as rDNS\@.

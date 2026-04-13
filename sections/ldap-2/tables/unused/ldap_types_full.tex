@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FULL TABLE - APPENDIX? %%%%%%%%%%%%%
+\begin{table*}[tb]
+\centering
+\small
+\caption{Type of LDAP servers divided into categories they were discovered:
+%set L as port 389, set LS as port 636, the intersection of them, and similarly with ports 3268 (set G) and 3269 (set GS).\\
+by port numbers, where 389 and 3268 we used \starttls and, 636 and 3269 we used LDAP over TLS.\\
+\faMehO: Community support, but no version found. \faThumbsUp: Receives security updates. \faRemove: End of life. \faQuestion: No information available. \faBomb: Community support with security issues found (approximately 2.6k -- all DoS). \faHourglassHalf: Some versions we found are still supported, and some are end-of-life.}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+%\textbf{Server name} & \textbf{Unique IPs} & \textbf{L $\setminus$ LS} & \textbf{LS $\setminus$ L} & \textbf{L $\cap$ LS} & \textbf{G $\setminus$ GS} & \textbf{GS $\setminus$ G} & \textbf{G $\cap$ GS} & \\
+\textbf{Server name} & \textbf{Unique IPs} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p389\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p636\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Both p389\\and p636\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p3268\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Only\\p3269\end{tabular}} & \textbf{\begin{tabular}[c]{@{}r@{}}Both p3268\\and p3269\end{tabular}}  & \\
+\midrule
+Total - 100\% & 71646 & 36677 & 10275 & 18590 & 10759 & 1755 & 4083 & \\
+\hline
+\rowcolor{blue!20}OpenLDAP & 34.7 & 43.3 & 22.6 & 35.9 & - & 0.2 & - & \faMehO \\
+Windows Server 2016 & 23.7 & 24.2 & 24.1& 12.4 & 59.0& 39.7 & 40.2 & \faThumbsUp\\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2016\end{tabular} & 9.6& 8.6& 10.4& 7.5& 19.4& 26.3 & 24.7 & \faThumbsUp\\
+Unknown& 7.1& 10.6 & 6.2 & 2.9& 0.2 & 0.1& 0.1 & - \\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2012 R2\end{tabular}& 6.8& 6.1& 7.9 & 4.7& 14.3& 17.2 & 17.6 & \faRemove\\
+Kerio Connect& 6.7& 0.6& 11.9& 18.0 & 0.0 & 0.4& 0.0 & \faQuestion \\
+\rowcolor{blue!20}Fedora Project 389 Directory Server& 2.4& 0.6& 4.5 & 5.6& - & -& 0.0 & \faBomb \\
+VMware Platform Services Controller& 1.9& 0.2& 4.8 & 4.3& - & -& - & \faHourglassHalf \\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2008 R2\end{tabular}& 1.9& 2.1& 1.7 & 1.1& 3.3 & 3.5& 3.4 & \faRemove \\
+Windows Server 2008 R2 & 1.8& 0.8& 3.0 & 3.3& 0.9 & 9.3& 10.1 & \faRemove\\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2000\end{tabular} & 1.1& 0.3& 1.1 & 2.9& 0.2 & 0.1& 0.0 & \faRemove \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2012\end{tabular} & 0.9& 0.8& 0.9 & 0.6& 1.7 & 1.9& 2.4 & \faRemove \\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2008\end{tabular} & 0.4& 0.4& 0.2 & 0.2& 0.6 & 0.7& 0.9 & \faRemove \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Active Directory Controller\\ on Windows Server 2003\end{tabular} & 0.3& 0.4& 0.1 & 0.1& 0.5 & 0.5& 0.5 & \faRemove \\
+\rowcolor{blue!20}IBM Domino LDAP Server & 0.2& 0.4& 0.1 & 0.0& - & -& - & \faRemove \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2012 R2\end{tabular} & 0.1& 0.2& 0.1 & 0.1& - & -& - & \faRemove \\
+\rowcolor{blue!20}Oracle Sun Directory Server& 0.1& 0.1& 0.1 & 0.2& - & -& - & \faQuestion \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2016\end{tabular}& 0.1& 0.2& 0.1 & 0.0& - & -& - & \faThumbsUp \\
+\rowcolor{blue!20}IBM Security Directory Server& 0.1& 0.2& 0.1 & 0.0& - & -& - & \faRemove \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2008 R2\end{tabular} & 0.1& 0.1& 0.1 & 0.0& - & -& - & \faRemove \\
+\rowcolor{blue!20}Sun Java System Directory Server & 0.0& 0.0& 0.0 & 0.0& - & -& - & \faQuestion \\
+Sun Directory Proxy Server & 0.0& 0.0& 0.0 & 0.0& - & -& - & \faQuestion \\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2008\end{tabular}& 0.0& 0.0& - & -& - & -& - & \faRemove \\
+\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2012\end{tabular}& 0.0& 0.0& 0.0 & -& - & -& - & \faRemove \\
+\rowcolor{blue!20}Windows Server 2012 R2 & 0.0& -& - & 0.0& - & 0.1& 0.1 & \faRemove \\
+Sun Directory Server & 0.0& -& 0.0 & 0.0& - & -& - & \faRemove \\
+\rowcolor{blue!20}\begin{tabular}[c]{@{}l@{}}Microsoft Lightweight Directory Server\\ on Windows Server 2003\end{tabular}& 0.0& 0.0& - & -& - & -& - & \faRemove \\
+UnboundID Directory Server & 0.0 & 0.0 & - & - & - & - & - & \faQuestion \\
+\rowcolor{blue!20}Scalix LDAP Server & 0.0 & 0.0 & - & - & - & - & - & \faRemove \\
+estos MetaDirectory Server & 0.0 & 0.0 & - & - & - & - & - & \faRemove \\
+\bottomrule
+\end{tabular}
+\label{tab:ldap_types_full}
+\end{table*}

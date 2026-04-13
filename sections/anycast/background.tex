@@ -1,0 +1,61 @@
+% !TEX root = main.tex
+
+\section{Background and Related Work}
+\label{sec:background-and-related-work}
+When a user connects to an anycast address, BGP directs the request to a single \gls{pop},
+typically one that is topologically close to the user~\cite{rfc4786}, from which the service replies.
+%
+A common misconception is that announcing an address at multiple locations, in itself, is classified as anycast.
+Many \glspl{cdn} announce their prefixes at multiple network edges (in different geographic regions),
+where they route traffic internally to a single \gls{pop} hosting the service.
+Critically, as defined in RFC~4786~\cite{rfc4786},
+anycast is the replication of a service address where several \glspl{pop} make the service available.
+
+In this work, we use anycast prefixes from \laces, a daily anycast census covering both IPv4 and IPv6.
+We use prefixes classified as anycast with high confidence using their latency-based detection method.
+This method also provides a lower bound of the number of \glspl{pop} behind anycast prefixes and their locations using iGreedy~\cite{igreedy}.
+\laces covers both large global anycast networks,
+such as most DNS root server deployments~\cite{rootservers},
+and small-scale regional anycast networks
+(\eg, confined within a continent or a country),
+like those deployed by some \gls{cctld} operators.
+%
+Finally, \laces covers rare cases of ``partial'' anycast (\ie, prefixes that contain a mix of replicated and non-replicated IP addresses).
+For example, they discuss a tier-1 that replicates a DNS resolver on a single IP address, whereas all other IP addresses
+are internally routed to a single location.
+
+% related work
+In 2015, Cicalese \etal~characterized services running on \num{1696} IPv4 anycast /24-prefixes
+announced by \num{346} distinct ASes~\cite{CicaleseEtAl_CharacterizingIPv4Anycast_2015}.
+They achieved this using \text{Nmap} port scans targeting a single IP address for \num{897} /24-prefixes
+within the top~100 ASes,
+identifying \num{449} open ports associated with common services.
+%
+Their results show that DNS is the most common service, found in over 60\% of ASes,
+and most ASes have an open TCP port with HTTP/HTTPS present in over 20\%.
+%
+In this work,
+we scan all IP addresses within anycast prefixes
+using ZMap~\cite{ZMapInternetScanner2013},
+LZR~\cite{lzr}, Zgrab2~\cite{censys15}, 
+and QUIC-specific probing~\cite{zirngibl2021over9000}
+to discover ports and detect services.
+%
+While our port selection is narrower,
+focusing on well-known ports and protocols,
+we prioritize accurate service identification across all addresses.
+%
+
+Sattler \etal~\cite{SattlerEtAl_PackedBrimInvestigating_2023} investigated so-called \glspl{hrp}
+where more than \num{231} IP addresses within a single /24-prefixes are responsive to TCP scans.
+%
+They showed that many prefixes originated by \glspl{cdn} are \glspl{hrp} and provided guidelines on how to manage such prefixes in measurement studies.
+%
+Due to the strong \gls{cdn} bias in anycast (more than 59\%~\cite{Hendriks_LACeS_An_Open_2025}),
+we separately assess \glspl{hrp} in our results.
+
+In 2021, Sommese \etal~investigated the adoption of anycast within DNS infrastructure~\cite{dns-anycast},
+showing an increase in anycast usage for authoritative nameservers.
+%
+Our work provides an overview of DNS in anycast prefixes,
+covering authoritative nameservers (including root-servers) and the software used, as well as domain names on anycast from the perspective of \glspl{gtld}.

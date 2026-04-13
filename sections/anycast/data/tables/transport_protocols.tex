@@ -1,0 +1,24 @@
+\begin{table}[tb]
+\centering
+%\small
+\caption{Transport protocols (filtered post-HRP classification). Columns show \textit{active IPs},  /24-prefix with \textit{active IPs}, and ASes with at least one prefix with detected service.}
+\label{tab:transport_protocols}
+\begin{tabular}{l r@{~}l r@{~}l r@{~}l}
+\toprule
+ & \multicolumn{2}{c}{Services (IP)} & \multicolumn{2}{c}{Services (/24)} & \multicolumn{2}{c}{Services (ASes)} \\
+\midrule
+HRP & \multicolumn{2}{c}{\num{1.6e6}} & \multicolumn{2}{c}{\num{9.4e3}} & \multicolumn{2}{c}{\num{177}} \\
+\midrule
+TCP & \num{895.2e3} & (55\%) & \num{9.2e3} & (98\%) & \num{153} & (86\%) \\
+UDP & \num{65.4e3} & (4\%) & \num{591} & (6\%) & \num{65} & (37\%) \\
+QUIC & \num{1.1e6} & (66\%) & \num{4.9e3} & (53\%) & \num{89} & (51\%) \\
+\midrule
+Non-HRP & \multicolumn{2}{c}{\num{141.9e3}} & \multicolumn{2}{c}{\num{3.8e3}} & \multicolumn{2}{c}{\num{823}} \\
+\midrule
+TCP & \num{113e3} & (80\%) & \num{2.4e3} & (63\%) & \num{535} & (65\%) \\
+UDP & \num{30.9e3} & (22\%) & \num{2.4e3} & (64\%) & \num{646} & (78\%) \\
+QUIC & \num{3.5e3} & (2\%) & \num{651} & (17\%) & \num{93} & (11\%) \\
+\bottomrule
+\end{tabular}
+\vspace*{-4mm}
+\end{table}

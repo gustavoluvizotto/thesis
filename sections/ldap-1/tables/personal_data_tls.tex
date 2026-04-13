@@ -1,0 +1,35 @@
+\begin{table}[tb]
+    \small
+    \centering
+    \setlength\tabcolsep{5.5pt}
+    \begin{tabular}{@{} l r r rr @{}}
+    \toprule
+        \multirow{2}{*}{\thead{Personal Data}} & \multirow{2}{*}{\thead{\# IPs}} & \multirow{2}{*}{\thead{Plaintext only}} & \multicolumn{2}{c}{\thead{TLS config}} \\
+        \cline{4-5}
+                                       &                         &                & \multicolumn{1}{@{}l}{\thead{w/ issues}} & \multicolumn{1}{@{}r@{}}{\thead{w/o issues}}       \\
+        \midrule
+        \midrule
+        Total & 12,179 & 4,801 & 5,986 & 1,392\\
+        \arrayrulecolor{gray!90}
+        \midrule
+        \arrayrulecolor{black}
+        Last Name    & 89.86\% & 39.19\% & 49.01\% & 11.80\% \\
+        Email        & 65.34\% & 36.55\% & 50.09\% & 13.36\% \\
+        First Name   & 64.41\% & 37.92\% & 51.84\% & 10.24\% \\
+        Full Name    & 49.50\% & 27.41\% & 60.24\% & 12.36\% \\
+        Phone No.    & 26.83\% & 37.82\% & 47.92\% & 14.26\% \\
+        Public Key   & 14.90\% & 23.25\% & 62.04\% & 14.71\% \\
+        Location     & 10.54\% & 50.55\% & 32.01\% & 17.45\% \\
+        Job          & 10.17\% & 33.28\% & 45.96\% & 20.76\% \\
+        Address      & 10.14\% & 44.21\% & 33.36\% & 22.43\% \\
+        Title        & 9.93\%  & 39.04\% & 35.65\% & 25.31\% \\
+        Country      & 7.45\%  & 58.77\% & 29.33\% & 11.91\% \\
+        Photo        & 2.82\%  & 47.23\% & 35.28\% & 17.49\% \\
+        Birthday     & 1.45\%  & 21.02\% & 47.73\% & 31.25\% \\
+        Gender       & 0.62\%  & 54.67\% & 38.67\% & 6.67\% \\
+        SSN          & 0.16\%  & 21.05\% & 78.95\% & 0.00\% \\
+    \bottomrule
+    \end{tabular}
+    \caption{Personal data attributes exposed by LDAP servers. Percentages based on the corresponding number of IPs.}
+    \label{tab:personal_data_attributes_tls}
+\end{table}

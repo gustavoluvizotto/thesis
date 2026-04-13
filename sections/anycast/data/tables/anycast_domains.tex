@@ -1,0 +1,23 @@
+\begin{table}[tb]
+\centering
+\caption{Anycast in DNS: 2021 (from Sommese \etal~\cite{dns-anycast}) and 2026 adoption.}
+\label{tab:dns_anycast_adoption}
+\begin{tabular}{ll r@{~}l r@{~}l}
+\toprule
+ &         & \multicolumn{2}{c}{\textbf{2021}} & \multicolumn{2}{c}{\textbf{2026}} \\
+\midrule
+\multirow{4}{*}{\rotatebox[origin=c]{90}{\# domains}}
+ & Total   & \num{187.5e6} &        & \num{204.1e6} & \\
+ & Anycast & \num{106.4e6} & (57\%) & \num{148.4e6} & (72\%) \\
+ & Unicast & \num{70.9e6}  & (38\%) & \num{48.3e6}  & (24\%) \\
+ & Mixed   & \num{10.2e6}  & (5\%)  & \num{7.4e6}   & (4\%) \\
+\midrule
+\multirow{4}{*}{\rotatebox[origin=c]{90}{\# NS(IP)}}
+ & Total   & \num{774638} & & \num{739493} & \\
+ & Anycast & \num{18179}  & & \num{22685} & \\
+ & Unicast & \num{756459} & & \num{716808} & \\
+ & Mixed   & N/A          & & N/A & \\
+\bottomrule
+\end{tabular}
+\end{table}
+% G: Shall we include this table?

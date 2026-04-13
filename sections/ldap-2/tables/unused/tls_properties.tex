@@ -1,0 +1,55 @@
+\begin{table}[!ht]
+\centering
+\small
+\begin{tabular}{l r r}
+\hline
+\textbf{Category} & \textbf{\gls{CUIDS}} & \textbf{\begin{tabular}[r]{@{}r@{}}Own\\scans\end{tabular}} \\
+\hline
+\textbf{Total} & 100\% (134732) & 100\% (338046) \\
+\hline
+\textbf{Version} \\ 
+\textcolor{red}{TLSv1\_0} & \textcolor{red}{4.4\%} & \textcolor{red}{3.5\%} \\
+\textcolor{red}{TLSv1\_1} & \textcolor{red}{0.5\%} & \textcolor{red}{0.3\%} \\
+\textcolor{green!60!black}{TLSv1\_2} &\textcolor{green!60!black}{66.0\%} & \textcolor{green!60!black}{60.3\%} \\
+\textcolor{green!60!black}{TLSv1\_3} & \textcolor{green!60!black}{29.1\%} & \textcolor{green!60!black}{36.0\%} \\
+
+\hline
+\textbf{Encryption}\\
+\textcolor{red}{3DES-EDE-CBC}   & \textcolor{red}{0.7\%} & \textcolor{red}{0.4\%} \\
+\textcolor{red}{AES128-CBC} & \textcolor{red}{4.5\%} & \textcolor{red}{3.7\%} \\
+\textcolor{red}{AES256-CBC} & \textcolor{red}{12.1\%} & \textcolor{red}{8.4\%} \\
+\textcolor{green!60!black}{AES128-GCM} & \textcolor{green!60!black}{25.4\%} & \textcolor{green!60!black}{31.4\%} \\
+\textcolor{green!60!black}{AES256-GCM} & \textcolor{green!60!black}{40.8\%} & \textcolor{green!60!black}{35.8\%} \\
+\textcolor{green!60!black}{CHACHA20-POLY1305} & \textcolor{green!60!black}{16.6\%} & \textcolor{green!60!black}{20.3\%} \\
+
+\hline
+\textbf{Key Exchange} \\ 
+\textcolor{red}{RSA} & \textcolor{red}{20.8\%} & \textcolor{red}{25.8\%} \\
+\textcolor{green!60!black}{ECDHE} & \textcolor{green!60!black}{50.1\%} & \textcolor{green!60!black}{38.3\%} \\
+\textcolor{green!60!black}{(EC)DHE/PSK} & \textcolor{green!60!black}{29.1\%} & \textcolor{green!60!black}{36.0\%} \\
+
+\hline
+\textbf{Signing Algorithm} \\
+\textcolor{red}{ECDSA-SHA1} & \textcolor{red}{0.0\% (5)} & \textcolor{red}{0.0\% (8)} \\
+\textcolor{red}{MD5-RSA} & \textcolor{red}{0.5\%} & \textcolor{red}{0.3\%} \\
+\textcolor{red}{SHA1-RSA} & \textcolor{red}{19.7\%} & \textcolor{red}{20.2\%} \\
+\textcolor{red}{SHA1-RSAPSS} & \textcolor{red}{-} & \textcolor{red}{0.0\% (99)} \\
+\textcolor{green!60!black}{ECDSA-SHA256} & \textcolor{green!60!black}{0.2\%} & \textcolor{green!60!black}{0.3\%} \\
+\textcolor{green!60!black}{ECDSA-SHA384} & \textcolor{green!60!black}{0.4\%} & \textcolor{green!60!black}{0.6\%} \\
+\textcolor{green!60!black}{ECDSA-SHA512} & \textcolor{green!60!black}{0.0\% (20)} & \textcolor{green!60!black}{0.0\% (19)} \\
+\textcolor{green!60!black}{SHA256-RSA} & \textcolor{green!60!black}{77.7\%} & \textcolor{green!60!black}{76.1\%} \\
+\textcolor{green!60!black}{SHA256-RSAPSS} & \textcolor{green!60!black}{0.0\% (24)} & \textcolor{green!60!black}{-} \\
+\textcolor{green!60!black}{SHA384-RSA} & \textcolor{green!60!black}{1.4\%} & \textcolor{green!60!black}{1.4\%} \\
+\textcolor{green!60!black}{SHA512-RSA} & \textcolor{green!60!black}{0.9\%} & \textcolor{green!60!black}{0.9\%} \\
+
+% X.509 signature is better off to the other table.
+%\hline
+%\textbf{Signature} \\ 
+%\textcolor{red}{Self-Signed} & \textcolor{red}{22.3\%} & \textcolor{red}{32.2\%} \\
+%\textcolor{green!60!black}{Not Self-Signed} & \textcolor{green!60!black}{77.7\%} & \textcolor{green!60!black}{67.8\%} \\
+
+\hline
+\end{tabular}
+\caption{TLS Properties of LDAP Hosts - \gls{CUIDS} Nov. 2022 x Own measurements Nov. 2023}
+\label{tab:tls_properties_table}
+\end{table}

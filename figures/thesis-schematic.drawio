@@ -1,0 +1,69 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
+  <diagram name="Page-1" id="8_BWY79qNa-phVY2SfDq">
+    <mxGraphModel dx="1052" dy="497" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="456" pageHeight="217" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-11" edge="1" parent="1" source="SgxL0lRGIPJIvBwxOV0T-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="R6Lobl6nhRBWN8JDHT8c-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SgxL0lRGIPJIvBwxOV0T-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 4&lt;div&gt;Finding and securing LDAP&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" x="240" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-12" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="R6Lobl6nhRBWN8JDHT8c-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="25" />
+              <mxPoint x="340" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 3&lt;br&gt;&lt;div&gt;Services on anycast&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" x="240" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-13" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="R6Lobl6nhRBWN8JDHT8c-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="185" />
+              <mxPoint x="340" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 5&lt;br&gt;&lt;div&gt;DMARC across countries&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" x="240" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 6&lt;div&gt;Conclusions &amp;amp; Reflections&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" x="360" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-14" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SgxL0lRGIPJIvBwxOV0T-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-15" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="R6Lobl6nhRBWN8JDHT8c-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="105" />
+              <mxPoint x="220" y="25" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-16" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="R6Lobl6nhRBWN8JDHT8c-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="105" />
+              <mxPoint x="220" y="185" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 2&lt;div&gt;Background&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" x="121" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-10" edge="1" parent="1" source="R6Lobl6nhRBWN8JDHT8c-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="R6Lobl6nhRBWN8JDHT8c-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R6Lobl6nhRBWN8JDHT8c-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Chapter 1&lt;div&gt;Introduction&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="90" y="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
