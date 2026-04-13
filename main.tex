@@ -1,10 +1,9 @@
 \documentclass[10pt,twoside,openright]{book}  % b5paper,
 
-\usepackage{titling}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\input{texenv/usepackage}
+\input{texenv/custom.tex}
+
 \setcounter{tocdepth}{1}
-\usepackage{hyperref}
-\usepackage[hypcap=true]{caption}
 \hypersetup{
 	pdffitwindow=false,
 	hidelinks,
@@ -13,39 +12,20 @@
 	pdfauthor={Gustavo Luvizotto Cesar},
 	pdfcreator={Gustavo Luvizotto Cesar},
 }
-\usepackage{microtype} % better typesetting
-\usepackage[english]{babel} % typographical rules
-\usepackage{nameref}
-\usepackage[nottoc]{tocbibind}
-\usepackage{tikz}
 \usetikzlibrary{positioning,shapes}
-\usepackage{acronym}
-\usepackage{phd_layout}
-\usepackage{fancyhdr}
 
-%\usepackage[acronym,nowarn]{glossaries}
-\usepackage[acronym]{glossaries}
 \makeglossaries{}
 \loadglsentries{texenv/acronyms}
 \loadglsentries{sections/ldap-2/src/acronyms}
 \loadglsentries{sections/dmarc/texenv/acronyms}
 \loadglsentries{sections/anycast/texenv/acronyms}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 
 %TODO remove for final!
 \fancyfoot[CO,CE]{---Draft for the assessment committee ---}
 
-
-
 \begin{document}
 %\includepdf{cover.pdf}
 \frontmatter
-
-\newcommand{\AuthorName}{Gustavo Luvizotto Cesar}
-\newcommand{\AuthorNameShort}{G. L. Cesar}
-\newcommand{\ThesisTitle}{Title of the Thesis}
-\newcommand{\ThesisSubTitle}{Subtitle of the Thesis}
 
 \include{sections/front_matter}
 
@@ -76,6 +56,5 @@ sections/ldap-1/references
 }
 
 \include{sections/publications}
-
 
 \end{document}
