@@ -1,0 +1,84 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
+  <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
+    <mxGraphModel dx="466" dy="374" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="252" pageHeight="315" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-2" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};size=20;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Client" vertex="1">
+          <mxGeometry height="310" width="40" as="geometry" />
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-3" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};size=20;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Server" vertex="1">
+          <mxGeometry height="310" width="43" x="209" as="geometry" />
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-7" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ClientHello">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="21.023809523809405" y="30.999999999999943" as="sourcePoint" />
+            <mxPoint x="230.5" y="30.999999999999943" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-8" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ServerHello">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <Array as="points">
+              <mxPoint x="81" y="61" />
+            </Array>
+            <mxPoint x="230.5" y="61" as="sourcePoint" />
+            <mxPoint x="21.023809523809405" y="61" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-9" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="&lt;div&gt;ClientKeyExchange&lt;/div&gt;">
+          <mxGeometry relative="1" width="80" x="0.0002" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="21.003809523809405" y="149.99999999999994" as="sourcePoint" />
+            <mxPoint x="230.48" y="149.99999999999994" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-10" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Certificate*">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="230.5" y="90" as="sourcePoint" />
+            <mxPoint x="21.003809523809394" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-14" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ChangeCipherSpec**">
+          <mxGeometry relative="1" width="80" x="0.0025" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="21.003809523809405" y="179.79999999999995" as="sourcePoint" />
+            <mxPoint x="230.48" y="179.79999999999995" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-15" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Finished">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="22" y="210.00000000000003" as="sourcePoint" />
+            <mxPoint x="231" y="210.00000000000003" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-16" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ChangeCipherSpec**">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="230.48" y="239.99999999999997" as="sourcePoint" />
+            <mxPoint x="21.003809523809405" y="239.99999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-17" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Finished">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="230.48" y="270" as="sourcePoint" />
+            <mxPoint x="21.003809523809405" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-19" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;startArrow=block;startFill=1;" value="Application Data">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="230.4761904761906" y="300" as="sourcePoint" />
+            <mxPoint x="21" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-21" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="ServerHelloDone">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <Array as="points">
+              <mxPoint x="181.19" y="120" />
+            </Array>
+            <mxPoint x="231.18999999999988" y="120" as="sourcePoint" />
+            <mxPoint x="21.000344827586222" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
