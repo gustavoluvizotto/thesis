@@ -21,7 +21,7 @@
 \loadglsentries{sections/anycast/texenv/acronyms}
 
 %TODO remove for final!
-\fancyfoot[CO,CE]{---Draft for the assessment committee ---}
+\fancyfoot[CO,CE]{--- Draft for the assessment committee ---}
 
 \begin{document}
 %\includepdf{cover.pdf}
@@ -48,13 +48,14 @@
 
 % References
 \bibliographystyle{IEEEtran}
-\bibliography{bibliography,
-sections/ldap-1/references,
-sections/ldap-2/references,
-sections/dmarc/references,
-sections/anycast/references,
+\bibliography{bibliography,  % refs. added to the thesis
+sections/ldap-1/references,  % landscape
+sections/ldap-2/references,  % sequel
+sections/dmarc/references,   % dmarc
+sections/anycast/references, % anycast
 }
 
 \include{sections/publications}
+%\include{sections/author} % leandro and syllas have this
 
 \end{document}

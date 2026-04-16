@@ -49,7 +49,9 @@ We briefly discuss the \gls{tls} handshake and how it achieves these properties.
 
 \subsection{TLS handshake}
 The \gls{tls} handshake occurs right after a \gls{tcp} connection is established between a client and a server.
-We depict a simplified view of the \gls{tls} handshake in~\cref{fig:background-tls-handshake}.
+We depict a simplified view of the \gls{tls} handshake in~\cref{fig:background-tls-handshake}, where we explain the key steps and ideas.
+We refer to the literature for other messages and details necessary for implementation of the protocol~\cite{rfc5246,rfc8446}.
+Other messages are \ldots TODO
 
 \begin{figure}[tb]
 \centering
@@ -69,8 +71,29 @@ The server chooses the best (most secure) \gls{tls} version and cipher suite whi
 In case the parties do not agree on a common \gls{tls} version or cipher suite, the handshake fails, alert messages are exchanged between the client and server and the connection is closed.
 We provide more details about \gls{tls} cipher suites in~\cref{subsec:background-tls-ciphers}.
 
-The server sends its certificate in the \texttt{Certificate} message, which contains the server's public key and is used by the client to authenticate the server.
-The authentication 
+The server sends its X.509 certificate first (leaf or end-host certificate) and a chain of certificates in the \texttt{Certificate} message.
+The distribution of certificates, its content and its validation is briefly discussed in~\cref{subsec:background-tls-pki}.
+The client uses the certificates to authenticate the server.
+For instance, by validating the chain, and the validity period of the certificates, and most importantly, by verifying the signature of the leaf certificate using the public key of the server.
+The signature is formed from the encryption of the hash of the certificate contents using the certificate issuer's private key.
+The client can compute the digest and verify against the decrypted signature using the server's public key.
+This process ensures that the certificate is not tampered and that the client is communicating with the intended server.
+
+The server sends a \texttt{ServerHelloDone} message to indicate that the server waits for the key exchange process to begin.
+After that, client and server perform the key exchange process.
+There are different key exchange methods, such as RSA, Diffie-Hellman and Elliptic Curve Diffie-Hellman, where the last two can be used for ephemeral key exchange.
+The key exchange allows client and server to generate a shared secret that is used to derive the session keys.
+The session key is used to encrypt and decrypt the application data during the \gls{tls} session.
+The shared secret can be reused or be regenerated for each session.
+Ephemeral key exchange methods provide perfect forward secrecy, which means that even if the server's private key is compromised, past communications remain secret.
+% TODO check RFC for more details to add
+
+Then both client and server send a \texttt{ChangeCipherSpec} message to indicate that subsequent messages will be encrypted using the negotiated cipher suite and session keys.
+Finally, both parties exchange a \texttt{Finished} message to verify that the handshake was successful and that both parties have the same session keys.
+The \texttt{Finished} message contains a hash of all handshake messages, which is encrypted using the session key.
+This approach ensures the integrity of the handshake.
+% TODO is the finishe or changecipherspec message that has this? check rfc
+
 % ServerKeyExchange message is used when the server needs to provide additional information to the client to complete the handshake. "More specifically it is used for anonymous Diffie-Hellman, Diffie-Hellman Ephemeral and Ephemeral RSA Key-Exchange methods."
 % https://ldapwiki.com/wiki/Wiki.jsp?page=ServerKeyExchange
 %https://eitca.org/cybersecurity/eitc-is-acss-advanced-computer-systems-security/network-security/secure-channels/examination-review-secure-channels/how-does-the-change-cipher-spec-protocol-function-within-the-ssl-tls-framework-and-why-is-it-important/
@@ -85,13 +108,24 @@ compression\_methods is not used in \gls{tls} 1.3 due to a known attack (CRIME)~
 \label{subsec:background-tls-ciphers}
 
 \subsection{TLS and the PKI}
+\label{subsec:background-tls-pki}
+We briefly discuss the \gls{pki} that supports \gls{tls} and many other protocols that rely on certificates for authentication since this is a well documented topic~\cite{holz-dissertation}.
 
 \section{LDAP}
 \label{sec:background-ldap}
+% tell what LDAP is and its use case (copy from ldap-1)
 
 \subsection{LDAP PKI}
+\label{subsec:background-ldap-pki}
+% copy from ldap-2
+
+\subsection{LDAP message}
+\label{subsec:background-ldap-message}
+% this is new
 
 \subsection{LDAP StartTLS}
+\label{subsec:background-ldap-starttls}
+% this is new
 
 \section{Email Security Protocols}
 \label{sec:background-dmarc}

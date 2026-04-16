@@ -49,4 +49,4 @@ endif
 	@echo "Diff generated: main-diff.pdf"
 
 live:
-	latexmk -lualatex -shell-escape -f -pvc -interaction=nonstopmode $(SRC)
+	@$(LATEXMK) -lualatex -shell-escape -f -pvc -interaction=nonstopmode $(SRC)

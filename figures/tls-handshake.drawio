@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
   <diagram name="Page-1" id="2YBvvXClWsGukQMizWep">
-    <mxGraphModel dx="466" dy="374" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="252" pageHeight="315" background="none" math="0" shadow="0">
+    <mxGraphModel dx="816" dy="655" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="252" pageHeight="315" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -25,8 +25,8 @@
             <mxPoint x="21.023809523809405" y="61" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="DY-V_Ve54LZgKYoW7WD8-9" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="&lt;div&gt;ClientKeyExchange&lt;/div&gt;">
-          <mxGeometry relative="1" width="80" x="0.0002" as="geometry">
+        <mxCell id="DY-V_Ve54LZgKYoW7WD8-9" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;startArrow=block;startFill=1;" value="&lt;div&gt;KeyExchange&lt;/div&gt;">
+          <mxGeometry relative="1" width="80" x="0.0025" as="geometry">
             <mxPoint as="offset" />
             <mxPoint x="21.003809523809405" y="149.99999999999994" as="sourcePoint" />
             <mxPoint x="230.48" y="149.99999999999994" as="targetPoint" />
