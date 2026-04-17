@@ -56,7 +56,7 @@ Other messages are \ldots TODO
 \begin{figure}[tb]
 \centering
 \includegraphics[width=.7\linewidth]{figures/tls-handshake.pdf}
-\caption{Simplified view of the TLS handshake.}
+\caption{Simplified view of the TLS handshake. * indicates that the message is optional}
 \label{fig:background-tls-handshake}
 \end{figure}
 
@@ -79,45 +79,66 @@ The signature is formed from the encryption of the hash of the certificate conte
 The client can compute the digest and verify against the decrypted signature using the server's public key.
 This process ensures that the certificate is not tampered and that the client is communicating with the intended server.
 
-The server sends a \texttt{ServerHelloDone} message to indicate that the server waits for the key exchange process to begin.
-After that, client and server perform the key exchange process.
-There are different key exchange methods, such as RSA, Diffie-Hellman and Elliptic Curve Diffie-Hellman, where the last two can be used for ephemeral key exchange.
-The key exchange allows client and server to generate a shared secret that is used to derive the session keys.
+Client and server perform the key exchange process.
+There are different key exchange methods, such as \gls{rsa}, \gls{dh} and \gls{ecdh}, where the last two can be used for ephemeral key exchange.
+The key exchange allows client and server to generate a premaster secret that is used to derive the session keys.
+The premaster secret is trasmitted either by encrypting using the server's public key (in \gls{rsa}) or by using the \gls{dh} key exchange method to generate the secret without transmitting it.
+The public parameters of the \gls{dh} can be statically defined in the certificate~\cite{rfc5114} or generated on every session, which is called ephemeral.
+Ephemeral key exchange methods provide \gls{pfs}, which means that even if the server's private key is compromised, past communications remain secret.
 The session key is used to encrypt and decrypt the application data during the \gls{tls} session.
-The shared secret can be reused or be regenerated for each session.
-Ephemeral key exchange methods provide perfect forward secrecy, which means that even if the server's private key is compromised, past communications remain secret.
-% TODO check RFC for more details to add
+% https://security.stackexchange.com/questions/94390/whats-the-purpose-of-dh-parameters
 
-Then both client and server send a \texttt{ChangeCipherSpec} message to indicate that subsequent messages will be encrypted using the negotiated cipher suite and session keys.
-Finally, both parties exchange a \texttt{Finished} message to verify that the handshake was successful and that both parties have the same session keys.
+Both client and server send a \texttt{ChangeCipherSpec} message to indicate that subsequent messages will be encrypted using the negotiated cipher suite and session keys.
+Finally, both parties exchange a \texttt{Finished} message to verify that the handshake was successful.
 The \texttt{Finished} message contains a hash of all handshake messages, which is encrypted using the session key.
 This approach ensures the integrity of the handshake.
-% TODO is the finishe or changecipherspec message that has this? check rfc
+
+% handshake steps 1.3
+The modern \gls{tls} version 1.3 handshake consists of fewer steps.
+For instance, the \texttt{ClientHello} message already contains a pre-shared key (either externally obtained or from previous handshake).
+The \texttt{ServerHello} message contains the certificates, the pre-shared key and early data.
+After that, the server immediately sends the \texttt{Finished} message, and the client computes the verifications and sends its \texttt{Finished} message.
+The \gls{tls} v1.3 only uses ephemeral key exchange methods.
+Furthermore, the \gls{tls} v1.3 handshake allows for 0-\gls{rtt} handshake, which means that the client can send early application data in the first message to the server, using the computed session key.
+%TODO when is this mode is used? check rfc.
+% TODO what else to say about 1.3?
+%A few parameters are removed in TLS v1.3 such as ``compression\_methods'' due to a known attack (CRIME)~\cite{CRIME-forum}, 
 
 % ServerKeyExchange message is used when the server needs to provide additional information to the client to complete the handshake. "More specifically it is used for anonymous Diffie-Hellman, Diffie-Hellman Ephemeral and Ephemeral RSA Key-Exchange methods."
 % https://ldapwiki.com/wiki/Wiki.jsp?page=ServerKeyExchange
 %https://eitca.org/cybersecurity/eitc-is-acss-advanced-computer-systems-security/network-security/secure-channels/examination-review-secure-channels/how-does-the-change-cipher-spec-protocol-function-within-the-ssl-tls-framework-and-why-is-it-important/
-% handshake steps 1.2
-% handshake steps 1.3
-% 0-rtt handshake
-
-Modern \gls{tls} handshake such as version 1.3, consist in less steps.
-compression\_methods is not used in \gls{tls} 1.3 due to a known attack (CRIME)~\cite{CRIME-forum}.
 
 \subsection{Cipher suites}
 \label{subsec:background-tls-ciphers}
+The \gls{tls} cipher suites represent a set of cryptographic parameters that define the configuration used in a \gls{tls} session.
+% TODO describe what parameters are defined in ciphers 1.2
+% TODO describe how a cipher 1.3 looks like
 
 \subsection{TLS and the PKI}
 \label{subsec:background-tls-pki}
 We briefly discuss the \gls{pki} that supports \gls{tls} and many other protocols that rely on certificates for authentication since this is a well documented topic~\cite{holz-dissertation}.
+% TODO: describe the content of the certificate
+% TODO: describe how certificate validation works
 
 \section{LDAP}
 \label{sec:background-ldap}
-% tell what LDAP is and its use case (copy from ldap-1)
+% copy from ldap-1 and ldap-2
+\acrfull{ldap} is a client-server protocol to facilitate transfer and access of data stored in directory services such as OpenLDAP or \acrfull{ad}.
+We use the generic term \textit{\gls{ldap} servers} to refer to all servers that speak the protocol and distinguish by directory service as needed.
+\gls{cldap} runs over UDP and it is restricted to a small set of queries.
+In this thesis we do not investigate.
+\gls{ldap} typically runs over TCP on port 389 (clear text with optional \starttls) or 636 (implicit \gls{tls}), while ports 3268 (clear text/\starttls) and 3269 (implicit \gls{tls}) are reserved for the \gls{gc} service in Microsoft's \gls{ad}.
+The \gls{gc} is an \gls{ad} role to manage and access copies of data items across a multitude of \gls{ldap} servers~\cite{alvinashcraft_GlobalCatalogWin32_2020}.
+\gls{ldap} stores data in a tree-like hierarchy.
+The special Root \gls{dse} data entry stores information about the server's functionality in form of attributes.
+These attributes with a predefined type and a value.
+The type determines the syntax, semantics, and characteristics of the value.
+Attribute types are uniquely identified internationally by their \gls{oid}~\cite{x500standard,x501Standard}.
+These attributes hold a unique significance, as they encompass essential information about the server, such as supported controls, extensions, features, \gls{ldap} versions, authentication mechanism such as \gls{sasl}, and more~\cite{LDAP_RFC_Model}, which can help identify the \gls{ldap} product.
 
-\subsection{LDAP PKI}
-\label{subsec:background-ldap-pki}
-% copy from ldap-2
+\gls{ldap} may use \gls{tls}, where a cipher suite is agreed upon and a chain of X.509 certificates is sent to a client.
+The RFC-9325 gives best-practice recommendations.
+% use case of LDAP
 
 \subsection{LDAP message}
 \label{subsec:background-ldap-message}
@@ -126,6 +147,27 @@ We briefly discuss the \gls{pki} that supports \gls{tls} and many other protocol
 \subsection{LDAP StartTLS}
 \label{subsec:background-ldap-starttls}
 % this is new
+
+\subsection{LDAP PKI}
+\label{subsec:background-ldap-pki}
+% copy from ldap-2
+A certificate chain must be anchored at a trusted root, requiring the \gls{ldap} client to be configured with the required root certificate(s).
+The so-called end-host (or leaf) certificate provides a cryptographic binding of an identifier---typically the domain name of the \gls{ldap} server---to a corresponding public key.
+On the Web, public \glspl{ca} issue certificates under CA/Browser Forum rules (\eg, verification of domain ownership), and root stores are managed by the \gls{os} (\eg, Windows, macOS, and Linux) and browser vendors (\eg, Firefox).
+For \gls{ldap}, no comparable body or standardization efforts exist.
+In many cases (\eg, Linux, Windows), the root store that the \gls{ldap} client relies on is the same as for the Web.
+In refined setups, the \gls{ldap} server administrator may supply it directly, even using a private \gls{ca} to issue their own certificates.
+In this case, the administrators must also deploy the root certificate to their \gls{ldap} clients using tools like \gls{ad} Certificate Services or scripts.
+In such a \textit{private \gls{pki}}, one should issue intermediate certificates from the root certificate, which in turn are used to issue a leaf certificate.
+This setup is important as it allows the private key for the root certificate to be kept in a secure location. An alternative, semi-private \gls{pki} setup is also possible: an operator could request a sub-\gls{ca} certificate from a public \gls{ca}, \ie, an intermediate certificate, from which they then issue their own certificates.
+This setup must be tightly controlled so leaf certificates are only ever issued for domains under control of the administrator~\cite{cabr}.
+% https://cabforum.org/working-groups/server/baseline-requirements/requirements/ 3.2.2.4.4
+
+A discouraged practice is to deploy so-called self-signed certificates, where the key used to sign a certificate is also the certified key.
+In such a case, the client must be pre-configured to accept only this certificate---or users told to ignore the warnings their \gls{ldap} client would show.
+The setup is only suitable if the \gls{ldap} server serves a minimal set of users.
+It also constitutes a security risk as the private key remains online in memory.
+As certificates are available for free and can be relatively easily deployed with the ACME protocol, there is little justification to use self-signed certificates any more.
 
 \section{Email Security Protocols}
 \label{sec:background-dmarc}
@@ -192,5 +234,6 @@ The reports provide insights into how Bob's domain is used and whether it is leg
 % contribution
 This chapter is either extended or adapted version of the author's publications.
 The~\cref{sec:background-anycast} is an adapted version of~\cite{gustavo-anycast}.
-The~\cref{sec:background-tls} is an extended and contextualized version of the background section of~\cite{gustavo-ldap2} where we provide more information about cipher suites, and \ldots of~\cite{gustavo-ldap2}.
+The~\cref{sec:background-tls} is new and provides an overview of \gls{tls}, yet with information relevant about the \gls{tls} handshake, the cipher suites and the \gls{pki} that supports \gls{tls}.
+The~\cref{sec:background-ldap} is an adaptation of the background sections of~\cite{landscape, gustavo-ldap2}, and we extend with information about the \gls{ldap} message format and the \gls{ldap} message to initiate \gls{tls} (\starttls).
 The~\cref{sec:background-dmarc} is an extended version of~\cite{gustavo-dmarc} where we provide more information about \gls{spf} and the alignment process in \gls{spf} and \gls{dkim} that is used in the process of \gls{dmarc} verification.
