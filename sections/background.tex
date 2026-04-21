@@ -116,13 +116,41 @@ The \gls{tls} cipher suites represent a set of cryptographic parameters that def
 
 \subsection{TLS and the PKI}
 \label{subsec:background-tls-pki}
-We briefly discuss the \gls{pki} that supports \gls{tls} and many other protocols that rely on certificates for authentication since this is a well documented topic~\cite{holz-dissertation}.
-% TODO: describe the content of the certificate
-% TODO: describe how certificate validation works
+We briefly describe the structure of X.509 certificates and the public key infrastructure (PKI) used to authenticate servers during the TLS handshake.
+X.509 certificates follow the hierarchical model defined in X.500 and are standardized by ITU-T~\cite{itu-t-x509}.
+The X.509 certificates were created to authenticate users to read and write information in directory services~\cite{holz-dissertation}.
+Over time, X.509 certificates have been widely adopted in applications such as S/MIME~\cite{OndaroEtAl_MINECollectingAnalyzing_2025} and services secured with \gls{tls}, including Web and LDAP~\cite{gustavo-ldap2}, with the Web driving their large-scale deployment~\cite{holz2020}.
+
+X.509 certificates contain the following fields~\cite{itu-t-x509}: the version (typically version 3), the serial number (unique unique per issuing \gls{ca}), the Subject and Issuer information (\eg, Common Name, Organization name and Organization Unit), the subject public key with the algorithm identifier and the key, the validity period of the certificate (\textit{not before} and \textit{not after}), and the signature algorithm identifier and signature of the certificate authority that issued the certificate.
+X.509 certificates may include optional extensions, where the most common and relevant to this thesis are: \gls{san} and the \textit{CA} flag.
+For instance, the \gls{san} extension specifies additional identities associated with the certificate, such as domain names or IP addresses.
+The \textit{CA} flag extension, which when set to ``true'', indicates that the certificate can be used to sign other certificates.
+In chapter (TODO ref LDAP) we show that \gls{ldap} servers use broken chains of certificates with the \textit{CA} flag set to ``true'' in the leaf certificates.
+
+X.509 certificates follow a hierarchical structure that enables a chain of trust.
+For instance, a leaf certificate is usually signed by an intermediate certificate, until reaching a trusted root certificate.
+A chain can have multiple intermediate certificates in the chain, or the leaf can be directly signed by a root certificate.
+The intermediate and root certificates are issued by a trusted \gls{ca}.
+The \gls{ca} is responsible for verifying the identity of certificate requesters.
+Hence, \gls{ca} are critical entities in the \gls{pki} ecosystem., and reaching such level of trust is a complex process from well-audited forums such as the CA/Browser Forum~\cite{cabr}.
+When a \gls{ca} goes rogue, it can issue fraudulent certificates.
+As a consequence, rogue \glspl{ca} are removed from the trusted root store, such as the case of DigiNotar removed from browsers~\cite{NightingaleDigiNotarRemovalFollow2011}.
+Trusted root stores are maintained and embedded in the \glspl{os} (\eg, Linux, Apple, and Windows), browsers (\eg, Chrome), or maintained by other entities (\eg, \gls{ccadb}\footnote{\url{ccadb.org}}).
+Certificates can also be self-signed, however their use is generally discouraged and limited to specific scenarios (see~\cref{subsec:background-ldap-pki}).
+When certificates are signed by a \gls{ca}, it creates a cryptographic binding between the identity of parent and child certificates.
+This binding enables clients to verify the authenticity of certificates during the \gls{tls} handshake.
+
+Certificate validity depends on several conditions.
+For instance, valid certificates have the chain of trust from the leaf certificate cryptographically leading to a publicly and trusted root certificate.
+Additionally, the validity period by the time of checking must be within the \textit{not before} and \textit{not after} fields.
+Furthermore, the signature of the leaf certificate must match the issuer's public key, and the signature algorithm should be secure (\eg, SHA-256)~\cite{X509certinsecuresigningalgorithmBoostSecurity}.
+Hostname verification may additionally be performed, where the domain name of the server must match the Common Name or the \gls{san} field of the certificate.
+Finally, the revocation status of a certificate can be checked using mechanisms such as \gls{crl}~\cite{rfc5280} or the \gls{ocsp}~\cite{rfc6960}.
 
 \section{LDAP}
 \label{sec:background-ldap}
 % copy from ldap-1 and ldap-2
+Similar to X.509 certificates, \gls{ldap} is also derived from the X.500 standard.
 \acrfull{ldap} is a client-server protocol to facilitate transfer and access of data stored in directory services such as OpenLDAP or \acrfull{ad}.
 We use the generic term \textit{\gls{ldap} servers} to refer to all servers that speak the protocol and distinguish by directory service as needed.
 \gls{cldap} runs over UDP and it is restricted to a small set of queries.
@@ -140,6 +168,23 @@ These attributes hold a unique significance, as they encompass essential informa
 The RFC-9325 gives best-practice recommendations.
 % use case of LDAP
 
+\subsection{LDAP Authentication and Authorization}
+Clients authenticate to an LDAP server by attempting a bind operation. 
+A connection between the client and the server is established if the bind is successful~\cite{rfc4511, LDAP_RFC_AUTHENTICATION}.
+As part of the bind request, the client chooses an authentication method and, if necessary, supplies authentication credentials.
+LDAPv3 supports four types of authentication: simple, anonymous, unauthenticated, and \gls{sasl} authentication~\cite{LDAP_RFC_AUTHENTICATION}.
+
+The simple authentication uses an username and a cleartext password.
+This method requires \gls{tls} to encrypt the password.
+Anonymous authentication uses empty username and password.
+% TODO Why is this used?
+Furthermore, the unauthenticated authentication uses an username but without a password.
+It's worth noting that RFC 4513~\cite{LDAP_RFC_AUTHENTICATION} recommends disabling this method by default for clients and servers.
+This method can be used with \gls{sso} to retrieve the \gls{dn} from the directory to proceed with the authentication.
+Finally, \gls{sasl} supports a wide range of authentication methods, such as username/password, Kerberos, and digital certificates.
+Anonymous and plaintext \gls{sasl} authentication is not commonly used in \gls{ldap}~\cite{rfc4513}.
+While some are notably robust, others have been identified as insecure~\cite{RFC4422SASL}.
+
 \subsection{LDAP message}
 \label{subsec:background-ldap-message}
 % this is new
@@ -153,7 +198,8 @@ The RFC-9325 gives best-practice recommendations.
 % copy from ldap-2
 A certificate chain must be anchored at a trusted root, requiring the \gls{ldap} client to be configured with the required root certificate(s).
 The so-called end-host (or leaf) certificate provides a cryptographic binding of an identifier---typically the domain name of the \gls{ldap} server---to a corresponding public key.
-On the Web, public \glspl{ca} issue certificates under CA/Browser Forum rules (\eg, verification of domain ownership), and root stores are managed by the \gls{os} (\eg, Windows, macOS, and Linux) and browser vendors (\eg, Firefox).
+On the Web, public \glspl{ca} issue certificates under CA/Browser Forum rules (\eg, verification of domain ownership).
+%, and root stores are managed by the \gls{os} (\eg, Windows, macOS, and Linux) and browser vendors (\eg, Firefox).
 For \gls{ldap}, no comparable body or standardization efforts exist.
 In many cases (\eg, Linux, Windows), the root store that the \gls{ldap} client relies on is the same as for the Web.
 In refined setups, the \gls{ldap} server administrator may supply it directly, even using a private \gls{ca} to issue their own certificates.

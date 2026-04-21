@@ -49,13 +49,6 @@
     year = {2013}
 }
 
-@article{Holz2020,
-    author = {Ralph Holz and Jens Hiller and Johanna Amann and Abbas Razaghpanah and Thomas Jost and Narseo Vallina-Rodriguez and Oliver Hohlfeld},
-    title = {Tracking the deployment of {TLS 1.3} on the Web: A story of experimentation and centralization},
-    journal = {SIGCOMM Comput. Commun. Rev. (CCR)},
-    issue = {3},
-    year = {2020}
-}
 
 @inproceedings{Sattler2023,
     author = {Patrick Sattler and Johannes Zirngibl and Mattijs Jonker and Oliver Gasser and Georg Carle and Ralph Holz},
@@ -94,17 +87,6 @@
 	author = {Apple},
     howpublished = {\url{https://developer.apple.com/documentation/opendirectory}},
     note = {Accessed 2023-09-11}
-}
-
-@techreport{rfc4511,
-	type = {Request for {Comments}},
-	title = {Lightweight {Directory} {Access} {Protocol} ({LDAP}): {The} {Protocol}},
-	shorttitle = {Lightweight Directory Access Protocol (LDAP)},
-	number = {RFC 4511},
-	institution = {Internet Engineering Task Force},
-	author = {Sermersheim, Jim},
-	month = jun,
-	year = {2006},
 }
 
 @techreport{LDAP_RFC_Model,
@@ -579,21 +561,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
     note = {https://github.com/gustavoluvizotto/cert-validator}
 }
 
-@misc{rfc4513,
-    series =    {Request for Comments},
-    number =    4513,
-    howpublished =  {RFC 4513},
-    publisher = {RFC Editor},
-    doi =       {10.17487/RFC4513},
-    url =       {https://www.rfc-editor.org/info/rfc4513},
-    author =    {Roger Harrison},
-    title =     {{Lightweight Directory Access Protocol (LDAP): Authentication Methods and Security Mechanisms}},
-    pagetotal = 34,
-    year =      2006,
-    month =     jun,
-    abstract =  {This document describes authentication methods and security mechanisms of the Lightweight Directory Access Protocol (LDAP). This document details establishment of Transport Layer Security (TLS) using the StartTLS operation. This document details the simple Bind authentication method including anonymous, unauthenticated, and name/password mechanisms and the Simple Authentication and Security Layer (SASL) Bind authentication method including the EXTERNAL mechanism. This document discusses various authentication and authorization states through which a session to an LDAP server may pass and the actions that trigger these state changes. This document, together with other documents in the LDAP Technical Specification (see Section 1 of the specification's road map), obsoletes RFC 2251, RFC 2829, and RFC 2830. {[}STANDARDS-TRACK{]}},
-}
-
 @InProceedings{censys15,
     author = {Zakir Durumeric and David Adrian and Ariana Mirian 
               and Michael Bailey and J. Alex Halderman},
@@ -691,21 +658,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
     note = {https://github.com/zmap/zcertificate}
 }
 
-@misc{rfc5280,
-    series =    {Request for Comments},
-    number =    5280,
-    howpublished =  {RFC 5280},
-    publisher = {RFC Editor},
-    doi =       {10.17487/RFC5280},
-    url =       {https://www.rfc-editor.org/info/rfc5280},
-    author =    {Sharon Boeyen and Stefan Santesson and Tim Polk and Russ Housley and Stephen Farrell and David Cooper},
-    title =     {{Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile}},
-    pagetotal = 151,
-    year =      2008,
-    month =     may,
-    abstract =  {This memo profiles the X.509 v3 certificate and X.509 v2 certificate revocation list (CRL) for use in the Internet. An overview of this approach and model is provided as an introduction. The X.509 v3 certificate format is described in detail, with additional information regarding the format and semantics of Internet name forms. Standard certificate extensions are described and two Internet-specific extensions are defined. A set of required certificate extensions is specified. The X.509 v2 CRL format is described in detail along with standard and Internet-specific extensions. An algorithm for X.509 certification path validation is described. An ASN.1 module and examples are provided in the appendices. {[}STANDARDS-TRACK{]}},
-}
-
 @misc{python-ldap,
 	title = {python-ldap},
 	url = {https://www.python-ldap.org/en/python-ldap-3.4.3},
@@ -714,17 +666,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	year = {2011},
     author = {python-ldap project},
     note = {https://www.python-ldap.org/en/python-ldap-3.4.3}
-}
-
-@inproceedings{holz2016,
-    title = {{TLS} in the wild: An Internet-wide analysis of {TLS}-based protocols for electronic communication},
-    abstract = "Email and chat still constitute the majority of electronic communication on the Internet. The standardisation and acceptance of protocols such as SMTP, IMAP, POP3, XMPP, and IRC has allowed to deploy servers for email and chat in a decentralised and interoperable fashion. These protocols can be secured by providing encryption with TLS—directly or via the STARTTLS extension. X.509 PKIs and ad hoc methods can be leveraged to authenticate communication peers. However, secure configuration is not straight-forward and many combinations of encryption and authentication mechanisms lead to insecure deployments and potentially compromise of data in transit. In this paper, we present the largest study to date that investigates the security of our email and chat infrastructures. We used active Internet-wide scans to determine the amount of secure service deployments, and employed passive monitoring to investigate to which degree user agents actually choose secure mechanisms for their communication. We addressed both client-to-server interactions as well as server-to-server forwarding. Apart from the authentication and encryption mechanisms that the investigated protocols offer on the transport layer, we also investigated the methods for client authentication in use on the application layer. Our findings shed light on an insofar unexplored area of the Internet. Our results, in a nutshell, are a mix of both positive and negative findings. While large providers offer good security for their users, most of our communication is poorly secured in transit, with weaknesses in the cryptographic setup and especially in the choice of authentication mechanisms. We present a list of actionable changes to improve the situation.",
-    author = "Ralph Holz and Johanna Amann and Olivier Mehani and Matthias Wachs and {Ali Kaafar}, Mohamed",
-    year = "2016",
-    doi = "10.14722/ndss.2016.23055",
-    language = "English",
-    isbn = "1-891562-41-X",
-    booktitle = "Network and Distributed System Security Symposium 2016",
 }
 
 @inproceedings{KrombholzEtAl_HaveNoIdea_2017,
@@ -959,22 +900,6 @@ Publisher: Multidisciplinary Digital Publishing Institute},
     abstract = {NIST is introducing a plan to transition away from the current limited use of the Secure Hash Algorithm 1 (SHA-1) hash function. Other approved hash functions are already available. The transition will be completed by December 31, 2030.},
     howpublished = {\url{https://csrc.nist.gov/news/2022/nist-transitioning-away-from-sha-1-for-all-apps}},
     langid = {american},
-}
-
-@inproceedings{holz2011,
-    author = {Holz, Ralph and Braun, Lothar and Kammenhuber, Nils and Carle, Georg},
-    title = {The {SSL} landscape: a thorough analysis of the {X.509 PKI} using active and passive measurements},
-    year = {2011},
-    isbn = {9781450310130},
-    publisher = {Association for Computing Machinery},
-    url = {https://doi.org/10.1145/2068816.2068856},
-    doi = {10.1145/2068816.2068856},
-    abstract = {The SSL and TLS infrastructure used in important protocols like HTTPs and IMAPs is built on an X.509 public-key infrastructure (PKI). X.509 certificates are thus used to authenticate services like online banking, shopping, e-mail, etc. However, it always has been felt that the certification processes of this PKI may lack in stringency, resulting in a deployment where many certificates do not meet the requirements of a secure PKI.This paper presents a comprehensive analysis of X.509 certificates in the wild. To shed more light on the state of the deployed and actually used X.509 PKI, we obtained and evaluated data from many different sources. We conducted HTTPs scans of a large number of popular HTTPs servers over a 1.5-year time span, including scans from nine locations distributed over the globe. To compare certification properties of highly ranked hosts with the global picture, we included a third-party scan of the entire IPv4 space in our analyses. Furthermore, we monitored live SSL/TLS traffic on a 10Gbps uplink of a large research network. This allows us to compare the properties of the deployed PKI with the part of the PKI that is being actively accessed by users.Our analysis reveals that the quality of certification lacks in stringency, due to a number of reasons among which incorrect certification chains or invalid certificate subjects give the most cause for concern. Similar concerns can be raised for the properties of certification chains and many self-signed certificates used in the deployed X.509 PKI. Our findings confirm what has long been believed -- namely that the X.509 PKI we often use in our everyday's lives is in a sorry state.},
-    booktitle = {Proceedings of the 2011 ACM SIGCOMM Conference on Internet Measurement Conference},
-    numpages = {18},
-    keywords = {public key infrastructure, certificates, X.509, TLS, SSL, HTTPS},
-    location = {Berlin, Germany},
-    series = {IMC '11}
 }
 
 @article{10.1145/328236.328114,

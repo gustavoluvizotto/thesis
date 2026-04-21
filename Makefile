@@ -23,10 +23,10 @@ dirs:
 
 ## Compile and copy PDF to top level
 main.pdf: $(SRC) $(BUILD_DEP)
-	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
-	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
+	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC) 1>/dev/null
+	#@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
 	#@$(BIBTEX) $(BIBTEX_OPTS) $(BUILD_DIR)/sections $(BUILD_DIR)/main
-	@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
+	#@$(LATEXMK) $(LATEXMK_OPTS) $(SRC)
 	@cp $(BUILD_DIR)/main.pdf $@
 
 
