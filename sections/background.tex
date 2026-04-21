@@ -42,16 +42,12 @@ Historically, \gls{tls} was introduced in 1994 with \gls{ssl} version 1.0~\cite{
 \gls{ietf} standardized \gls{tls} in 1999 and the current version is 1.3~\cite{rfc8446}, while 1.2 ~\cite{rfc5246} is still widely used and not considered deprecated.
 % https://www.cs.auckland.ac.nz/courses/compsci726s2c/lectures/ra-2021/COMPSCI726-SSL-TLS.pdf
 Examples of known application-layer protocols that use \gls{tls} are HTTPS to communicate with web servers, SMTPS for email servers and LDAPS for directory services.
-
-\gls{tls} was designed with the goal of providing confidentiality, integrity, and authentication.
-To achieve these properties, client and server have a handshake phase before setting up the secure communication channel.
-We briefly discuss the \gls{tls} handshake and how it achieves these properties.
+Two parties communicate using \gls{tls} after a successful handhshake.
 
 \subsection{TLS handshake}
 The \gls{tls} handshake occurs right after a \gls{tcp} connection is established between a client and a server.
 We depict a simplified view of the \gls{tls} handshake in~\cref{fig:background-tls-handshake}, where we explain the key steps and ideas.
 We refer to the literature for other messages and details necessary for implementation of the protocol~\cite{rfc5246,rfc8446}.
-Other messages are \ldots TODO
 
 \begin{figure}[tb]
 \centering
@@ -68,6 +64,7 @@ The client random values is used to generate the master secret alongside the ser
 
 The server replies with a \texttt{ServerHello} message that contains the selected \gls{tls} version, a random value, session ID, selected cipher suite, the selected compression method and optionally extensions (\eg, the \gls{sni}~\cite{rfc6066}).
 The server chooses the best (most secure) \gls{tls} version and cipher suite which are supported by both parties.
+The selected cipher suite determines the cryptographic primitives used in subsequent handshake steps, including the key exchange mechanism, authentication method, symmetric encryption algorithm, and message authentication algorithm.
 In case the parties do not agree on a common \gls{tls} version or cipher suite, the handshake fails, alert messages are exchanged between the client and server and the connection is closed.
 We provide more details about \gls{tls} cipher suites in~\cref{subsec:background-tls-ciphers}.
 
@@ -78,25 +75,28 @@ For instance, by validating the chain, and the validity period of the certificat
 The signature is formed from the encryption of the hash of the certificate contents using the certificate issuer's private key.
 The client can compute the digest and verify against the decrypted signature using the server's public key.
 This process ensures that the certificate is not tampered and that the client is communicating with the intended server.
+The authentication algorithm specified in the cipher suite (\eg, \gls{rsa} or \gls{ecdsa}) determines how the certificate's public key is used to verify the server's identity.
 
 Client and server perform the key exchange process.
-There are different key exchange methods, such as \gls{rsa}, \gls{dh} and \gls{ecdh}, where the last two can be used for ephemeral key exchange.
+The key exchange mechanism is determined by the selected cipher suite (for \gls{tls} $\leq$1.2), \eg, \gls{rsa}, \gls{dh}, or \gls{ecdh}.
+This choice defines how the premaster secret is established during the handshake.
 The key exchange allows client and server to generate a premaster secret that is used to derive the session keys.
 The premaster secret is trasmitted either by encrypting using the server's public key (in \gls{rsa}) or by using the \gls{dh} key exchange method to generate the secret without transmitting it.
 The public parameters of the \gls{dh} can be statically defined in the certificate~\cite{rfc5114} or generated on every session, which is called ephemeral.
 Ephemeral key exchange methods provide \gls{pfs}, which means that even if the server's private key is compromised, past communications remain secret.
 The session key is used to encrypt and decrypt the application data during the \gls{tls} session.
 % https://security.stackexchange.com/questions/94390/whats-the-purpose-of-dh-parameters
+The encryption algorithm specified in the cipher suite (\eg, \gls{aes} with \gls{cbc} or \gls{gcm}) are only applied after the handshake keys have been established.
 
 Both client and server send a \texttt{ChangeCipherSpec} message to indicate that subsequent messages will be encrypted using the negotiated cipher suite and session keys.
 Finally, both parties exchange a \texttt{Finished} message to verify that the handshake was successful.
 The \texttt{Finished} message contains a hash of all handshake messages, which is encrypted using the session key.
-This approach ensures the integrity of the handshake.
+The hash algorithm (\eg, SHA256) associated with the cipher suite is used and this approach ensures the integrity of the handshake.
 
 % handshake steps 1.3
 The modern \gls{tls} version 1.3 handshake consists of fewer steps.
-For instance, the \texttt{ClientHello} message already contains a pre-shared key (either externally obtained or from previous handshake).
-The \texttt{ServerHello} message contains the certificates, the pre-shared key and early data.
+For instance, the \texttt{ClientHello} message already contains a \gls{psk} (either externally obtained or from previous handshake).
+The \texttt{ServerHello} message contains the certificates, the \gls{psk} and early data.
 After that, the server immediately sends the \texttt{Finished} message, and the client computes the verifications and sends its \texttt{Finished} message.
 The \gls{tls} v1.3 only uses ephemeral key exchange methods.
 Furthermore, the \gls{tls} v1.3 handshake allows for 0-\gls{rtt} handshake, which means that the client can send early application data in the first message to the server, using the computed session key.
@@ -110,9 +110,10 @@ Furthermore, the \gls{tls} v1.3 handshake allows for 0-\gls{rtt} handshake, whic
 
 \subsection{Cipher suites}
 \label{subsec:background-tls-ciphers}
-The \gls{tls} cipher suites represent a set of cryptographic parameters that define the configuration used in a \gls{tls} session.
-% TODO describe what parameters are defined in ciphers 1.2
-% TODO describe how a cipher 1.3 looks like
+The \gls{tls} cipher suites represent a set of cryptographic parameters agreed during the \gls{tls} handshake used in a \gls{tls} session.
+Cipher suites of \gls{tls} version $\leq$1.2 have similar format as: \texttt{TLS\_ECDH\_RSA\_WITH\_AES\_256\_CBC\_SHA}. Here, \texttt{ECDH} is the key exchange algorithm, \texttt{RSA} is the authentication algorithm, \texttt{AES\_256} is the session cipher and its bit size, \texttt{CBC} is the type of encryption, and \texttt{SHA} is the digest or message authentication code algorithm.
+
+For \gls{tls} v1.3, the cipher suite format is simplified to \texttt{TLS\_AES\_256\_GCM\_SHA384}, where the key exchange are (EC)DHE, \gls{psk} or a combination of both and are ommited from the cipher suite.
 
 \subsection{TLS and the PKI}
 \label{subsec:background-tls-pki}
