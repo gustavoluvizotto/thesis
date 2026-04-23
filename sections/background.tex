@@ -96,6 +96,7 @@ The hash algorithm (\eg, SHA256) associated with the cipher suite is used and th
 % handshake steps 1.3
 The modern \gls{tls} version 1.3 handshake simplifies the negotiation process.
 For instance, the \texttt{ClientHello} message includes supported cipher suites, key shares for ephemeral key exchange, and optionally \glspl{psk}.
+% TODO explain more key shares and psk.
 The server responds with a \texttt{ServerHello} message selecting the cipher suite and key share after which parties derive the session keys, send the certificates, the \gls{psk} and early data.
 After that, the server immediately sends the \texttt{Finished} message, and the client computes the verifications and sends its \texttt{Finished} message.
 In \gls{tls} 1.3, only ephemeral key exchange methods are used, providing forward secrecy by default.
