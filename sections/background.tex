@@ -136,7 +136,7 @@ For instance, a leaf certificate is usually signed by an intermediate certificat
 A chain can have multiple intermediate certificates in the chain, or the leaf can be directly signed by a root certificate.
 The intermediate and root certificates are issued by a trusted \gls{ca}.
 The \gls{ca} is responsible for verifying the identity of certificate requesters.
-Hence, \gls{ca} are critical entities in the \gls{pki} ecosystem., and reaching such level of trust is a complex process from well-audited forums such as the CA/Browser Forum~\cite{cabr}.
+Hence, \gls{ca} are critical entities in the \gls{pki} ecosystem, and reaching such level of trust is a complex process from well-audited forums such as the CA/Browser Forum~\cite{cabr}.
 When a \gls{ca} goes rogue, it can issue fraudulent certificates.
 As a consequence, rogue \glspl{ca} are removed from the trusted root store, such as the case of DigiNotar removed from browsers~\cite{NightingaleDigiNotarRemovalFollow2011}.
 Trusted root stores are maintained and embedded in the \glspl{os} (\eg, Linux, Apple, and Windows), browsers (\eg, Chrome), or maintained by other entities (\eg, \gls{ccadb}\footnote{\url{ccadb.org}}).
@@ -284,7 +284,7 @@ The reports provide insights into how Bob's domain is used and whether it is leg
 \end{figure}
 
 % contribution
-\section{Contributions}
+\section*{Contributions}
 This chapter is either extended or adapted version of the author's publications.
 The~\cref{sec:background-anycast} is an adapted version of~\cite{gustavo-anycast}.
 The~\cref{sec:background-tls} is new and provides an overview of \gls{tls}, yet with information relevant about the \gls{tls} handshake, the cipher suites and the \gls{pki} that supports \gls{tls}.
