@@ -6,17 +6,38 @@ High level view. The Internet since its inception 30 years ago has evolved from 
 
 Perspective. As the Internet evolved, individuals started adding their Web pages CITE, and companies provided email CITE, instant messaging CITE, blogs to give individuals a space to share their thoughts and pictures CITE.
 
-Switching to problematic. Soon, the Internet became too complex, running multiple services CITE (TODO how many?)
+Complexity problem. Soon, the Internet became too complex, running multiple services CITE (TODO how many?)
 For instance, traditional services such as email, Web, DNS, LDAP, instant messaging but also modern such as music or video streaming, online gaming, IoT and many more.
 Due to increased high user demand, service providers had to adapt for availability CITE, privacy CITE, and configuration complexity also increased CITE.
+Companies could not easily self-host all their necessary services.
 
-Bring the problem. Such panorama lead to service outsourcing to large service providers CITE and a consolidation of the Internet CITE.
-This consolidation has led to nations and even government relying on often foreign service providers CITE.
-% TODO check responsible internet paper to try to argue transparency and data soverignty.
+Dependency problem. Such panorama lead to service outsourcing to large service providers CITE and a consolidation of the Internet CITE.
+Studies had shown consolidation on services like Web, DNS, and email CITE or on networks like \glspl{cdn} CITE.
+This consolidation has led to nations relying on often foreign service providers CITE.
+for instance, the top companies are either US or chinese based CITE.
+And when the company is outside, it may get acquired by these top companies CITE.
+this means that users and service providers lose control over their data and also the technology.
+Furthermore, service providers and individuals can be subject to external policies and regulations that could affect their stored information CITE.
+
+Making the bridge.
+TODO: this is not correctly argumented.
+for that (connection with previous paragraph), we need to trust these service providers
+to trust networks, we need to know the ecosystems/services involved and the dependencies they have on other systems and networks.
+
 
 \section{Towards a Transparent Internet}
 \label{sec:intro-transparency}
-% TODO what to write here?
+% where do I want transparency; here I make a bridge to my RQs; here I explain why I chose my topics...
+As we argument in previous section and also conceptualized by Hesselman \etal~CITE, digital autonomy can be achieve through a more transparent Internet.
+In this thesis, our focus is to increase transparency of the Internet through means of empirically evaluating: a) services that have not been explored by the research community, recently or, to a certain extent, have not been empirically measured and; b) national level data flow dependencies that pivot the perspective from the Internet opacity into revealing data flows and dependencies that are not visible to policy makers, users and network operators.
+Hence, this thesis takes a case study driven approach to increase transparency of the Internet.
+
+To increase the transparency of the Internet, we need to understand how different layers of the Internet is being used from a service oriented perspective.
+For instance, anycast networks are used by large \glspl{cdn} to provide better performance and availability CITE.
+A 10 year old study show that some services are provisioned over anycast networks, such as DNS CITE and Web CITE.
+We don't know what modern services are provisioned over anycast networks and what practices are used by operators to provision these services.
+From a transport layer, much has been investigated on the use of \gls{tls} in the Web, the web pki ecosystem, the tls on SSH (?) on email (?) but not much is known about the use of \gls{tls} in the \acrshort{ldap} ecosystem. \ldots
+Finally
 
 \section{Goal, Research Questions and Approach}
 \label{sec:intro-goal-rq-approach}
@@ -47,3 +68,4 @@ In this thesis we aim to contribute to the transparency of the Internet, and thu
 
 \section{Organisation and Key Contributions}
 \label{sec:intro-org-key-contrib}
+% thesis schematic (UT model); the methods -> results -> impact flow (suggestion); what each chapter has and from which paper is derived.
